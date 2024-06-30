@@ -7,6 +7,9 @@ import {Order} from './orders';
 import {OrderItem} from './orderItems';
 import {Stock} from './stock';
 import {Payment} from './payments';
+import {Shop} from './shop';
+import {Discount} from './discount';
+import {Tax} from './tax';
 
 export type {
   Product,
@@ -17,4 +20,7 @@ export type {
   Stock,
   User,
   Payment,
+  Tax,
+  Discount,
+  Shop,
 };

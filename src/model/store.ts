@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Realm, { ObjectSchema } from 'realm';
 import { createRealmContext } from '@realm/react';
+import { migration, SCHEMA_VERSION } from './migration';
 
 let realmInstance: Realm | null = null;
 
@@ -41,12 +42,36 @@ export const CategorySchema: ObjectSchema = {
   },
 };
 
+export const TaxSchema: ObjectSchema = {
+  name: 'Tax',
+  primaryKey: 'tax_id',
+  properties: {
+    tax_id: 'int',
+    name: 'string',
+    rate: 'double',
+    status: {type: 'int', default: 0},
+  },
+};
+
+export const DiscountSchema: ObjectSchema = {
+  name: 'Discount',
+  primaryKey: 'discount_id',
+  properties: {
+    discount_id: 'int',
+    name: 'string',
+    rate: 'double',
+    status: {type: 'int', default: 0},
+  },
+};
+
 export const OrderSchema: ObjectSchema = {
   name: 'Order',
   primaryKey: 'order_id',
   properties: {
     order_id: 'int',
     user_id: 'int?',
+    total_tax: 'double?',
+    total_discount: 'double?',
     total_price: 'double',
     customer_id: 'int?',
     status: 'string?',
@@ -74,7 +99,24 @@ export const UserSchema: ObjectSchema = {
     user_id: 'int',
     username: 'string',
     password: 'string',
+    first_name: 'string',
+    last_name: 'string',
+    pass_code: 'int',
+    status: {type: 'int', default: 0},
     role: 'string',
+  },
+};
+
+export const ShopSchema: ObjectSchema = {
+  name: 'Shop',
+  primaryKey: 'shop_id',
+  properties: {
+    shop_id: 'int',
+    name: 'string',
+    mobile: 'string',
+    email: 'string',
+    address: 'string',
+    description: 'string',
   },
 };
 
@@ -101,7 +143,7 @@ export const PaymentSchema: ObjectSchema = {
   },
 };
 
-const { useRealm, useQuery, RealmProvider } = createRealmContext({
+const {useRealm, useQuery, RealmProvider} = createRealmContext({
   schema: [
     PaymentSchema,
     ProductSchema,
@@ -111,6 +153,9 @@ const { useRealm, useQuery, RealmProvider } = createRealmContext({
     UserSchema,
     OrderItemSchema,
     OrderSchema,
+    ShopSchema,
+    DiscountSchema,
+    TaxSchema,
   ],
   deleteRealmIfMigrationNeeded: true,
 });
@@ -124,13 +169,17 @@ const schema = [
   UserSchema,
   OrderItemSchema,
   OrderSchema,
+  ShopSchema,
+  DiscountSchema,
+  TaxSchema,
 ];
 
 const RealmOptions = () => {
   return {
     path: 'pos.realm',
     schema: schema,
-    schemaVersion: 0,
+    schemaVersion: SCHEMA_VERSION,
+    migration 
   };
 };
 
@@ -154,4 +203,5 @@ export {
   RealmProvider,
   Realm,
   getRealmInstance,
+ 
 };

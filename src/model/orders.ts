@@ -8,6 +8,8 @@ export interface Order {
   customer_id?: number;
   status: string;
   date: string;
+  tax?: number;
+  discount?: number;
 }
 
 const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
@@ -42,6 +44,8 @@ const queryAllOrders = async(): Promise<Order[]> => {
           customer_id: order.customer_id,
           status: order.status,
           date: order.date,
+          tax: order.tax,
+          discount: order.discount
         }));
       resolve(orders);
     } catch (error) {
@@ -64,6 +68,8 @@ const queryOrderById = async(order_id: number): Promise<Order | null> => {
               customer_id: order.customer_id,
               status: order.status,
               date: order.date,
+              tax: order.tax,
+              discount: order.discount,
             }
           : null
       );

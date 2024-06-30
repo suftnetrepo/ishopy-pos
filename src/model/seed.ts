@@ -9,28 +9,58 @@ import {
   User,
   Payment,
   Stock,
+  Tax,
+  Discount,
+  Shop
 } from './types';
 
 const seedData = async () => {
   const realm = await getRealmInstance();
   try {
     realm.write(() => {
-      console.log('..................work at last')
-      // realm.deleteAll();
-           
+      console.log('..................work at last');
+      realm.deleteAll();
+
       // Seed Users
       const users: User[] = [
-        { user_id: 1, username: 'admin', password: 'admin123', role: 'admin' },
-        { user_id: 2, username: 'user', password: 'user123', role: 'user' },
+        {user_id: 1, username: 'admin', password: 'admin123', role: 'admin'},
+        {user_id: 2, username: 'user', password: 'user123', role: 'user'},
       ];
       users.forEach(user => realm.create('User', user));
 
       // Seed Categories
       const categories: Category[] = [
-        { category_id: 1, name: 'Electronics', status: 1 },
-        { category_id: 2, name: 'Books', status: 1 },
+        {category_id: 1, name: 'Electronics', status: 1},
+        {category_id: 2, name: 'Books', status: 1},
       ];
       categories.forEach(category => realm.create('Category', category));
+
+      // Seed Taxes
+      const taxes: Tax[] = [
+        {tax_id: 1, name: 'VAT', rate: 2.5, status: 1},
+        {tax_id: 2, name: 'State Tax', rate: 1.6, status: 1},
+      ];
+      taxes.forEach(tax => realm.create('Tax', tax));
+
+      // Seed Taxes
+      const discounts: Discount[] = [
+        {discount_id: 1, name: 'Season', rate: 2, status: 1},
+        {discount_id: 2, name: 'State Tax', rate: 3, status: 1},
+      ];
+      discounts.forEach(discount => realm.create('Tax', discount));
+
+      // Seed Shop
+      const shops: Shop[] = [
+        {
+          shop_id: 1,
+          name: 'Shop A',
+          email: 'kabelsus@yahoo.com',
+          mobile: '1234566778',
+          description: 'No thing',
+          address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
+        },
+      ];
+      shops.forEach(shop => realm.create('Shop', shop));
 
       // Seed Products
       const products: Product[] = [
@@ -183,6 +213,8 @@ const seedData = async () => {
           total_price: Math.floor(Math.random() * 1000) + 100,
           customer_id: i % 2 === 0 ? 1 : 2,
           status: i % 2 === 0 ? 'completed' : 'pending',
+          tax : 10,
+          discount : 20,
           date: new Date().toISOString(),
         });
       }
