@@ -1,8 +1,9 @@
 export type HomeStack = {
-  Home: undefined;
+  home: undefined;
   Login: undefined;
   Product: undefined;
   Sales: undefined;
   Settings: undefined;
   Test: undefined;
+  keypad: undefined;
 };

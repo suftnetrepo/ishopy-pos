@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryUsers, insertUser, updateUser, deleteUser } from "../model/user";
+import { queryUsers, insertUser, updateUser, deleteUser, loginUser, loginByPin } from "../model/user";
 import { User } from "../model/types";
 
 interface Initialize {
-	data: User[] | [] | null | User;
+	data: User[] | [] | null | User ;
 	error: Error | null;
 	loading: boolean;
 }
@@ -156,4 +156,88 @@ const useDeleteUser = () => {
 	};
 };
 
-export { useUser, useInsertUser, useUpdateUser, useDeleteUser };
+const useLogin = () => {
+	const [data, setData] = useState<Initialize>({
+		data: null,
+		error: null,
+		loading: false,
+	});
+
+	const loginHandler = async (user_name: string, password : string) => {
+		setData((prev) => ({ ...prev, loading: true }));
+		try {
+			const user = await loginUser(user_name, password);
+			setData({
+				data: user,
+				error: null,
+				loading: false,
+			});
+
+			return user
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}		
+	};
+
+	const resetHandler= ()=>{
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
+	return {
+		...data,
+		resetHandler,
+		loginUser: loginHandler,
+	};
+};
+
+const usePin = () => {
+	const [data, setData] = useState<Initialize>({
+		data: null,
+		error: null,
+		loading: false,
+	});
+
+	const loginHandler = async (pin: number) => {
+		setData((prev) => ({ ...prev, loading: true }));
+		try {
+			const user = await loginByPin(pin);
+			setData({
+				data: user,
+				error: null,
+				loading: false,
+			});
+
+			return user
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	};
+
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
+	return {
+		...data,
+		resetHandler,
+		loginByPin: loginHandler,
+	};
+};
+
+export { usePin, useLogin, useUser, useInsertUser, useUpdateUser, useDeleteUser };

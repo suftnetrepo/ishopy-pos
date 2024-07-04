@@ -129,5 +129,22 @@ const loginUser = async (username: string, password: string): Promise<User> => {
     }
   });
 };
+const loginByPin = async (pin: number): Promise<User> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const user = realm
+        .objects<User>('User')
+        .filtered('pass_code == $0', pin)[0];
+      if (user) {
+        resolve(user);
+      } else {
+        reject(new Error('Invalid pin'));
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
-export { insertUser, updateUser, deleteUser, queryUsers, loginUser };
+export { insertUser, updateUser, deleteUser, queryUsers, loginUser, loginByPin };

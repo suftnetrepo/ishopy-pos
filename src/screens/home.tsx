@@ -34,7 +34,7 @@ const Home = () => {
   return (
     <StyledSafeAreaView >
       <YStack 
-      height={'100%'}
+    flex={1}
         marginHorizontal={16}
         justifyContent='center' alignItems='center'
       >
@@ -49,7 +49,7 @@ const Home = () => {
           backgroundColor={theme.colors.gray[1]}
           borderRadius={32}
         />
-        <StyledButton flex={0} borderColor={theme.colors.gray[400]}
+        <StyledButton borderColor={theme.colors.gray[400]}
           backgroundColor={theme.colors.gray[1]}
           borderRadius={32}
         >

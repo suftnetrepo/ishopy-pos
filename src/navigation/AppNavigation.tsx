@@ -4,15 +4,19 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {HomeStack} from '../types/navigation';
 import Home from '../screens/home';
 import Login from '../screens/login';
+import Keypad from '../screens/lock';
+import TabScreen from '../screens/tab';
+
+
 // import Test from '../screens/test';
 
 const Stack = createStackNavigator<HomeStack>();
 function Navigator() {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="home"
+        component={TabScreen}
         options={{
           headerShown: false,
         }}
@@ -20,6 +24,13 @@ function Navigator() {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="keypad"
+        component={Keypad}
         options={{
           headerShown: false,
         }}
