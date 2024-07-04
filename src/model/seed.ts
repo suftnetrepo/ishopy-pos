@@ -23,8 +23,24 @@ const seedData = async () => {
 
       // Seed Users
       const users: User[] = [
-        {user_id: 1, username: 'admin', password: 'admin123', role: 'admin'},
-        {user_id: 2, username: 'user', password: 'user123', role: 'user'},
+        {
+          user_id: 1,
+          first_name: 'james',
+          last_name: 'micheal',
+          username: 'admin',
+          password: 'admin123',
+          role: 'admin',
+          pass_code: 123456,
+        },
+        {
+          user_id: 2,
+          first_name: 'ema',
+          last_name: 'dam',
+          username: 'user',
+          password: 'user123',
+          role: 'user',
+          pass_code: 1234567,
+        },
       ];
       users.forEach(user => realm.create('User', user));
 
@@ -47,7 +63,7 @@ const seedData = async () => {
         {discount_id: 1, name: 'Season', rate: 2, status: 1},
         {discount_id: 2, name: 'State Tax', rate: 3, status: 1},
       ];
-      discounts.forEach(discount => realm.create('Tax', discount));
+      discounts.forEach(discount => realm.create('Discount', discount));
 
       // Seed Shop
       const shops: Shop[] = [

@@ -5,7 +5,7 @@ import { User } from "../model/types";
 
 interface Initialize {
 	data: User[] | [] | null | User;
-    error: Error | null;
+	error: Error | null;
 	loading: boolean;
 }
 
@@ -17,22 +17,22 @@ const useUser = () => {
 	});
 
 	useEffect(() => {
-        async function load() {
-            try {
-                const users = await queryUsers();
-                setData(prev => ({
-                    ...prev,
-                    data: users,
-                    loading: false, 
-                }));
-            } catch (error) {
-                setData({
-                    data: null,
-                    error: error as Error,
-                    loading: false,
-                });
-            }
-        }
+		async function load() {
+			try {
+				const users = await queryUsers();
+				setData(prev => ({
+					...prev,
+					data: users,
+					loading: false,
+				}));
+			} catch (error) {
+				setData({
+					data: null,
+					error: error as Error,
+					loading: false,
+				});
+			}
+		}
 		load();
 	}, []);
 
@@ -43,7 +43,7 @@ const useUser = () => {
 };
 
 const useInsertUser = () => {
-    const [data, setData] = useState<Initialize>({
+	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
 		loading: true,
@@ -53,11 +53,14 @@ const useInsertUser = () => {
 		username: string,
 		password: string,
 		role: string,
+		first_name: string,
+		last_name: string,
+		pass_code: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await insertUser(username, password, role);
+			const user = await insertUser(first_name, last_name, username, password, role, pass_code);
 			setData({
 				data: user,
 				error: null,
@@ -79,7 +82,7 @@ const useInsertUser = () => {
 };
 
 const useUpdateUser = () => {
-    const [data, setData] = useState<Initialize>({
+	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
 		loading: true,
@@ -90,11 +93,14 @@ const useUpdateUser = () => {
 		username: string,
 		password: string,
 		role: string,
+		first_name: string,
+		last_name: string,
+		pass_code: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await updateUser(user_id, username, password, role);
+			const user = await updateUser(first_name, last_name, user_id, username, password, role, pass_code);
 			setData({
 				data: user,
 				error: null,
