@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { validatorRules } from "./validatorRules";
 import { useLogin } from "../../hooks/useUser";
@@ -25,16 +25,63 @@ const Login = () => {
         user
       })
     })
+  }
 
+  const RenderHeader = () => {
+
+    return (
+      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
+        <StyledButton onPress={() => setFields({ ...fields, password: 'admin123', user_name: 'admin' })}>
+          <StyledBadge
+            color={theme.colors.green[800]}
+            backgroundColor={theme.colors.green[100]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={10}
+            paddingVertical={5}
+          >
+           Mock Admin
+          </StyledBadge>
+        </StyledButton>
+
+        <StyledSpacer marginHorizontal={4} />
+        <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
+          <StyledBadge
+            color={theme.colors.orange[800]}
+            backgroundColor={theme.colors.orange[100]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={10}
+            paddingVertical={5}
+          >
+           Mock User
+          </StyledBadge>
+        </StyledButton>
+
+        <StyledSpacer marginHorizontal={4} />
+        <StyledButton onPress={() => setFields({ ...fields, password: '', user_name: '' })}>
+          <StyledBadge
+            color={theme.colors.gray[800]}
+            backgroundColor={theme.colors.gray[100]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={10}
+            paddingVertical={5}
+          >
+            Clear
+          </StyledBadge>
+        </StyledButton>
+
+      </XStack>
+    )
   }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
-        {/* <StyledHeader.Title icon cycleProps={{
-          borderColor:theme.colors.gray[700],
-          marginRight:8
-         }} />           */}
+        <StyledHeader.Full>
+          <RenderHeader />
+        </StyledHeader.Full>
 
       </StyledHeader>
       <YStack
@@ -67,6 +114,7 @@ const Login = () => {
           backgroundColor={theme.colors.gray[1]}
           borderRadius={32}
           paddingHorizontal={8}
+          value={fields.user_name}
           placeholderTextColor={theme.colors.gray[300]}
           onChangeText={(text) => setFields({ ...fields, user_name: text })}
           error={!!errorMessages?.user_name}
@@ -84,6 +132,7 @@ const Login = () => {
           backgroundColor={theme.colors.gray[1]}
           borderRadius={32}
           paddingHorizontal={8}
+          value={fields.password}
           placeholderTextColor={theme.colors.gray[300]}
           onChangeText={(text) => setFields({ ...fields, password: text })}
           error={!!errorMessages?.password}

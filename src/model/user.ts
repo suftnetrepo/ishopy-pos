@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable prettier/prettier */
 import { getRealmInstance } from './store';
 

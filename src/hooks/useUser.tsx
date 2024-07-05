@@ -207,6 +207,7 @@ const usePin = () => {
 
 	const loginHandler = async (pin: number) => {
 		setData((prev) => ({ ...prev, loading: true }));
+		
 		try {
 			const user = await loginByPin(pin);
 			setData({
