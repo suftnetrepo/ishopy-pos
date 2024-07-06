@@ -20,10 +20,9 @@ const Keypad = () => {
             setPin(pin + num);
 
             if (passCode.length === 4) {
-                loginByPin(parseInt(passCode)).then((user) => {
-                    // navigator.navigate("home", {
-                    //     user
-                    // })
+                loginByPin(parseInt(passCode)).then((result) => {
+                    result && (
+                        navigator.navigate("bottom-tabs"))
                 })
             }
         }

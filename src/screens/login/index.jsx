@@ -5,9 +5,11 @@ import { theme } from "../../configs/theme";
 import { validatorRules } from "./validatorRules";
 import { useLogin } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
+import { useAppContext } from "../../hooks/appContext";
 
 const Login = () => {
   const navigator = useNavigation()
+  const { login } = useAppContext()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(validatorRules.fields)
   const { error, loading, loginUser, resetHandler } = useLogin()
@@ -20,10 +22,11 @@ const Login = () => {
       return false
     }
 
-    loginUser(fields.user_name, fields.password).then((user) => {
-      navigator.navigate("keypad", {
-        user
-      })
+    loginUser(fields.user_name, fields.password).then(async (result) => {
+      if (result) {
+        await login(result)
+        navigator.navigate("bottom-tabs")
+      }
     })
   }
 
@@ -40,7 +43,7 @@ const Login = () => {
             paddingHorizontal={10}
             paddingVertical={5}
           >
-           Mock Admin
+            Mock Admin
           </StyledBadge>
         </StyledButton>
 
@@ -54,7 +57,7 @@ const Login = () => {
             paddingHorizontal={10}
             paddingVertical={5}
           >
-           Mock User
+            Mock User
           </StyledBadge>
         </StyledButton>
 
@@ -150,7 +153,7 @@ const Login = () => {
             {`Don't have an account?`}  { }
           </StyledText>
           <StyledSpacer marginHorizontal={2} />
-          <StyledButton link onPress={()=> { navigator.navigate("sign-up")}} >
+          <StyledButton link onPress={() => { navigator.navigate("sign-up") }} >
             <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
               Sign up
             </StyledText>

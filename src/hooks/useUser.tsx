@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import { queryUsers, insertUser, updateUser, deleteUser, loginUser, loginByPin } from "../model/user";
-import { User } from "../model/types";
+import { User, Shop } from "../model/types";
+import { queryAllShops } from "../model/shop";
 
 interface Initialize {
-	data: User[] | [] | null | User ;
+	data: User[] | [] | null | User | Shop;
 	error: Error | null;
 	loading: boolean;
 }
@@ -167,13 +168,17 @@ const useLogin = () => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const user = await loginUser(user_name, password);
+			const shop = await queryAllShops()
 			setData({
 				data: user,
 				error: null,
 				loading: false,
 			});
 
-			return user
+			return {
+				user,
+				shop
+			} 
 		} catch (error) {
 			setData({
 				data: null,

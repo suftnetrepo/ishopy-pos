@@ -1,49 +1,46 @@
-
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import { StyledSafeAreaView } from "../components/packages/safeAreaView";
-import { XStack, YStack } from "../components/packages/stack";
-import { StyledSpacer } from "../components/packages/Spacer";
-import { StyledButton } from "../components/packages/button";
-import StyledText from "../components/packages/text";
-import { StyledMIcon } from '../components/packages/icon';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { YStack, XStack, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import { StyledMIcon } from '../../components/icon';
+import { theme } from '../../configs/theme';
+import { useAppContext } from '../../hooks/appContext';
 
-const RegistrationCompleted = () => {
+const SignUpCompleted = () => {
+    const { user } = useAppContext()
     const navigator = useNavigation()
-    const route = useRoute()
-    const { patient } = route.params
-
+   
     return (
-        <StyledSafeAreaView backgroundColor='grey.1'>
+        <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
             <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-                <YStack borderRadius={8} justifyContent='center' alignItems='center' width='80%' backgroundColor='grey.1' paddingHorizontal={16} paddingVertical={16}>
+                <YStack borderRadius={8} justifyContent='center' alignItems='center' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={16}>
                     <StyledSpacer marginVertical={32}></StyledSpacer>
                     <StyledMIcon
                         name="check-circle"
                         size={120}
-                        color='green.300'
+                        color={theme.colors.green[600]}
                     />
                     <StyledSpacer marginVertical={8}></StyledSpacer>
                     <StyledText
-                        color="grey.800"
-                        fontWeight="normal"
-                        fontSize="font_size_large"
+                        color={theme.colors.gray[800]}
+                        fontWeight={theme.fontWeight.normal}
+                        fontSize={theme.fontSize.normal}
                         textAlign="center"
                     >
                         Hi <StyledText
-                            color="grey.800"
-                            fontWeight="bold"
-                            fontSize="font_size_normal"
+                           color={theme.colors.gray[800]}
+                          fontWeight={theme.fontWeight.bold}
+                             fontSize={theme.fontSize.large}
                             textAlign="center"
-                        >{patient}!</StyledText>, welcome aboard! We've successfully registered your account. Now, you can manage your appointments, view your health records, and consult with our specialists anytime. We're excited to be part of your health journey!.                       
+                        >{`${user.first_name} ${user.last_name}`}!</StyledText>, {`\n\n`} Welcome to iShopy POS! We're thrilled to help you streamline your sales, inventory, and customer relationships—all without needing an internet connection.{`\n\n`} Should you have any questions or need support, our team is here to help. Feel free to reach out anytime. {`\n\n`} Thank you for choosing iShopy POS. We look forward to supporting your business success!                   
                     </StyledText>
                     <StyledSpacer marginVertical={16}></StyledSpacer>
                     <XStack justifyContent='flex-end' alignItems='flex-end'>
-                        <StyledButton size='sm' color='cyan.500' borderColor='cyan.500' backgroundColor='cyan.500' flex={1} onPress={() => {
-                            navigator.navigate("bottomNavigator");
+                        <StyledButton  color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} flex={1} onPress={() => {
+                            navigator.navigate("home");
                         }
                         } >
-                            <StyledText color='grey.1' fontSize='font_size_normal'>Go to Dashboard</StyledText>
+                            <StyledText paddingVertical={8} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Go to Dashboard</StyledText>
                         </StyledButton>
                     </XStack>
                     <StyledSpacer marginVertical={24}></StyledSpacer>
@@ -53,4 +50,4 @@ const RegistrationCompleted = () => {
     )
 }
 
-export default RegistrationCompleted
+export default SignUpCompleted

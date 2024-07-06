@@ -3,18 +3,17 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../screens/login';
 import Keypad from '../screens/lock';
-import TabScreen from '../screens/tab';
+import BottomTabs from '../screens/tab';
 import SignUp from '../screens/signUp';
-
-// import Test from '../screens/test';
+import SignUpCompleted from '../screens/signUp/signUpCompleted';
 
 const Stack = createStackNavigator();
 function Navigator() {
   return (
-    <Stack.Navigator initialRouteName="sign-up">
+    <Stack.Navigator initialRouteName="login">
       <Stack.Screen
-        name="home"
-        component={TabScreen}
+        name="bottom-tabs"
+        component={BottomTabs}
         options={{
           headerShown: false,
         }}
@@ -40,8 +39,15 @@ function Navigator() {
           headerShown: false,
         }}
       />
+       <Stack.Screen
+        name="sign-up-completed"
+        component={SignUpCompleted}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
-export default Navigator;
+export {Navigator}

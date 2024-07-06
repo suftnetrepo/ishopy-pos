@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React, { useState  } from "react";
+import React, { useState } from "react";
 import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
@@ -9,13 +9,15 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { signUpValidatorRules } from "./validatorRules";
 import { generateRandomData } from "../../utiles/help";
 import { useInsertShop } from "../../hooks/useShop";
+import { useAppContext } from "../../hooks/appContext";
 
 const SignUp = () => {
   const navigator = useNavigation()
+  const { login } = useAppContext()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(signUpValidatorRules.fields)
   const { error, loading, insertHandler, resetHandler } = useInsertShop()
-   
+
   const onSubmit = async () => {
     setErrorMessages({})
     const { hasError, errors } = validate(fields, signUpValidatorRules.rules)
@@ -24,12 +26,11 @@ const SignUp = () => {
       return false
     }
 
-    await insertHandler(fields).then((result) => {    
-      result && (
-        navigator.navigate("keypad", {
-          user: result
-        })
-      )
+    await insertHandler(fields).then(async (result) => {
+      if (result) {
+        await login(result)
+        navigator.navigate("sign-up-completed")
+      }
     })
   }
 

@@ -1,104 +1,88 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-key */
+/* eslint-disable prettier/prettier */
 import * as React from 'react';
-import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/MaterialIcons'
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SearchScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Search!</Text>
-    </View>
-  );
-}
-
-function ScanScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Scan!</Text>
-    </View>
-  );
-}
-
-function HistoryScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>History!</Text>
-    </View>
-  );
-}
-
-function ProfileScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile!</Text>
-    </View>
-  );
-}
+import { XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { theme } from '../configs/theme';
+import Home from './home';
+import Product from './product';
+import Sales from './sales';
+import Account from './account';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabScreen() {
+const Tabs = ({ state, descriptors, navigation }) => {
+  {
+    return (
+      <XStack justifyContent='space-between' borderRadius={32} marginHorizontal={8} backgroundColor={theme.colors.gray[1]} alignItems='center' paddingHorizontal={8} paddingVertical={16}>
+        {
+          state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const BarIcon = options.tabBarIcon
+            const focused = state.index === index
+
+            return (
+              <StyledButton key={index} onPress={() => navigation.navigate(route.name)} >
+                <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={16} paddingVertical={8}>
+                  <BarIcon focused={focused} size={30} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]} />
+                  {
+                    focused && (
+                      <>
+                        <StyledSpacer marginHorizontal={4} />
+                        <StyledText fontWeight={theme.fontWeight.bold} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]}>{route.name}</StyledText>
+                      </>
+                    )
+                  }
+                </XStack>
+              </StyledButton>
+            )
+          })
+        }
+      </XStack>
+    )
+  }
+}
+
+export default function BottomTabs() {
   return (
-     <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <Tab.Navigator
+      tabBar={(props) => <Tabs {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name='home' component={Home} options={{
+        tabBarIcon: ({ focused, size, color }) => {
+          return (
+            <Icon focused={focused} color={color} size={size} name='home' />
+          )
+        }
+      }} />
 
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Search') {
-              iconName = focused ? 'search' : 'search-outline';
-            } else if (route.name === 'Scan') {
-              iconName = focused ? 'scan-circle' : 'scan-circle-outline';
-              size = focused ? 48 : 24; // Larger size for the focused scan button
-              color = focused ? '#5E3DF2' : color;
-            } else if (route.name === 'History') {
-              iconName = focused ? 'time' : 'time-outline';
-            } else if (route.name === 'Profile') {
-              iconName = focused ? 'person' : 'person-outline';
-            }
+      <Tab.Screen name='product' component={Product} options={{
+        tabBarIcon: ({ size, color }) => {
+          return (
+            <Icon color={color} size={size} name='square-outline' />
+          )
+        }
+      }} />
 
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#5E3DF2',
-          tabBarInactiveTintColor: 'gray',
-          tabBarShowLabel: true,
-          tabBarLabelStyle: {
-            fontSize: 12,
-          },
-          tabBarStyle: {
-            height: 60,
-          },
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen
-          name="Scan"
-          component={ScanScreen}
-          options={{
-            tabBarIconStyle: {
-              backgroundColor: '#5E3DF2',
-              borderRadius: 30,
-              padding: 10,
-              marginTop: -30,
-            },
-            tabBarLabelStyle: {
-              display: 'none',
-            },
-          }}
-        />
-        <Tab.Screen name="History" component={HistoryScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
+      <Tab.Screen name='sales' component={Sales} options={{
+        tabBarIcon: ({ size, color }) => {
+          return (
+            <Icon color={color} size={size} name='basket-outline' />
+          )
+        }
+      }} />
+
+      <Tab.Screen name='account' component={Account} options={{
+        tabBarIcon: ({ size, color }) => {
+          return (
+            <Icon color={color} size={size} name='account-outline' />
+          )
+        }
+      }} />
+    </Tab.Navigator>
   );
 }

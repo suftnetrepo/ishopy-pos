@@ -29,7 +29,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const [state, setState] = useState<State>(initialState);
 
     const actions: Actions = {
-        login: async (params: { user: User, shop: Shop }) => {
+        login: async (params: { user: User, shop: Shop }) => {          
             const { shop, user } = params ;
             setState((prevState) => ({
                 ...prevState,
