@@ -1,22 +1,21 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../configs/theme";
-
-import { useLogin } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { signUpValidatorRules } from "./validatorRules";
 import { generateRandomData } from "../../utiles/help";
-
+import { useInsertShop } from "../../hooks/useShop";
 
 const SignUp = () => {
   const navigator = useNavigation()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(signUpValidatorRules.fields)
-  const { error, loading, loginUser, resetHandler } = useLogin()
-
+  const { error, loading, insertHandler, resetHandler } = useInsertShop()
+   
   const onSubmit = async () => {
     setErrorMessages({})
     const { hasError, errors } = validate(fields, signUpValidatorRules.rules)
@@ -25,15 +24,14 @@ const SignUp = () => {
       return false
     }
 
-    // loginUser(fields.user_name, fields.password).then((user) => {
-    //   navigator.navigate("keypad", {
-    //     user
-    //   })
-    // })
+    await insertHandler(fields).then((result) => {    
+      result && (
+        navigator.navigate("keypad", {
+          user: result
+        })
+      )
+    })
   }
-
-   console.log("...................fields", fields)
-  console.log("...................errorMessages", errorMessages)
 
   const RenderHeader = () => {
 
@@ -80,7 +78,7 @@ const SignUp = () => {
       <YStack
         flex={1}
         marginHorizontal={16}
-      >     
+      >
         <YStack
           justifyContent='flex-start' alignItems='center'
         >
@@ -92,8 +90,8 @@ const SignUp = () => {
             Sign Up to continue.
           </StyledText>
         </YStack>
-         <StyledSpacer marginVertical={16} />
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>       
+        <StyledSpacer marginVertical={16} />
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <StyledInput
             label={'Store name'}
             keyboardType='default'
@@ -127,7 +125,7 @@ const SignUp = () => {
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
-          />          
+          />
           <StyledInput
             label={'LastName'}
             keyboardType='default'
@@ -179,7 +177,7 @@ const SignUp = () => {
             error={!!errorMessages?.mobile}
             errorMessage={errorMessages?.mobile?.message}
           />
-           <StyledInput
+          <StyledInput
             label={'Address'}
             keyboardType='default'
             placeholder='Enter your address'
@@ -234,7 +232,7 @@ const SignUp = () => {
           <StyledSpacer marginVertical={8} />
           <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
-               Sign up
+              Sign up
             </StyledText>
           </StyledButton>
           <StyledSpacer marginVertical={4} />
@@ -243,9 +241,9 @@ const SignUp = () => {
               {`Already have an account?`}  { }
             </StyledText>
             <StyledSpacer marginHorizontal={2} />
-            <StyledButton link  >
+            <StyledButton link onPress={() => { navigator.navigate("login") }} >
               <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
-               Sign in
+                Sign in
               </StyledText>
             </StyledButton>
           </XStack>

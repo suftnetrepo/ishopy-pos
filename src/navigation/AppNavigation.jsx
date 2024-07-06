@@ -1,20 +1,17 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeStack} from '../types/navigation';
-import Home from '../screens/home';
 import Login from '../screens/login';
 import Keypad from '../screens/lock';
 import TabScreen from '../screens/tab';
 import SignUp from '../screens/signUp';
 
-
 // import Test from '../screens/test';
 
-const Stack = createStackNavigator<HomeStack>();
+const Stack = createStackNavigator();
 function Navigator() {
   return (
-    <Stack.Navigator initialRouteName="signUp">
+    <Stack.Navigator initialRouteName="sign-up">
       <Stack.Screen
         name="home"
         component={TabScreen}
@@ -37,7 +34,7 @@ function Navigator() {
         }}
       />
       <Stack.Screen
-        name="signUp"
+        name="sign-up"
         component={SignUp}
         options={{
           headerShown: false,

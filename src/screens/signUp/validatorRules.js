@@ -86,6 +86,7 @@ const signUpValidatorRules = {
     address: '' ,
     role: 'admin',
     pass_code: 1234,
+    description : 'Todo'
   }
 }
 

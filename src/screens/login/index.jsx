@@ -150,7 +150,7 @@ const Login = () => {
             {`Don't have an account?`}  { }
           </StyledText>
           <StyledSpacer marginHorizontal={2} />
-          <StyledButton link >
+          <StyledButton link onPress={()=> { navigator.navigate("sign-up")}} >
             <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
               Sign up
             </StyledText>

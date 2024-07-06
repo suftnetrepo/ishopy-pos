@@ -44,7 +44,7 @@ const queryAllShops = async (): Promise<Shop[]> => {
           email: shop.email,
           address: shop.address,
           description: shop.description,
-        }));
+        }));  
       resolve(shops);
     } catch (error) {
       reject(error);
