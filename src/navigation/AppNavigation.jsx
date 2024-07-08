@@ -6,6 +6,8 @@ import Keypad from '../screens/lock';
 import BottomTabs from '../screens/tab';
 import SignUp from '../screens/signUp';
 import SignUpCompleted from '../screens/signUp/signUpCompleted';
+import Printer from '../screens/account/printer';
+
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -42,6 +44,13 @@ function Navigator() {
        <Stack.Screen
         name="sign-up-completed"
         component={SignUpCompleted}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="printer"
+        component={Printer}
         options={{
           headerShown: false,
         }}

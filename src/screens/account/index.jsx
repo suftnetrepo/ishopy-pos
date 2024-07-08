@@ -1,18 +1,19 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React from "react";
 import { useNavigation } from '@react-navigation/native';
-import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, StyledBackgroundImage, StyledImage, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { YStack, StyledBackgroundImage, StyledImage, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { StyledMIcon } from "../../components/icon";
 import { useAppContext } from "../../hooks/appContext";
 
 const Account = () => {
-  const navigate = useNavigation()
+  const navigator = useNavigation()
   const { user } = useAppContext()
 
-  const RenderRow = ({ icon ='account-circle', title }) => {
+  const RenderRow = ({ icon = 'account-circle', title, screen }) => {
     return (
       <XStack borderRadius={16} marginHorizontal={16} marginBottom={8} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={8} paddingHorizontal={8}>
         <StyledMIcon size={32} name={icon} color={theme.colors.gray[800]} onPress={() => { }} />
@@ -21,18 +22,21 @@ const Account = () => {
           {title}
         </StyledText>
         <StyledSpacer flex={1} />
-        <StyledMIcon size={32} name='chevron-right' color={theme.colors.gray[800]} onPress={() => { }} />
+        <StyledMIcon size={32} name='chevron-right' color={theme.colors.gray[300]} onPress={() => screen && navigator.navigate(screen)} />
       </XStack>
     )
   }
 
   return (
     <StyledSafeAreaView >
-      <StyledBackgroundImage height={160} source={require('../../../assets/img/bg_2.png')}>
+      <StyledBackgroundImage height={220} source={require('../../../assets/img/bg_2.png')}>
         <StyledHeader statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "light-content" }} >
         </StyledHeader>
-        <YStack flex={1} backgroundColor='rgba(0, 0, 0, 0.3)'>
-          <StyledSpacer marginVertical={16} />
+        <YStack flex={1} justifyContent='center' backgroundColor='rgba(0, 0, 0, 0.3)'>       
+          <StyledText paddingHorizontal={16} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={theme.colors.gray[100]}>
+            Profile
+          </StyledText>
+          <StyledSpacer marginVertical={4} />
           <XStack
             paddingHorizontal={8}
             paddingVertical={8}
@@ -67,7 +71,7 @@ const Account = () => {
         borderTopLeftRadius={16}
         borderTopRightRadius={16}>
         <StyledSpacer marginVertical={8} />
-        <RenderRow icon="account-circle" title='Personal information' />
+        <RenderRow icon="local-printshop" title='Printer Settings' screen='printer' />
         <RenderRow icon="help-outline" title='FAQ' />
         <RenderRow icon="info-outline" title='Help Center' />
       </YStack>

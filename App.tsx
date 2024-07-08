@@ -8,6 +8,8 @@ import { RealmProvider } from './src/model/store'
 import { seedData } from './src/model/seed'
 import { StyledToast } from './src/components/toast'
 import AppProvider from './src/hooks/appContext'
+import RadioProvider from './src/hooks/radioContext';
+
 
 function App(): React.JSX.Element {
 
@@ -30,9 +32,12 @@ function App(): React.JSX.Element {
             ),
           }}
         >
-          <NavigationContainer>
-            <Navigator />
-          </NavigationContainer>
+          <RadioProvider>
+            <NavigationContainer>
+              <Navigator />
+            </NavigationContainer>
+          </RadioProvider>
+         
         </ToastProvider>
       </AppProvider>
     </RealmProvider>
