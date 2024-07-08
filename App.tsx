@@ -2,14 +2,13 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { ToastProvider } from 'react-native-toast-notifications'
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Navigator } from './src/navigation/AppNavigation';
 import { RealmProvider } from './src/model/store'
 import { seedData } from './src/model/seed'
 import { StyledToast } from './src/components/toast'
 import AppProvider from './src/hooks/appContext'
 import RadioProvider from './src/hooks/radioContext';
-
 
 function App(): React.JSX.Element {
 

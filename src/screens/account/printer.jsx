@@ -6,6 +6,7 @@ import { YStack, XStack, StyledHeader, StyledRadioButton, StyledSafeAreaView, St
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../../configs/theme';
 import { useRadioContext } from '../../hooks/radioContext';
+import BluetoothPrinter from './bluetoothPrinter';
 
 const Printer = () => {
     const navigator = useNavigation()
@@ -13,7 +14,7 @@ const Printer = () => {
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-            <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
+            <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
                 <StyledHeader.Title navigator={navigator} title='Printer' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8
@@ -78,6 +79,7 @@ const Printer = () => {
                     <StyledSpacer flex={1} />
                     <StyledRadioButton name='wifi' selected={checked} onPress={(name) => onValueChange(name)} />
                 </XStack>
+                <BluetoothPrinter />
             </YStack>
         </StyledSafeAreaView>
     );
