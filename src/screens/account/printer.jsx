@@ -10,12 +10,12 @@ import BluetoothPrinter from './bluetoothPrinter';
 
 const Printer = () => {
     const navigator = useNavigation()
-    const { onValueChange, checked } = useRadioContext() 
+    const { onValueChange, checked } = useRadioContext()
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-                <StyledHeader.Title navigator={navigator} title='Printer' icon cycleProps={{
+                <StyledHeader.Header navigator={navigator} title='Printer' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8
                 }} />
@@ -79,7 +79,12 @@ const Printer = () => {
                     <StyledSpacer flex={1} />
                     <StyledRadioButton name='wifi' selected={checked} onPress={(name) => onValueChange(name)} />
                 </XStack>
-                <BluetoothPrinter />
+                 <StyledSpacer marginVertical={4} />
+                {
+                    checked === 'bluetooth' && (
+                        <BluetoothPrinter />
+                    )
+                }                
             </YStack>
         </StyledSafeAreaView>
     );

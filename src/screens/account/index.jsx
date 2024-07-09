@@ -28,16 +28,14 @@ const Account = () => {
   }
 
   return (
-    <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
- 
-        <StyledHeader statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
+    <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}> 
+        <StyledHeader skipAndroid={true} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
         </StyledHeader>
         <StyledSpacer marginVertical={16} />
         <StyledText paddingHorizontal={16} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
           Profile
-        </StyledText>
-        {/* <StyledSpacer marginVertical={4} /> */}
-             <YStack   >
+        </StyledText>      
+        <YStack >
         <XStack
           paddingHorizontal={8}
           paddingVertical={8}

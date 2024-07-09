@@ -31,7 +31,7 @@ const Home = () => {
 
   return (
     <StyledSafeAreaView >
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
+      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>

@@ -81,7 +81,7 @@ const Login = () => {
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
+      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true  }} >
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>

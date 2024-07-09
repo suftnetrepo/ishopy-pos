@@ -43,7 +43,7 @@ const Keypad = () => {
                 <Icon
                     name={'exit-to-app'}
                     size={48}
-                    color={theme.colors.gray[200]}
+                    color={theme.colors.gray[700]}
                     onPress={() => {
                         navigator.navigate("login")
                     }}
@@ -58,7 +58,7 @@ const Keypad = () => {
                 <Icon
                     name={'lock-clock'}
                     size={64}
-                    color={theme.colors.gray[500]}
+                    color={theme.colors.gray[800]}
                 />
             </XStack>
         )
@@ -66,7 +66,7 @@ const Keypad = () => {
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-            <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
+            <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
                 <StyledHeader.Full>
                     <RenderHeader />
                 </StyledHeader.Full>
