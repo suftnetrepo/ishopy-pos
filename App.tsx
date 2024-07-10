@@ -9,6 +9,7 @@ import { seedData } from './src/model/seed'
 import { StyledToast } from './src/components/toast'
 import AppProvider from './src/hooks/appContext'
 import RadioProvider from './src/hooks/radioContext';
+import {BluetoothPrinterProvider} from './src/hooks/bluetoothPrinterProvider';
 
 function App(): React.JSX.Element {
 
@@ -31,12 +32,13 @@ function App(): React.JSX.Element {
             ),
           }}
         >
-          <RadioProvider>
-            <NavigationContainer>
-              <Navigator />
-            </NavigationContainer>
-          </RadioProvider>
-         
+          <BluetoothPrinterProvider>
+            <RadioProvider>
+              <NavigationContainer>
+                <Navigator />
+              </NavigationContainer>
+            </RadioProvider>
+          </BluetoothPrinterProvider>
         </ToastProvider>
       </AppProvider>
     </RealmProvider>

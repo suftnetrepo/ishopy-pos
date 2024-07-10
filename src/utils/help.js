@@ -16,4 +16,8 @@ const generateRandomData = () => {
   };
 };
 
-export { generateRandomData }
+const toWordCase = (str) => {
+  return str.toLowerCase().replace(/(^|\s)\S/g, (t) => t.toUpperCase());
+};
+
+export { generateRandomData, toWordCase }

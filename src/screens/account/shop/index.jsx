@@ -6,14 +6,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { YStack, XStack, StyledButton, StyledHeader, StyledSafeAreaView, StyledBadge, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
-import { theme, fontStyles } from '../../configs/theme';
-import { StyledMIcon } from '../../components/icon';
-import { useBluetoothPrinterContext } from '../../hooks/bluetoothPrinterProvider';
+import { theme, fontStyles } from '../../../configs/theme';
+import { StyledMIcon } from '../../../components/icon';
 import { useNavigation } from '@react-navigation/native';
 
-const Product = () => {
+const Shop = () => {
  const navigator = useNavigation()
-  const { selectedPrinter, testPrint } = useBluetoothPrinterContext();
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
@@ -26,12 +24,9 @@ const Product = () => {
       <YStack>
         <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={theme.colors.gray[300]} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={4} paddingHorizontal={4}>
           <StyledSpacer marginHorizontal={2} />
-          <StyledMIcon size={32} name='bluetooth-connected' color={theme.colors.green[600]} />
-          <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
-            {selectedPrinter?.name}
-          </StyledText>
+          <StyledMIcon size={32} name='bluetooth-connected' color={theme.colors.green[600]} />          
           <StyledSpacer flex={1} />
-          <StyledButton onPress={() => testPrint()}>
+          <StyledButton>
             <StyledBadge
               fontFamily={fontStyles.FontAwesome5_Regular}
               color={theme.colors.orange[800]}
@@ -51,4 +46,4 @@ const Product = () => {
   );
 }
 
-export default Product
+export default Shop

@@ -76,4 +76,27 @@ const printReceipt = async (receiptData) => {
     }
 };
 
-export default printReceipt;
+   const receiptTestData = {
+        businessName: 'Food Business Center',
+        addressLine1: '23232, JAVA CITY, SELANGOR',
+        addressLine2: 'NY, USA',
+        phone: '03-435435435',
+        table: '06',
+        checkNumber: '622967',
+        pax: '04',
+        date: '11/01/2020',
+        time: '18:34',
+        cashier: 'David Smith',
+        items: [
+            { quantity: 4, name: 'Chinese Buffet', total: 51.96 },
+            { quantity: 4, name: 'Soda', total: 7.96 },
+            { quantity: 4, name: 'Desserts', total: 15.56 }
+        ],
+        subtotal: 75.48,
+        foodTax: 2.90,
+        localTax: 1.28,
+        total: 79.66,
+        footerMessage: 'Take home a bag of meatballs and 2 pkgs. of cream sauce for only $9.99\nMade from an authentic recipe!'
+    };
+
+export { printReceipt, receiptTestData };

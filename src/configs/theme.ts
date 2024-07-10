@@ -1,4 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { fontStyles } from "../utils/fontStyles"
+
+/* eslint-disable prettier/prettier */
 
 const palettes = {
   white: '#FFFFFF',
@@ -373,4 +376,4 @@ const theme = {
   },
 };
 
-export {theme, lightColors, darkColors, palettes};
+export {theme, lightColors, darkColors, palettes, fontStyles};

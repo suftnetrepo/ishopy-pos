@@ -28,6 +28,7 @@ const Login = () => {
         navigator.navigate("bottom-tabs")
       }
     })
+    
   }
 
   const RenderHeader = () => {

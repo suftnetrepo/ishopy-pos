@@ -5,8 +5,9 @@
 /* eslint-disable prettier/prettier */
 import React from "react";
 import MIcon from "react-native-vector-icons/MaterialIcons";
-import { styled } from 'fluent-styles';
+// import { styled } from 'fluent-styles';
 import { theme } from "../../configs/theme";
+import { styled } from '../../../src/utils/styled'
 
 const Icon = styled(MIcon, {
     base: {

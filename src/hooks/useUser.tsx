@@ -10,36 +10,46 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useUser = () => {
+const useUsers = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const users = await queryUsers();
-				setData(prev => ({
-					...prev,
-					data: users,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadUsers() {
+		try {
+			const users = await queryUsers();
+			setData(prev => ({
+				...prev,
+				data: users,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
+	}
+
+	useEffect(() => {		
+		loadUsers();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		loadUsers,
+		resetHandler
 	};
 };
 
@@ -59,9 +69,10 @@ const useInsertUser = () => {
 		pass_code: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
-
+		console.log(".................data", { first_name, last_name, username, password, role, pass_code })
 		try {
 			const user = await insertUser(first_name, last_name, username, password, role, pass_code);
+			console.log(".................user", user)
 			setData({
 				data: user,
 				error: null,
@@ -76,9 +87,18 @@ const useInsertUser = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		insertUser: insertUserHandler,
+		resetHandler
 	};
 };
 
@@ -116,9 +136,18 @@ const useUpdateUser = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		updateUser: updateUserHandler,
+		resetHandler
 	};
 };
 
@@ -164,7 +193,7 @@ const useLogin = () => {
 		loading: false,
 	});
 
-	const loginHandler = async (user_name: string, password : string) => {
+	const loginHandler = async (user_name: string, password: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const user = await loginUser(user_name, password);
@@ -178,17 +207,17 @@ const useLogin = () => {
 			return {
 				user,
 				shop
-			} 
+			}
 		} catch (error) {
 			setData({
 				data: null,
 				error: error as Error,
 				loading: false,
 			});
-		}		
+		}
 	};
 
-	const resetHandler= ()=>{
+	const resetHandler = () => {
 		setData({
 			data: null,
 			error: null,
@@ -212,7 +241,7 @@ const usePin = () => {
 
 	const loginHandler = async (pin: number) => {
 		setData((prev) => ({ ...prev, loading: true }));
-		
+
 		try {
 			const user = await loginByPin(pin);
 			setData({
@@ -246,4 +275,4 @@ const usePin = () => {
 	};
 };
 
-export { usePin, useLogin, useUser, useInsertUser, useUpdateUser, useDeleteUser };
+export { usePin, useLogin, useUsers, useInsertUser, useUpdateUser, useDeleteUser };
