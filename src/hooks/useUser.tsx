@@ -57,7 +57,7 @@ const useInsertUser = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const insertUserHandler = async (
@@ -69,15 +69,14 @@ const useInsertUser = () => {
 		pass_code: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
-		console.log(".................data", { first_name, last_name, username, password, role, pass_code })
 		try {
-			const user = await insertUser(first_name, last_name, username, password, role, pass_code);
-			console.log(".................user", user)
+			const user = await insertUser(first_name, last_name, username, password, role, pass_code);		
 			setData({
 				data: user,
 				error: null,
 				loading: false,
 			});
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -106,7 +105,7 @@ const useUpdateUser = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const updateUserHandler = async (
@@ -127,6 +126,7 @@ const useUpdateUser = () => {
 				error: null,
 				loading: false,
 			});
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -159,18 +159,20 @@ const useDeleteUser = () => {
 	}>({
 		data: false,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const deleteUserHandler = async (user_id: number) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
-			const user = await deleteUser(user_id);
+			const result = await deleteUser(user_id);
 			setData({
-				data: user,
+				data: result,
 				error: null,
 				loading: false,
 			});
+
+			return result
 		} catch (error) {
 			setData({
 				data: false,

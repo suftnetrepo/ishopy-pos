@@ -12,6 +12,11 @@ import Discount from '../screens/account/discount'
 import Tax from '../screens/account/tax'
 import Shop from '../screens/account/shop'
 import AddUser from '../screens/account/user/add'
+import EditUser from '../screens/account/user/edit'
+import AddTax from '../screens/account/tax/add'
+import EditTax from '../screens/account/tax/edit'
+import AddDiscount from '../screens/account/discount/add'
+import EditDiscount from '../screens/account/discount/edit'
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -20,6 +25,41 @@ function Navigator() {
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-discount"
+        component={AddDiscount}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-discount"
+        component={EditDiscount}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-tax"
+        component={AddTax}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-tax"
+        component={EditTax}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-user"
+        component={EditUser}
         options={{
           headerShown: false,
         }}
@@ -67,7 +107,7 @@ function Navigator() {
         }}
       />
       <Stack.Screen
-        name="user"
+        name="users"
         component={User}
         options={{
           headerShown: false,

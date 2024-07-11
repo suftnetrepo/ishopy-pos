@@ -17,7 +17,7 @@ const useBluetoothPrinter = () => {
 
     useEffect(() => {
         requestPermissions();
-         loadSelectedPrinter(); 
+        loadSelectedPrinter();
     }, []);
 
     const requestPermissions = async () => {
@@ -60,7 +60,7 @@ const useBluetoothPrinter = () => {
         BluetoothManager.connect(device.address)
             .then(() => {
                 setConnectedDevice(device);
-                saveSelectedPrinter(device); 
+                saveSelectedPrinter(device);
             })
             .catch(err => setError(err)).finally(() => {
                 setLoading(false)
@@ -90,11 +90,19 @@ const useBluetoothPrinter = () => {
     };
 
     const testPrint = () => {
-        printReceipt(receiptTestData)
+        try {
+            printReceipt(receiptTestData)
+        } catch (err) {
+            setError(err);
+        }
     };
 
     const print = (receiptData) => {
-        printReceipt(receiptData)
+        try {
+            printReceipt(receiptData)
+        } catch (err) {
+            setError(err);
+        }
     };
 
     return {
@@ -108,7 +116,7 @@ const useBluetoothPrinter = () => {
         error,
         setError,
         loading,
-        selectedPrinter      
+        selectedPrinter
     }
 }
 

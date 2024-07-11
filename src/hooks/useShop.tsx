@@ -121,7 +121,7 @@ const useUpdateShop = () => {
 
 	const updateHandler = async (shop: Shop) => {
 		setData((prev) => ({ ...prev, loading: true }));
-
+		
 		try {
 			const user = await updateShop(shop);
 			setData({
@@ -129,6 +129,7 @@ const useUpdateShop = () => {
 				error: null,
 				loading: false,
 			});
+			return true
 		} catch (error) {
 			setData({
 				data: null,

@@ -1,49 +1,175 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-/* eslint-disable react/jsx-key */
-/* eslint-disable prettier/prettier */
-import React from 'react';
-import { YStack, XStack, StyledButton, StyledHeader, StyledSafeAreaView, StyledBadge, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
-import { theme, fontStyles } from '../../../configs/theme';
-import { StyledMIcon } from '../../../components/icon';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import { validate, StyledSpinner, YStack, StyledOkDialog, StyledMultiInput, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { theme } from "../../../configs/theme";
+import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { shopRules } from "./validatorRules";
+import { useUpdateShop } from "../../../hooks/useShop";
+import { useAppContext } from "../../../hooks/appContext";
 
 const Shop = () => {
- const navigator = useNavigation()
+  const navigator = useNavigation()
+  const { updateCurrentShop, shop } = useAppContext()
+  const [errorMessages, setErrorMessages] = useState({})
+  const [fields, setFields] = useState(shopRules.fields)
+  const { updateHandler, error, loading, resetHandler } = useUpdateShop()
+
+  useEffect(() => {
+    setFields((pre) => {
+      return {
+        ...pre,
+        ...shop[0]
+      }
+    })
+  }, [shop])
+
+  const onSubmit = async () => {
+    setErrorMessages({})
+    const { hasError, errors } = validate(fields, shopRules.rules)
+    if (hasError) {
+      setErrorMessages(errors)
+      return false
+    }
+
+    const update = () => {
+      updateCurrentShop(fields)
+      navigator.navigate("bottom-tabs", { screen: 'profile' })
+    }
+
+    await updateHandler(fields).then(async (result) => {
+      result && (
+        update()
+      )
+    })
+  }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header navigator={navigator} title='Printer' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.goBack()} title='Shop' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
       </StyledHeader>
-      <YStack>
-        <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={theme.colors.gray[300]} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={4} paddingHorizontal={4}>
-          <StyledSpacer marginHorizontal={2} />
-          <StyledMIcon size={32} name='bluetooth-connected' color={theme.colors.green[600]} />          
-          <StyledSpacer flex={1} />
-          <StyledButton>
-            <StyledBadge
-              fontFamily={fontStyles.FontAwesome5_Regular}
-              color={theme.colors.orange[800]}
-              backgroundColor={theme.colors.orange[100]}
-              fontWeight={theme.fontWeight.bold}
-              fontSize={theme.fontSize.medium}
-              paddingHorizontal={15}
-              paddingVertical={1}
-            >
-              Test print
-            </StyledBadge>
+
+      <YStack
+        flex={1}
+        backgroundColor={theme.colors.gray[100]}
+        paddingHorizontal={16}
+      >
+        <StyledSpacer marginVertical={8} />
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+          <StyledInput
+            label={'Store name'}
+            keyboardType='default'
+            placeholder='Enter your store name'
+            returnKeyType='next'
+            maxLength={50}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.name}
+            placeholderTextColor={theme.colors.gray[300]}
+            onChangeText={(text) => setFields({ ...fields, name: text })}
+            error={!!errorMessages?.name}
+            errorMessage={errorMessages?.name?.message}
+          />
+          <StyledInput
+            label={'Email'}
+            keyboardType='default'
+            placeholder='Enter your email'
+            returnKeyType='next'
+            maxLength={50}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.email}
+            placeholderTextColor={theme.colors.gray[300]}
+            onChangeText={(text) => setFields({ ...fields, email: text })}
+            error={!!errorMessages?.email}
+            errorMessage={errorMessages?.email?.message}
+          />
+          <StyledInput
+            label={'Mobile'}
+            keyboardType='default'
+            placeholder='Enter your mobile'
+            returnKeyType='next'
+            maxLength={20}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.mobile}
+            placeholderTextColor={theme.colors.gray[300]}
+            onChangeText={(text) => setFields({ ...fields, mobile: text })}
+            error={!!errorMessages?.mobile}
+            errorMessage={errorMessages?.mobile?.message}
+          />
+          <StyledMultiInput
+            label={'Address'}
+            keyboardType='default'
+            placeholder='Enter your address'
+            returnKeyType='done'
+            maxLength={100}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.address}
+            placeholderTextColor={theme.colors.gray[300]}
+            onChangeText={(text) => setFields({ ...fields, address: text })}
+            error={!!errorMessages?.address}
+            errorMessage={errorMessages?.address?.message}
+          />
+
+          <StyledMultiInput
+            label={'Description'}
+            keyboardType='default'
+            placeholder='Enter shop description'
+            returnKeyType='done'
+            maxLength={200}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.gray[400]}
+            backgroundColor={theme.colors.gray[1]}
+            value={fields.description}
+            borderRadius={16}
+            paddingHorizontal={8}
+            placeholderTextColor={theme.colors.gray[400]}
+            onChangeText={(text) => setFields({ ...fields, description: text })}
+          />
+
+          <StyledSpacer marginVertical={8} />
+          <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
+            <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
+              Save Changes
+            </StyledText>
           </StyledButton>
-          <StyledSpacer marginHorizontal={2} />
-        </XStack>
+          <StyledSpacer marginVertical={4} />
+        </KeyboardAwareScrollView>
       </YStack>
+      {
+        (error) && (
+          <StyledOkDialog title={error?.message} description='please try again' visible={true} onOk={() => {
+            resetHandler()
+          }} />
+        )
+      }
+      {
+        (loading) && (
+          <StyledSpinner />
+        )
+      }
     </StyledSafeAreaView>
-  );
+  )
 }
 
 export default Shop

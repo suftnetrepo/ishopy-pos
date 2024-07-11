@@ -3853,10 +3853,10 @@ flow-parser@0.*:
   resolved "https://registry.npmjs.org/flow-parser/-/flow-parser-0.238.2.tgz"
   integrity sha512-fs7FSnzzKF6oSzjk14JlBHt82DPchYHVsXtPi4Fkn+qrunVjWaBZY7nSO/mC9X4l9+wRah/R69DRd5NGDOrWqw==
 
-fluent-styles@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/fluent-styles/-/fluent-styles-1.12.0.tgz#3ac6599371075392dd804fd8f2348b2ca14d6a87"
-  integrity sha512-xb5ya96oyQXcIyo2GeBL4LXshVEfrvlw+BABIlmFurFf1EzDN2rLzsVVJIXEx0ngPIA3eAIwrPddTK0xLk582w==
+fluent-styles@^1.21.0:
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/fluent-styles/-/fluent-styles-1.21.0.tgz#22b989986ba8429fb2e8d039ed09491a9774810f"
+  integrity sha512-lcfUP8TU3UmUXhxc5PTn+yAiUaPjzftHNYI+c1KT/ZnW8GTD1ys7872zRami4tBd3hle1NXIyblNiryL+zhLiQ==
   dependencies:
     react-native-dropdown-picker "^5.4.6"
     react-native-vector-icons "^9.2.0"

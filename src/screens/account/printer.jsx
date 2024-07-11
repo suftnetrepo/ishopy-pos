@@ -15,7 +15,7 @@ const Printer = () => {
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-                <StyledHeader.Header navigator={navigator} title='Printer' icon cycleProps={{
+                <StyledHeader.Header onPress={()=> navigator.goBack()}  title='Printer' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8
                 }} />

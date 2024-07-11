@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 import { BluetoothEscposPrinter, ALIGN } from 'tp-react-native-bluetooth-printer';
@@ -72,7 +73,7 @@ const printReceipt = async (receiptData) => {
         await BluetoothEscposPrinter.cutLine(1);
 
     } catch (error) {
-        console.error(error);
+        throw new Error(error.message);
     }
 };
 

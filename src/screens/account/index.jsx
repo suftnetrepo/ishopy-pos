@@ -78,7 +78,7 @@ const Account = () => {
         }>
         </StyledSeparator>
         <RenderRow icon="local-printshop" title='Printer' screen='printer' />
-        <RenderRow icon="person" title='User' screen='user' />
+        <RenderRow icon="person" title='User' screen='users' />
         <RenderRow icon="outlet" title='Shop' screen='shop' />
         <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />
         <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />

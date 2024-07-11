@@ -16,10 +16,18 @@ import { toWordCase } from '../../../utils/help';
 const User = () => {
   const navigator = useNavigation()
   const [isDialogVisible, setIsDialogVisible] = useState(false)
+  const [user, setUser] = useState()
   const { data, error, loading, loadUsers, resetHandler } = useUsers()
-  const { deleteUser } = useDeleteUser()
+  const { deleteUser, error : deleteError, loading : deleting } = useDeleteUser()
 
-
+  const onConfirm = () => {
+    deleteUser(user?.user_id).then(async (result) => {
+      result && (
+        loadUsers()
+      )
+      setIsDialogVisible(false)
+    })
+  }
 
   const RenderCard = ({ item }) => {
     return (
@@ -35,11 +43,17 @@ const User = () => {
         </YStack>
         <XStack flex={1} justifyContent='flex-end' alignItems='center'>
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-            <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => navigator.navigate("screen")} />
+            <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => navigator.navigate("edit-user", {
+              user :item
+            })} />
           </StyledCycle>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-            <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => navigator.navigate("screen")} />
+            <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() =>
+              { 
+                setIsDialogVisible(true)
+                setUser(item)}
+                } />
           </StyledCycle>
         </XStack>
       </XStack>
@@ -49,7 +63,7 @@ const User = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header navigator={navigator} title='Users' icon cycleProps={{
+        <StyledHeader.Header onPress={()=> navigator.navigate("bottom-tabs", { screen : 'profile'})} title='Users' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={
@@ -73,26 +87,26 @@ const User = () => {
         />
       </YStack>
       {
-        (error) && (
-          <StyledOkDialog title={error?.message} description='please try again' visible={true} onOk={() => {
+        (error || deleteError) && (
+          <StyledOkDialog title={error?.message || deleteError?.message} description='please try again' visible={true} onOk={() => {
             resetHandler()
           }} />
         )
       }
       {
-        (loading) && (
+        (loading || deleting) && (
           <StyledSpinner />
         )
       }
       {isDialogVisible &&
         <StyledConfirmDialog
           visible
-          description='Are you sure you want to logout?'
+          description='Are you sure you want to delete this user?'
           confirm='Yes'
           cancel='No'
           title={'Confirmation'}
           onCancel={() => setIsDialogVisible(false)}
-          onConfirm={() => setIsDialogVisible(false)}
+          onConfirm={() => onConfirm()}
         />}
     </StyledSafeAreaView>
   );

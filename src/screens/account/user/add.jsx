@@ -2,38 +2,47 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, StyledOkDialog, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { signUpValidatorRules } from "../user/validatorRules";
+import { userRules } from "../user/validatorRules";
 import { useInsertUser } from "../../../hooks/useUser";
+import { ShowToast } from "../../../components/toast";
 
 const AddUser = () => {
   const navigator = useNavigation()
   const [errorMessages, setErrorMessages] = useState({})
-  const [fields, setFields] = useState(signUpValidatorRules.fields)
-  const { insertUser, data } = useInsertUser()
-
-  console.log(data)
+  const [fields, setFields] = useState(userRules.fields)
+  const { insertUser, error, loading, resetHandler } = useInsertUser()
 
   const onSubmit = async () => {
     setErrorMessages({})
-    const { hasError, errors } = validate(fields, signUpValidatorRules.rules)
+    const { hasError, errors } = validate(fields, userRules.rules)
     if (hasError) {
       setErrorMessages(errors)
       return false
     }
 
-    await insertUser(fields.user_name, fields.password, fields.role, fields.first_name, fields.last_name, fields.pass_code).then(async (result) => {
-      console.log(result)
+    const handleResult = () => {
+      ShowToast("Success", "User was added successfully", "success")
+      setFields(userRules.reset)
+    }   
+
+    await insertUser(fields.username, fields.password, fields.role, fields.first_name, fields.last_name, parseInt(fields.pass_code)).then(async (result) => {
+      result && handleResult()
     })
+
   }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header navigator={navigator} title='Add User' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.reset({
+          key: "users",
+          index: 0,
+          routes: [{ name: 'users' }]
+        })} title='Add User' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
@@ -81,40 +90,6 @@ const AddUser = () => {
             errorMessage={errorMessages?.last_name?.message}
           />
           <StyledInput
-            label={'Email'}
-            keyboardType='default'
-            placeholder='Enter your email'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.email}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, email: text })}
-            error={!!errorMessages?.email}
-            errorMessage={errorMessages?.email?.message}
-          />
-          <StyledInput
-            label={'Mobile'}
-            keyboardType='default'
-            placeholder='Enter your mobile'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.mobile}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, mobile: text })}
-            error={!!errorMessages?.mobile}
-            errorMessage={errorMessages?.mobile?.message}
-          />
-          <StyledInput
             label={'Username'}
             keyboardType='default'
             placeholder='Enter your username'
@@ -125,16 +100,16 @@ const AddUser = () => {
             backgroundColor={theme.colors.gray[1]}
             borderRadius={32}
             paddingHorizontal={8}
-            value={fields.user_name}
+            value={fields.username}
             placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, user_name: text })}
-            error={!!errorMessages?.user_name}
-            errorMessage={errorMessages?.user_name?.message}
+            onChangeText={(text) => setFields({ ...fields, username: text })}
+            error={!!errorMessages?.username}
+            errorMessage={errorMessages?.username?.message}
           />
           <StyledInput
             label={'Password'}
             keyboardType='default'
-            type='password'
+            secureTextEntry={true}
             placeholder='Enter your password'
             returnKeyType='done'
             maxLength={8}
@@ -176,7 +151,7 @@ const AddUser = () => {
           <StyledSpacer marginVertical={4} />
         </KeyboardAwareScrollView>
       </YStack>
-      {/* {
+      {
         (error) && (
           <StyledOkDialog title={error?.message} description='please try again' visible={true} onOk={() => {
             resetHandler()
@@ -187,7 +162,7 @@ const AddUser = () => {
         (loading) && (
           <StyledSpinner />
         )
-      } */}
+      }
     </StyledSafeAreaView>
   )
 }
