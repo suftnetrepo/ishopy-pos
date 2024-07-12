@@ -5,13 +5,15 @@ export interface Category {
   category_id: number;
   name: string;
   status: number;
+  color_code?: string;
 }
 
 const insertCategory = async (
   name: string,
   status: number = 0,
+  color_code : string
 ): Promise<Category> => {
-  const realm = await getRealmInstance()
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -19,6 +21,7 @@ const insertCategory = async (
           category_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
           name,
           status,
+          color_code,
         };
         realm.create('Category', category);
         resolve(category);
@@ -40,6 +43,7 @@ const queryAllCategories = async (): Promise<Category[]> => {
           category_id: category.category_id,
           name: category.name,
           status: category.status,
+          color_code: category.color_code
         }));
       resolve(categories);
     } catch (error) {
@@ -60,6 +64,7 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
           category_id: category.category_id,
           name: category.name,
           status: category.status,
+          color_code: category.color_code,
         }));
       resolve({...categories});
     } catch (error) {
@@ -79,11 +84,12 @@ const queryCategoryById = async (category_id: number): Promise<Category | null> 
       resolve(
         category
           ? {
-            category_id: category.category_id,
-            name: category.name,
-            status: category.status,
-          }
-          : null,
+              category_id: category.category_id,
+              name: category.name,
+              status: category.status,
+              color_code: category.color_code,
+            }
+          : null
       );
     } catch (error) {
       reject(error);
@@ -95,6 +101,7 @@ const updateCategory = async (
   category_id: number,
   name: string,
   status: number,
+  color_code: string
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -102,11 +109,12 @@ const updateCategory = async (
       realm.write(() => {
         const category = realm.objectForPrimaryKey<Category>(
           'Category',
-          category_id,
+          category_id
         );
         if (category) {
           category.name = name;
           category.status = status;
+          category.color_code = color_code;
           resolve(category);
         } else {
           reject(new Error('Category not found'));

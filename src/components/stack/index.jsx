@@ -15,7 +15,7 @@ const StyledStack = styled(View, {
         status: {
             '0': {
                 borderLeftColor: theme.colors.red[400],
-                borderLeftWidth: 8,
+                borderLeftWidth: 4,
                 borderTopColor: theme.colors.gray[300],
                 borderRightColor: theme.colors.gray[300],
                 borderBottomColor: theme.colors.gray[300],
@@ -24,8 +24,8 @@ const StyledStack = styled(View, {
                 borderBottomWidth: 1,
             },
             '1': {
-                borderLeftColor: theme.colors.green[500],
-                borderLeftWidth: 8,
+                borderLeftColor: theme.colors.teal[500],
+                borderLeftWidth: 4,
                 borderTopColor: theme.colors.gray[300],
                 borderRightColor: theme.colors.gray[300],
                 borderBottomColor: theme.colors.gray[300],

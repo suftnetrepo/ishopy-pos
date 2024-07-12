@@ -17,6 +17,9 @@ import AddTax from '../screens/account/tax/add'
 import EditTax from '../screens/account/tax/edit'
 import AddDiscount from '../screens/account/discount/add'
 import EditDiscount from '../screens/account/discount/edit'
+import Product from '../screens/account/product';
+import AddProduct from '../screens/account/product/add';
+import EditProduct from '../screens/account/product/edit';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -25,6 +28,27 @@ function Navigator() {
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="products"
+        component={Product}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-product"
+        component={AddProduct}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-product"
+        component={EditProduct}
         options={{
           headerShown: false,
         }}

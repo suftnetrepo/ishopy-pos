@@ -12,6 +12,7 @@ export interface Product {
   stock?: number;
   category_id?: number;
   status?: number;
+  description?: string;
 }
 
 const insertProduct = async (
@@ -55,6 +56,7 @@ const queryAllProducts = async (
           stock: product.stock,
           category_id: product.category_id,
           status: product.status,
+          description: product.description
         }));
       resolve(products);
     } catch (error) {
@@ -82,6 +84,7 @@ const queryProductByStatus = async (status: number = 1): Promise<Product[]> => {
           stock: product.stock,
           category_id: product.category_id,
           status: product.status,
+          description: product.description,
         }));
       resolve(products);
     } catch (error) {
@@ -109,6 +112,7 @@ const queryProductByCategory = async (category_id: number): Promise<Product[]> =
           stock: product.stock,
           category_id: product.category_id,
           status: product.status,
+          description: product.description,
         }));
       resolve(products);
     } catch (error) {
@@ -125,17 +129,18 @@ const queryProductById = async (product_id: number): Promise<Product | null> => 
       resolve(
         product
           ? {
-            product_id: product.product_id,
-            name: product.name,
-            bar_code: product.bar_code,
-            color_code: product.color_code,
-            price: product.price,
-            price_offer: product.price_offer,
-            cost: product.cost,
-            stock: product.stock,
-            category_id: product.category_id,
-            status: product.status,
-          }
+              product_id: product.product_id,
+              name: product.name,
+              bar_code: product.bar_code,
+              color_code: product.color_code,
+              price: product.price,
+              price_offer: product.price_offer,
+              cost: product.cost,
+              stock: product.stock,
+              category_id: product.category_id,
+              status: product.status,
+              description: product.description,
+            }
           : null
       );
     } catch (error) {
@@ -154,17 +159,18 @@ const queryProductByBarCode = async (bar_code: string): Promise<Product | null> 
       resolve(
         product
           ? {
-            product_id: product.product_id,
-            name: product.name,
-            bar_code: product.bar_code,
-            color_code: product.color_code,
-            price: product.price,
-            price_offer: product.price_offer,
-            cost: product.cost,
-            stock: product.stock,
-            category_id: product.category_id,
-            status: product.status,
-          }
+              product_id: product.product_id,
+              name: product.name,
+              bar_code: product.bar_code,
+              color_code: product.color_code,
+              price: product.price,
+              price_offer: product.price_offer,
+              cost: product.cost,
+              stock: product.stock,
+              category_id: product.category_id,
+              status: product.status,
+              description: product.description,
+            }
           : null
       );
     } catch (error) {
@@ -195,6 +201,7 @@ const updateProduct = async (
             existingProduct.stock = product.stock;
             existingProduct.category_id = product.category_id;
             existingProduct.status = product.status;
+            existingProduct.description=  product.description;
             resolve(existingProduct);
         } else {
           reject(new Error('Product not found'));

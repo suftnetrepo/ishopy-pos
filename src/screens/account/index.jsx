@@ -82,6 +82,7 @@ const Account = () => {
         <RenderRow icon="outlet" title='Shop' screen='shop' />
         <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />
         <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />
+        <RenderRow icon="collections" title='Product' screen='products' />
         <RenderRow icon="help-outline" title='FAQ' />
         <RenderRow icon="info-outline" title='Help Center' />
       </YStack>

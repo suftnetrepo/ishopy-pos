@@ -25,29 +25,40 @@ const useProducts = () => {
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryAllProducts();
-				setData((prev) => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadProducts() {
+		try {
+			const result = await queryAllProducts();
+			setData({				
+				data: result,
+				error: null,
+				loading: false,
+			});
+			return true
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
+	}
+
+	useEffect(() => {		
+		loadProducts();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler,
+		loadProducts
 	};
 };
 
@@ -78,9 +89,17 @@ const useQueryProductByStatus = async (status: number) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler
 	};
 };
 
@@ -111,9 +130,17 @@ const useQueryProductByCategory = async (category_id: number) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler
 	};
 };
 
@@ -144,9 +171,17 @@ const useQueryProductById = async (product_id: number) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler
 	};
 };
 
@@ -177,9 +212,17 @@ const useQueryProductByBarCode = async (bar_code: string) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler
 	};
 };
 
@@ -187,7 +230,7 @@ const useInsertProduct = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const insertHandler = async (product: Omit<Product, "product_id">) => {
@@ -200,6 +243,8 @@ const useInsertProduct = () => {
 				error: null,
 				loading: false,
 			});
+
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -209,9 +254,18 @@ const useInsertProduct = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		insert: insertHandler,
+		resetHandler
 	};
 };
 
@@ -232,6 +286,8 @@ const useUpdateProduct = () => {
 				error: null,
 				loading: false,
 			});
+
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -241,9 +297,18 @@ const useUpdateProduct = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		update: updateHandler,
+		resetHandler
 	};
 };
 
@@ -267,6 +332,7 @@ const useDeleteProduct = () => {
 				error: null,
 				loading: false,
 			});
+			return true
 		} catch (error) {
 			setData({
 				data: false,
@@ -276,9 +342,18 @@ const useDeleteProduct = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: false,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
-		delete: deleteHandler,
+		deleteProduct: deleteHandler,
+		resetHandler
 	};
 };
 

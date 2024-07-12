@@ -7,7 +7,8 @@ export interface Shop {
   mobile: string;
   email: string;
   address: string;
-  description: string;
+  description?: string;
+  currency?: string;
 }
 
 const insertShop = async (
@@ -44,6 +45,7 @@ const queryAllShops = async (): Promise<Shop[]> => {
           email: shop.email,
           address: shop.address,
           description: shop.description,
+          currency: shop.currency
         }));  
       resolve(shops);
     } catch (error) {
@@ -66,6 +68,7 @@ const queryShopById = async (shop_id: number): Promise<Shop | null> => {
               email: shop.email,
               address: shop.address,
               description: shop.description,
+              currency: shop.currency,
             }
           : null
       );
@@ -89,6 +92,7 @@ const updateShop = async (
             (updateShop.email = shop.email),
             (updateShop.address = shop.address),
             (updateShop.description = shop.description),
+              (updateShop.currency= shop.currency)
             resolve(updateShop);
         } else {
           reject(new Error('Shop not found'));

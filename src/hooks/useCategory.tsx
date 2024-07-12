@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { queryAllCategories, queryCategoriesByStatus, queryCategoryById, deleteCategory, insertCategory, updateCategory } from "../model/category";
 import { Category } from "../model/types";
-
 interface Initialize {
 	data: Category[] | null | Category | [] | boolean;
 	error: Error | null;
@@ -16,29 +15,30 @@ const useCategories = () => {
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryAllCategories();
-				setData(prev => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadCategories() {
+		try {
+			const result = await queryAllCategories();
+			setData(prev => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
+	}
+
+	useEffect(() => {		
+		loadCategories();
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		loadCategories
 	};
 };
 
@@ -70,8 +70,7 @@ const useQueryCategoriesByStatus = async (status: number) => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -103,8 +102,7 @@ const useQueryCategoryById = async (category_id: number) => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -119,11 +117,12 @@ const useInsertCategory = () => {
 	const insertCategoryHandler = async (
 		name: string,
 		status: number = 0,
+		color_code : string
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const result = await insertCategory(name, status);
+			const result = await insertCategory(name, status, color_code);
 			setData({
 				data: result,
 				error: null,
@@ -155,11 +154,12 @@ const useUpdateCategory = () => {
 		category_id: number,
 		name: string,
 		status: number,
+		color_code : string
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await updateCategory(category_id, name, status);
+			const user = await updateCategory(category_id, name, status, color_code);
 			setData({
 				data: user,
 				error: null,

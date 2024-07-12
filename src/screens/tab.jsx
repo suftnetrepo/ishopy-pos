@@ -8,7 +8,6 @@ import { XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { theme } from '../configs/theme';
 import Home from './home';
-import Product from './product';
 import Sales from './sales';
 import Account from './account';
 
@@ -60,7 +59,7 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='product' component={Product} options={{
+      <Tab.Screen name='report' component={Home} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='square-outline' />
