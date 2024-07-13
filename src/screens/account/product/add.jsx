@@ -34,7 +34,7 @@ const AddProduct = () => {
       setFields(productRules.reset)
     }
 
-    await insert({...fields, price : parseFloat(fields.price), stock: parseFloat(fields.stock), cost : parseFloat(fields.cost)}).then(async (result) => {
+    await insert({...fields, price : parseFloat(fields.price), cost : parseFloat(fields.cost)}).then(async (result) => {
       result && handleResult()
     })
 
@@ -125,24 +125,7 @@ const AddProduct = () => {
             error={!!errorMessages?.category_id}
             errorMessage={errorMessages?.category_id?.message}
             listMode='MODAL'
-          />
-          <StyledInput
-            label={'Quantity'}
-            keyboardType='numeric'
-            placeholder='Enter your quantity'
-            returnKeyType='next'
-            maxLength={9}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.stock}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, stock: text })}
-            error={!!errorMessages?.stock}
-            errorMessage={errorMessages?.stock?.message}
-          />
+          />         
           <XStack
             justifyContent='flex-start'
             alignItems='center'

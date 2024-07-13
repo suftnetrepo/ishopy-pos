@@ -255,6 +255,7 @@ const seedData = async () => {
         stock_id: product.product_id,
         product_id: product.product_id,
         stock: product.stock ?? 0, // Ensure stock is a number
+        date: new Date().toISOString(),
       }));
       stock.forEach(stockItem => realm.create('Stock', stockItem));
 

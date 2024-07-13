@@ -82,7 +82,7 @@ const Products = () => {
           </StyledCycle>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-             <StyledMIcon size={24} name='add-task' color={theme.colors.gray[600]} onPress={() => navigator.navigate("stock", {
+             <StyledMIcon size={24} name='add-task' color={theme.colors.gray[600]} onPress={() => navigator.navigate("stocks", {
               product: item
             })} />
           </StyledCycle>
@@ -110,7 +110,7 @@ const Products = () => {
           data={data}
           showsVerticalScrollIndicator={false}
           initialNumToRender={100}
-          keyExtractor={(item) => item.user_id}
+          keyExtractor={(item) => item.product_id}
           renderItem={({ item, index }) => {
             return (
               <RenderCard item={item} key={index} />

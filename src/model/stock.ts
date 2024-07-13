@@ -5,6 +5,7 @@ export interface Stock {
   stock_id: number;
   product_id: number;
   stock: number;
+  date: string;
 }
 
 const insertStock = async (product_id: number, stock: number = 0): Promise<Stock> => {
@@ -16,6 +17,7 @@ const insertStock = async (product_id: number, stock: number = 0): Promise<Stock
           stock_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
           product_id,
           stock,
+          date: new Date().toISOString(),
         };
         realm.create('Stock', newStock);
         resolve(newStock);
@@ -37,6 +39,7 @@ const queryStockById = async (stock_id: number): Promise<Stock | null> => {
               stock_id: stock.stock_id,
               product_id: stock.product_id,
               stock: stock.stock,
+              date: stock.date
             }
           : null
       );
@@ -57,6 +60,7 @@ const queryStockByProductId = async (product_id: number): Promise<Stock[]> => {
           stock_id: stock.stock_id,
           product_id: stock.product_id,
           stock: stock.stock,
+          date: stock.date,
         }));
       resolve(stocks);
     } catch (error) {

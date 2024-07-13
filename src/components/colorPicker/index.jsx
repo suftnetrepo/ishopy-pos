@@ -2,9 +2,10 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FlatList } from 'react-native';
 import { palettes, theme } from '../../configs/theme';
-import { YStack, XStack, StyledScrollView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import { YStack, XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 
 const ColorPicker = React.memo(({ color, onPress }) => {
     const [selectedColor, setSelectedColor] = useState(color);
@@ -18,6 +19,30 @@ const ColorPicker = React.memo(({ color, onPress }) => {
         if (onPress) onPress(color);
     };
 
+    const colorData = useMemo(() => {
+        return Object.keys(palettes).reduce((acc, colorFamily) => {
+            const shades = Object.keys(palettes[colorFamily])
+                .filter((key) => parseInt(key) >= 600 && parseInt(key) <= 900)
+                .map((shade) => ({
+                    color: palettes[colorFamily][shade],
+                    shade
+                }));
+            return [...acc, ...shades];
+        }, []);
+    }, [palettes]);
+
+    const renderItem = ({ item }) => (
+        <StyledButton
+            height={48}
+            width={48}
+            borderRadius={5}
+            marginVertical={10}
+            marginHorizontal={5}
+            backgroundColor={item.color}
+            onPress={() => handleClick(item.color)}
+        />
+    );
+
     return (
         <YStack padding={10} justifyContent='center' alignItems='center'>
             {selectedColor && (
@@ -28,25 +53,13 @@ const ColorPicker = React.memo(({ color, onPress }) => {
                 </XStack>
             )}
             <StyledSpacer marginVertical={8} />
-            <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {Object.keys(palettes).map((colorFamily) => (
-                    <XStack key={colorFamily} flexWrap='wrap' marginHorizontal={5}>
-                        {Object.keys(palettes[colorFamily])
-                            .filter((key) => parseInt(key) >= 600 && parseInt(key) <= 900)
-                            .map((shade) => (
-                                <StyledButton
-                                    key={shade}
-                                    height={48}
-                                    width={48}
-                                    borderRadius={5}
-                                    marginVertical={10}
-                                    backgroundColor={palettes[colorFamily][shade]}
-                                    onPress={() => handleClick(palettes[colorFamily][shade])}
-                                />
-                            ))}
-                    </XStack>
-                ))}
-            </StyledScrollView>
+            <FlatList
+                data={colorData}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.color}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+            />
             <StyledSpacer marginVertical={4} />
         </YStack>
     );
