@@ -36,9 +36,18 @@ const useCategories = () => {
 		loadCategories();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
-		loadCategories
+		loadCategories,
+		resetHandler
 	};
 };
 
@@ -69,8 +78,17 @@ const useQueryCategoriesByStatus = async (status: number) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		...data
+		...data,
+		resetHandler
 	};
 };
 
@@ -101,8 +119,17 @@ const useQueryCategoryById = async (category_id: number) => {
 		load();
 	}, []);
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
-		...data
+		...data,
+		resetHandler
 	};
 };
 
@@ -111,7 +138,7 @@ const useInsertCategory = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const insertCategoryHandler = async (
@@ -128,6 +155,8 @@ const useInsertCategory = () => {
 				error: null,
 				loading: false,
 			});
+
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -137,9 +166,18 @@ const useInsertCategory = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		insertCategory: insertCategoryHandler,
+		resetHandler
 	};
 };
 
@@ -147,7 +185,7 @@ const useUpdateCategory = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const updateCategoryHandler = async (
@@ -157,14 +195,15 @@ const useUpdateCategory = () => {
 		color_code : string
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
-
+		
 		try {
-			const user = await updateCategory(category_id, name, status, color_code);
+			const result = await updateCategory(category_id, name, status, color_code);
 			setData({
-				data: user,
+				data: result,
 				error: null,
 				loading: false,
 			});
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -174,9 +213,18 @@ const useUpdateCategory = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		updateCategory: updateCategoryHandler,
+		resetHandler
 	};
 };
 
@@ -188,7 +236,7 @@ const useDeleteCategory = () => {
 	}>({
 		data: false,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const deleteCategoryHandler = async (category_id: number) => {
@@ -200,6 +248,8 @@ const useDeleteCategory = () => {
 				error: null,
 				loading: false,
 			});
+
+			return true
 		} catch (error) {
 			setData({
 				data: false,
@@ -209,9 +259,18 @@ const useDeleteCategory = () => {
 		}
 	};
 
+	const resetHandler = () => {
+		setData({
+			data: false,
+			error: null,
+			loading: false,
+		});
+	}
+
 	return {
 		...data,
 		deleteCategory: deleteCategoryHandler,
+		resetHandler
 	};
 };
 

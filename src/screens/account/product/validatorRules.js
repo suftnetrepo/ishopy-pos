@@ -6,7 +6,7 @@ const reset = {
   bar_code: "",
   color_code: "",
   price: '',
-  cost: '',
+  cost: '0',
   stock: '',
   status: 0,
   category_id: ''
@@ -22,7 +22,19 @@ const productRules = {
         pattern: /^.{0,50}$/,
         message: 'product name must be no more than 50 characters'
       }
-    ]     
+    ],
+    price: [
+      {
+        pattern: /^\d+(\.\d{1,2})?$/,
+        message: 'price is required'
+      }
+    ],
+    category_id: [
+      {
+        pattern: /^.+$/,
+        message: 'category is required'
+      }
+    ]
   },
   reset: reset,
   fields: {

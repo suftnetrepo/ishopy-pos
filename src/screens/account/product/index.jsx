@@ -13,13 +13,15 @@ import { useProducts, useDeleteProduct } from '../../../hooks/useProduct';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
+import { useAppContext } from '../../../hooks/appContext';
 
 const Products = () => {
   const navigator = useNavigation()
+  const { shop : {currency } } = useAppContext()
   const [isDialogVisible, setIsDialogVisible] = useState(false)
   const [product, setProduct] = useState()
   const { data, error, loading, loadProducts, resetHandler } = useProducts()
-  const { deleteProduct, error: deleteError, loading: deleting } = useDeleteProduct()
+  const { deleteProduct, error: deleteError } = useDeleteProduct()
 
   const onConfirm = () => {
     deleteProduct(product?.product_id).then(async (result) => {
@@ -41,19 +43,19 @@ const Products = () => {
           <StyledSpacer marginVertical={4} />
           <XStack>
             <StyledBadge
-              color={theme.colors.indigo[800]}
-              backgroundColor={theme.colors.indigo[100]}
+              color={theme.colors.orange[800]}
+              backgroundColor={theme.colors.orange[100]}
               fontWeight={theme.fontWeight.normal}
               fontSize={theme.fontSize.medium}
               paddingHorizontal={10}
               paddingVertical={1}
             >
-             £ {item.price}
+             {currency}{item.price}
             </StyledBadge>
             <StyledSpacer marginHorizontal={2} />
             <StyledBadge
-              color={theme.colors.blueGray[800]}
-              backgroundColor={theme.colors.blueGray[200]}
+              color={theme.colors.green[800]}
+              backgroundColor={theme.colors.green[100]}
               fontWeight={theme.fontWeight.normal}
               fontSize={theme.fontSize.medium}
               paddingHorizontal={10}

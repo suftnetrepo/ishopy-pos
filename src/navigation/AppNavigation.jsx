@@ -20,6 +20,9 @@ import EditDiscount from '../screens/account/discount/edit'
 import Product from '../screens/account/product';
 import AddProduct from '../screens/account/product/add';
 import EditProduct from '../screens/account/product/edit';
+import Category from '../screens/account/category';
+import AddCategory from '../screens/account/category/add';
+import EditCategory from '../screens/account/category/edit';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -33,8 +36,29 @@ function Navigator() {
         }}
       />
       <Stack.Screen
+        name="edit-category"
+        component={EditCategory}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-category"
+        component={AddCategory}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="products"
         component={Product}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="categories"
+        component={Category}
         options={{
           headerShown: false,
         }}

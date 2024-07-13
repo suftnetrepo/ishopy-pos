@@ -42,8 +42,9 @@ const shopRules = {
     name: "",   
     email: "",   
     mobile: '',    
-    address: '' ,   
-    description : 'Todo'
+    address: '' , 
+    currency : '£',  
+    description : ''
   }
 }
 

@@ -6,42 +6,41 @@ import { validate, StyledSpinner, XStack, YStack, StyledOkDialog, StyledCheckBox
 import { theme } from "../../../configs/theme";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { discountRules } from "./validatorRules";
-import { useUpdateDiscount } from "../../../hooks/useDiscount";
+import { categoryRules } from "./validatorRules";
+import { useUpdateCategory } from "../../../hooks/useCategory";
+import ColorPicker from "../../../components/colorPicker";
 
-const EditDiscount = () => {
+const EditCategory = () => {
   const navigator = useNavigation()
   const route = useRoute()
   const [errorMessages, setErrorMessages] = useState({})
-  const [fields, setFields] = useState(discountRules.fields)
-  const { update, error, loading, resetHandler } = useUpdateDiscount()
-  const { discount } = route.params
-
-  console.log(".............fields", fields)
-
+  const [fields, setFields] = useState(categoryRules.fields)
+  const { updateCategory, error, loading, resetHandler } = useUpdateCategory()
+  const { category } = route.params
+ 
   useEffect(() => {
     setFields((pre) => {
       return {
         ...pre,
-        ...discount      
+        ...category
       }
     })
-  }, [discount])
+  }, [category])
 
   const onSubmit = async () => {
     setErrorMessages({})
-    const { hasError, errors } = validate(fields, discountRules.rules)
+    const { hasError, errors } = validate(fields, categoryRules.rules)
     if (hasError) {
       setErrorMessages(errors)
       return false
     }
 
-    await update({...fields, rate : parseFloat(fields.rate)}).then(async (result) => {
+    await updateCategory(fields.category_id, fields.name, fields.status, fields.color_code).then(async (result) => {
       result && (
         navigator.reset({
-          key: 'discount',
+          key: 'categories',
           index: 0,
-          routes: [{ name: 'discount' }],
+          routes: [{ name: 'categories' }],
         })
       )
     })
@@ -51,10 +50,10 @@ const EditDiscount = () => {
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
         <StyledHeader.Header onPress={() => navigator.reset({
-          key: "discount",
+          key: "categories",
           index: 0,
-          routes: [{ name: 'discount' }]
-        })} title='Edit Discount' icon cycleProps={{
+          routes: [{ name: 'categories' }]
+        })} title='Edit Category' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
@@ -67,10 +66,11 @@ const EditDiscount = () => {
       >
         <StyledSpacer marginVertical={8} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+          <ColorPicker color={fields.color_code || theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
             label={'Name'}
             keyboardType='default'
-            placeholder='Enter discount name'
+            placeholder='Enter category name'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -84,23 +84,6 @@ const EditDiscount = () => {
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
           />
-          <StyledInput
-            label={'Rate'}
-            keyboardType='number-pad'
-            placeholder='Enter discount rate'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields?.rate?.toString()}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, rate: text })}
-            error={!!errorMessages?.rate}
-            errorMessage={errorMessages?.rate?.message}
-          />
           <StyledSpacer marginVertical={4} />
           <XStack
             justifyContent='flex-start'
@@ -111,7 +94,7 @@ const EditDiscount = () => {
             <StyledCheckBox
               height={30}
               width={30}
-              checked={fields.status === 1 ? true : false}             
+              checked={fields.status === 1 ? true : false}
               checkedColor={theme.colors.pink[600]}
               onPress={(value) => setFields({ ...fields, status: value ? 1 : 0 })}
             />
@@ -151,4 +134,4 @@ const EditDiscount = () => {
   )
 }
 
-export default EditDiscount
+export default EditCategory

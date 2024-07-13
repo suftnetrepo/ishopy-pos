@@ -14,11 +14,12 @@ export const ProductSchema: ObjectSchema = {
     bar_code: 'string?',
     color_code: 'string?',
     price: 'double',
-    price_offer: { type: 'double', default: 0 },
-    cost: { type: 'double', default: 0 },
-    stock: { type: 'int', default: 0 },
+    price_offer: {type: 'double', default: 0},
+    cost: {type: 'double', default: 0},
+    stock: {type: 'int', default: 0},
     category_id: 'int?',
-    status: { type: 'int', default: 0 },
+    status: {type: 'int', default: 0},
+    description: 'string?',
   },
 };
 
@@ -38,7 +39,8 @@ export const CategorySchema: ObjectSchema = {
   properties: {
     category_id: 'int',
     name: 'string',
-    status: { type: 'int', default: 0 },
+    color_code: 'string?',
+    status: {type: 'int', default: 0},
   },
 };
 
@@ -116,7 +118,8 @@ export const ShopSchema: ObjectSchema = {
     mobile: 'string',
     email: 'string',
     address: 'string',
-    description: 'string',
+    currency: 'string?',
+    description: 'string?',
   },
 };
 
@@ -176,7 +179,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '__pos.realm',
+    path: '__pos__.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

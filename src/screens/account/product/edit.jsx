@@ -2,45 +2,49 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from "react";
-import { validate, StyledSpinner, YStack, StyledOkDialog, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, XStack, StyledOkDialog, StyledCheckBox, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../../configs/theme";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { userRules } from "./validatorRules";
-import { useUpdateUser } from "../../../hooks/useUser";
+import { productRules } from "./validatorRules";
+import { StyledInput } from "../../../components/form";
+import { StyledDropdown } from "../../../components/dropdown";
+import ColorPicker from "../../../components/colorPicker";
+import { useCategories } from "../../../hooks/useCategory";
+import { useUpdateProduct } from "../../../hooks/useProduct";
 
-const EditUser = () => {
+const EditProduct = () => {
   const navigator = useNavigation()
   const route = useRoute()
   const [errorMessages, setErrorMessages] = useState({})
-  const [fields, setFields] = useState(userRules.fields)
-  const { updateUser, error, loading, resetHandler } = useUpdateUser()
-  const { user } = route.params
+  const [fields, setFields] = useState(productRules.fields)
+  const { update, error, loading, resetHandler } = useUpdateProduct()
+  const { data } = useCategories()
+  const { product } = route.params
 
   useEffect(() => {
     setFields((pre) => {
       return {
         ...pre,
-        ...user,
-        pass_code: user?.pass_code?.toString()
+        ...product
       }
     })
-  }, [user])
+  }, [product])
 
   const onSubmit = async () => {
     setErrorMessages({})
-    const { hasError, errors } = validate(fields, userRules.rules)
+    const { hasError, errors } = validate(fields, productRules.rules)
     if (hasError) {
       setErrorMessages(errors)
       return false
     }
 
-    await updateUser(user.user_id, fields.username, fields.password, fields.role, fields.first_name, fields.last_name, parseInt(fields.pass_code)).then(async (result) => {    
+    await update(fields.product_id, { ...fields, price: parseFloat(fields.price), stock: parseFloat(fields.stock), cost: parseFloat(fields.cost) }).then(async (result) => {
       result && (
-        navigator.reset({   
-          key : 'users',    
+        navigator.reset({
+          key: 'products',
           index: 0,
-          routes: [{ name: 'users' }],
+          routes: [{ name: 'products' }],
         })
       )
     })
@@ -49,7 +53,7 @@ const EditUser = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={()=> navigator.goBack()} title='Edit User' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.goBack()} title='Edit Product' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
@@ -62,10 +66,11 @@ const EditUser = () => {
       >
         <StyledSpacer marginVertical={8} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+          <ColorPicker color={ fields.color_code || theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
-            label={'FirstName'}
+            label={'Name'}
             keyboardType='default'
-            placeholder='Enter your firstname'
+            placeholder='Enter your product name'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -73,82 +78,103 @@ const EditUser = () => {
             backgroundColor={theme.colors.gray[1]}
             borderRadius={32}
             paddingHorizontal={8}
-            value={fields.first_name}
+            value={fields.name}
             placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, first_name: text })}
-            error={!!errorMessages?.first_name}
-            errorMessage={errorMessages?.first_name?.message}
+            onChangeText={(text) => setFields({ ...fields, name: text })}
+            error={!!errorMessages?.name}
+            errorMessage={errorMessages?.name?.message}
+          />
+          <XStack justifyContent='space-between' alignItems='center'>
+            <StyledInput
+              flex={1}
+              label={'Price'}
+              keyboardType='number-pad'
+              placeholder='Enter your price'
+              returnKeyType='next'
+              maxLength={50}
+              fontSize={theme.fontSize.small}
+              borderColor={theme.colors.yellow[800]}
+              backgroundColor={theme.colors.gray[1]}
+              borderRadius={32}
+              paddingHorizontal={8}
+              value={fields.price.toString()}
+              placeholderTextColor={theme.colors.gray[400]}
+              onChangeText={(text) => setFields({ ...fields, price: text })}
+              error={!!errorMessages?.price}
+              errorMessage={errorMessages?.price?.message}
+            />
+            <StyledSpacer marginHorizontal={8} />
+            <StyledInput
+              flex={1}
+              label={'Cost'}
+              keyboardType='number-pad'
+              placeholder='Enter your cost'
+              returnKeyType='next'
+              maxLength={50}
+              fontSize={theme.fontSize.small}
+              borderColor={theme.colors.yellow[800]}
+              backgroundColor={theme.colors.gray[1]}
+              borderRadius={32}
+              paddingHorizontal={8}
+              value={fields.cost.toString()}
+              placeholderTextColor={theme.colors.gray[400]}
+              onChangeText={(text) => setFields({ ...fields, cost: text })}
+              error={!!errorMessages?.cost}
+              errorMessage={errorMessages?.cost?.message}
+            />
+          </XStack>
+
+          <StyledDropdown
+            placeholder={'Select a category'}
+            label={'Category'}
+            items={data.map((item) => ({ value: item.category_id, label: item.name }))}
+            value={fields.category_id}
+            onSelectItem={e => setFields({ ...fields, category_id: e.value })}
+            error={!!errorMessages?.category_id}
+            errorMessage={errorMessages?.category_id?.message}
+            listMode='MODAL'
           />
           <StyledInput
-            label={'LastName'}
-            keyboardType='default'
-            placeholder='Enter your lastname'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.last_name}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, last_name: text })}
-            error={!!errorMessages?.last_name}
-            errorMessage={errorMessages?.last_name?.message}
-          />
-          <StyledInput
-            label={'Username'}
-            keyboardType='default'
-            placeholder='Enter your username'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.username}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, username: text })}
-            error={!!errorMessages?.username}
-            errorMessage={errorMessages?.username?.message}
-          />
-          <StyledInput
-            label={'Password'}
-            keyboardType='default'
-            secureTextEntry={true}
-            placeholder='Enter your password'
-            returnKeyType='done'
-            maxLength={8}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields.password}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, password: text })}
-            error={!!errorMessages?.password}
-            errorMessage={errorMessages?.password?.message}
-          />
-          <StyledInput
-            label={'Pass code'}
+            label={'Quantity'}
             keyboardType='numeric'
-            placeholder='Enter your pass code'
-            returnKeyType='done'
-            maxLength={4}
+            placeholder='Enter your quantity'
+            returnKeyType='next'
+            maxLength={9}
             fontSize={theme.fontSize.small}
             borderColor={theme.colors.yellow[800]}
             backgroundColor={theme.colors.gray[1]}
             borderRadius={32}
             paddingHorizontal={8}
-            value={fields.pass_code}
+            value={fields.stock.toString()}
             placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, pass_code: text })}
-            error={!!errorMessages?.pass_code}
-            errorMessage={errorMessages?.pass_code?.message}
+            onChangeText={(text) => setFields({ ...fields, stock: text })}
+            error={!!errorMessages?.stock}
+            errorMessage={errorMessages?.stock?.message}
           />
-          <StyledSpacer marginVertical={8} />
+          <XStack
+            justifyContent='flex-start'
+            alignItems='center'
+            paddingVertical={8}
+            paddingHorizontal={16}
+          >
+            <StyledCheckBox
+              height={30}
+              width={30}
+              checked={fields.status === 1 ? true : false}
+              checkedColor={theme.colors.pink[600]}
+              onPress={(value) => setFields({ ...fields, status: value ? 1 : 0 })}
+            />
+            <StyledSpacer marginHorizontal={8} />
+            <StyledText
+              fontWeight={theme.fontWeight.normal}
+              color={theme.colors.gray[600]}
+              fontSize={theme.fontSize.large}
+            >
+              Status
+            </StyledText>
+
+          </XStack>
+          <StyledSpacer marginVertical={4} />
           <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
               Save Changes
@@ -173,4 +199,4 @@ const EditUser = () => {
   )
 }
 
-export default EditUser
+export default EditProduct

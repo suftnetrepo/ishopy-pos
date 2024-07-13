@@ -6,45 +6,46 @@ import { validate, StyledSpinner, XStack, YStack, StyledOkDialog, StyledCheckBox
 import { theme } from "../../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { discountRules } from "./validatorRules";
-import { useInsertDiscount } from "../../../hooks/useDiscount";
+import { categoryRules } from "./validatorRules";
+import { useInsertCategory } from "../../../hooks/useCategory";
 import { ShowToast } from "../../../components/toast";
+import ColorPicker from "../../../components/colorPicker";
 
-const AddDiscount = () => {
+const AddCategory = () => {
   const navigator = useNavigation()
   const [errorMessages, setErrorMessages] = useState({})
-  const [fields, setFields] = useState(discountRules.fields)
-  const { insert, error, loading, resetHandler } = useInsertDiscount()  
+  const [fields, setFields] = useState(categoryRules.fields)
+  const { insertCategory, error, loading, resetHandler } = useInsertCategory()
 
-const onSubmit = async () => {
-  setErrorMessages({})
+  const onSubmit = async () => {
+    setErrorMessages({})
 
-  const { hasError, errors } = validate(fields, discountRules.rules)
-  if (hasError) {
-    setErrorMessages(errors)
-    return false
-  }
-
-  const handleResult = () => {
-    ShowToast("Success", "Discount was added successfully")
-    setFields(discountRules.reset)  // Reset the fields
-  }
-
-  await insert({...fields, rate: parseFloat(fields.rate)}).then(async (result) => {
-    if (result) {
-      handleResult()
+    const { hasError, errors } = validate(fields, categoryRules.rules)
+    if (hasError) {
+      setErrorMessages(errors)
+      return false
     }
-  })
-}
+
+    const handleResult = () => {
+      ShowToast("Success", "Category was added successfully")
+      setFields(categoryRules.reset) 
+    }
+
+    await insertCategory(fields.name, fields.status, fields.color_code).then(async (result) => {
+      if (result) {
+        handleResult()
+      }
+    })
+  }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
         <StyledHeader.Header onPress={() => navigator.reset({
-          key: "discount",
+          key: "categories",
           index: 0,
-          routes: [{ name: 'discount' }]
-        })} title='Add Discount' icon cycleProps={{
+          routes: [{ name: 'categories' }]
+        })} title='Add Category' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
@@ -57,10 +58,11 @@ const onSubmit = async () => {
       >
         <StyledSpacer marginVertical={8} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+          <ColorPicker color={theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
             label={'Name'}
             keyboardType='default'
-            placeholder='Enter discount name'
+            placeholder='Enter category name'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -73,24 +75,7 @@ const onSubmit = async () => {
             onChangeText={(text) => setFields({ ...fields, name: text })}
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
-          />
-          <StyledInput
-            label={'Rate'}
-            keyboardType='number-pad'
-            placeholder='Enter discount rate'
-            returnKeyType='next'
-            maxLength={50}
-            fontSize={theme.fontSize.small}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
-            paddingHorizontal={8}
-            value={fields?.rate?.toString()}
-            placeholderTextColor={theme.colors.gray[400]}
-            onChangeText={(text) => setFields({ ...fields, rate: text })}
-            error={!!errorMessages?.rate}
-            errorMessage={errorMessages?.rate?.message}
-          />
+          />          
           <StyledSpacer marginVertical={4} />
           <XStack
             justifyContent='flex-start'
@@ -101,7 +86,7 @@ const onSubmit = async () => {
             <StyledCheckBox
               height={30}
               width={30}
-              checked={fields.status === 1 ? true : false}             
+              checked={fields.status === 1 ? true : false}
               checkedColor={theme.colors.pink[600]}
               onPress={(value) => setFields({ ...fields, status: value ? 1 : 0 })}
             />
@@ -141,4 +126,4 @@ const onSubmit = async () => {
   )
 }
 
-export default AddDiscount
+export default AddCategory

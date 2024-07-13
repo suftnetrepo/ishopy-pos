@@ -235,7 +235,7 @@ const useInsertProduct = () => {
 
 	const insertHandler = async (product: Omit<Product, "product_id">) => {
 		setData((prev) => ({ ...prev, loading: true }));
-
+		
 		try {
 			const result = await insertProduct(product);
 			setData({
@@ -273,7 +273,7 @@ const useUpdateProduct = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
 	});
 
 	const updateHandler = async (product_id: number, product: Product) => {

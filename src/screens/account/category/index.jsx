@@ -14,7 +14,7 @@ import { FlatList } from 'react-native';
 import { toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
 
-const Discount = () => {
+const Category = () => {
   const navigator = useNavigation()
   const [isDialogVisible, setIsDialogVisible] = useState(false)
   const [category, setCategory] = useState()
@@ -37,10 +37,7 @@ const Discount = () => {
         <YStack flex={2}>
           <StyledText paddingHorizontal={8} fontFamily={fontStyles.FontAwesome5_Regular} fontWeight={theme.fontWeight.medium} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
             {toWordCase(item.name)} 
-          </StyledText>
-          <StyledText paddingHorizontal={8} fontFamily={fontStyles.FontAwesome5_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={theme.colors.gray[600]}>
-            ({item.rate}%)
-          </StyledText>
+          </StyledText>         
         </YStack>
         <XStack flex={1} justifyContent='flex-end' alignItems='center'>
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
@@ -64,13 +61,13 @@ const Discount = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={()=> navigator.navigate("bottom-tabs", { screen : 'profile'})} title='Discounts' icon cycleProps={{
+        <StyledHeader.Header onPress={()=> navigator.navigate("bottom-tabs", { screen : 'profile'})} title='Categories' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={
           <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={16}>
             <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
-              <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-tax")} />
+              <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-category")} />
             </StyledCycle>
           </XStack>
         } />
@@ -102,7 +99,7 @@ const Discount = () => {
       {isDialogVisible &&
         <StyledConfirmDialog
           visible
-          description='Are you sure you want to delete this discount?'
+          description='Are you sure you want to delete this category?'
           confirm='Yes'
           cancel='No'
           title={'Confirmation'}
@@ -113,4 +110,4 @@ const Discount = () => {
   );
 }
 
-export default Discount
+export default Category

@@ -113,6 +113,23 @@ const Shop = () => {
             error={!!errorMessages?.mobile}
             errorMessage={errorMessages?.mobile?.message}
           />
+          <StyledInput
+            label={'Currency'}
+            keyboardType='default'
+            placeholder='Enter your currency'
+            returnKeyType='next'
+            maxLength={3}
+            fontSize={theme.fontSize.normal}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.currency}
+            placeholderTextColor={theme.colors.gray[300]}
+            onChangeText={(text) => setFields({ ...fields, currency: text })}
+            error={!!errorMessages?.currency}
+            errorMessage={errorMessages?.currency?.message}
+          />
           <StyledMultiInput
             label={'Address'}
             keyboardType='default'

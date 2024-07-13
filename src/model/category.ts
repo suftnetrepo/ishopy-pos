@@ -110,7 +110,8 @@ const updateCategory = async (
         const category = realm.objectForPrimaryKey<Category>(
           'Category',
           category_id
-        );
+        );        
+      
         if (category) {
           category.name = name;
           category.status = status;

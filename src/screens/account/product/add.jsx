@@ -12,31 +12,14 @@ import { productRules } from "./validatorRules";
 import { StyledInput } from "../../../components/form";
 import { StyledDropdown } from "../../../components/dropdown";
 import ColorPicker from "../../../components/colorPicker";
+import { useCategories } from "../../../hooks/useCategory";
 
 const AddProduct = () => {
   const navigator = useNavigation()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(productRules.fields)
   const { insert, error, loading, resetHandler } = useInsertProduct()
-
-  const data = [
-    {
-      label: 'Physical Examination Test',
-      value: 'Physical Examination Test'
-    },
-    {
-      label: 'Blood Test',
-      value: 'Blood Test'
-    },
-    {
-      label: 'Imaging Test',
-      value: 'Imaging Test'
-    },
-    {
-      label: 'Diagnostic Procedures Test',
-      value: 'Diagnostic Procedures Test'
-    }
-  ]
+  const { data } = useCategories()
 
   const onSubmit = async () => {
     setErrorMessages({})
@@ -51,7 +34,7 @@ const AddProduct = () => {
       setFields(productRules.reset)
     }
 
-    await insert(fields).then(async (result) => {
+    await insert({...fields, price : parseFloat(fields.price), stock: parseFloat(fields.stock), cost : parseFloat(fields.cost)}).then(async (result) => {
       result && handleResult()
     })
 
@@ -73,7 +56,7 @@ const AddProduct = () => {
         flex={1}
         backgroundColor={theme.colors.gray[100]}
         paddingHorizontal={16}
-      >        
+      >
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <ColorPicker color={theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
@@ -136,12 +119,12 @@ const AddProduct = () => {
           <StyledDropdown
             placeholder={'Select a category'}
             label={'Category'}
-            items={data}
+            items={data.map((item) => ({ value: item.category_id, label: item.name }))}
             value={fields.category_id}
             onSelectItem={e => setFields({ ...fields, category_id: e.value })}
-            errorMessage={'Please select category'}
+            error={!!errorMessages?.category_id}
+            errorMessage={errorMessages?.category_id?.message}
             listMode='MODAL'
-
           />
           <StyledInput
             label={'Quantity'}

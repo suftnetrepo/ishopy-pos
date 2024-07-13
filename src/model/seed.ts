@@ -74,6 +74,7 @@ const seedData = async () => {
           mobile: '1234566778',
           description: 'No thing',
           address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
+          currency : '£'
         },
       ];
       shops.forEach(shop => realm.create('Shop', shop));
