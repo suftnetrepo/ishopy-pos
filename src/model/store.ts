@@ -29,7 +29,8 @@ export const StockSchema: ObjectSchema = {
   properties: {
     stock_id: 'int',
     product_id: 'int',
-    stock: { type: 'int', default: 0 },
+    stock: {type: 'int', default: 0},
+    date: 'string'
   },
 };
 
@@ -179,7 +180,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '__pos___.realm',
+    path: '___pos___.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

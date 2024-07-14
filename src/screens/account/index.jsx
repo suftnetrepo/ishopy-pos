@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 import React from "react";
 import { useNavigation } from '@react-navigation/native';
-import { YStack, StyledImage, XStack, StyledHeader, StyledSafeAreaView, StyledSeparator, StyledSpacer, StyledText } from 'fluent-styles';
+import { YStack, StyledImage, XStack, StyledHeader, StyledScrollView, StyledSafeAreaView, StyledSeparator, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { StyledMIcon } from "../../components/icon";
 import { useAppContext } from "../../hooks/appContext";
@@ -30,10 +30,10 @@ const Account = () => {
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <StyledHeader skipAndroid={true} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
+      <StyledHeader skipAndroid={false} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
       </StyledHeader>
-      <StyledSpacer marginVertical={16} />
-      <StyledText paddingHorizontal={16} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
+      {/* <StyledSpacer marginVertical={16} /> */}
+      <StyledText paddingHorizontal={24} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
         Profile
       </StyledText>
       <YStack >
@@ -61,32 +61,43 @@ const Account = () => {
               {toWordCase(user.role)}
             </StyledText>
           </YStack>
-        </XStack>
-        <StyledSpacer marginVertical={8} />
+        </XStack>    
       </YStack>
+          <StyledSpacer marginVertical={8} />
+      <StyledScrollView>
+        <YStack
+          flex={2}         
+          backgroundColor={theme.colors.gray[100]}
+          borderTopLeftRadius={16}
+          borderTopRightRadius={16}>
+          <StyledSeparator left={
+            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
+              Application
+            </StyledText>
+          }>
+          </StyledSeparator>
+          <RenderRow icon="local-printshop" title='Printer' screen='printer' />
+          <RenderRow icon="person" title='User' screen='users' />
+          <RenderRow icon="outlet" title='Shop' screen='shop' />
+          <StyledSeparator left={
+            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
+              Shop
+            </StyledText>
+          }></StyledSeparator>
+          <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />
+          <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />
+          <RenderRow icon="shopping-bag" title='Category' screen='categories' />
+          <RenderRow icon="collections" title='Product' screen='products' />
+          <StyledSeparator left={
+            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
+              Help
+            </StyledText>
+          }></StyledSeparator>
+          <RenderRow icon="help-outline" title='FAQ' />
+          <RenderRow icon="info-outline" title='Help Center' />
+        </YStack>
+      </StyledScrollView>
 
-      <YStack
-        flex={2}
-        marginTop={-16}
-        backgroundColor={theme.colors.gray[100]}
-        borderTopLeftRadius={16}
-        borderTopRightRadius={16}>
-        <StyledSeparator left={
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
-            Settings
-          </StyledText>
-        }>
-        </StyledSeparator>
-        <RenderRow icon="local-printshop" title='Printer' screen='printer' />
-        <RenderRow icon="person" title='User' screen='users' />
-        <RenderRow icon="outlet" title='Shop' screen='shop' />
-        <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />
-        <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />
-        <RenderRow icon="shopping-bag" title='Category' screen='categories' />
-        <RenderRow icon="collections" title='Product' screen='products' />
-        <RenderRow icon="help-outline" title='FAQ' />
-        <RenderRow icon="info-outline" title='Help Center' />
-      </YStack>
     </StyledSafeAreaView>
   )
 }

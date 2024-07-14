@@ -27,4 +27,73 @@ const toWordCase = (str) => {
   return str.toLowerCase().replace(/(^|\s)\S/g, (t) => t.toUpperCase());
 };
 
-export { generateRandomData, toWordCase }
+const getGreetings = () => {
+  const currentTime = new Date().getHours();
+  let greeting;
+
+  if (currentTime < 12) {
+    greeting = "Good morning";
+  } else if (currentTime < 18) {
+    greeting = "Good afternoon";
+  } else {
+    greeting = "Good evening";
+  }
+
+  return greeting;
+};
+
+const dateConverter = (stringDate) => {
+ return stringDate.split("T")[0].split("-").reverse().join("-")
+};
+
+function formatCurrency(currencySymbol, amount) {
+  const numericAmount = parseFloat(amount);
+
+  if (isNaN(numericAmount)) {
+    return amount;
+  }
+
+  const formattedAmount = currencySymbol + numericAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+  return formattedAmount;
+}
+
+function currencySymbolMapper(currencySymbol) {
+  const currencyMap = {
+    "£": "gbp",
+    "$": "usd",
+    "aed": "aed",
+    "afn": "afn",
+    "all": "all",
+    "amd": "amd",
+    "usdc": "usdc",
+    "btn": "btn",
+    "ghs": "ghs",
+    "eek": "eek",
+    "lvl": "lvl",
+    "svc": "svc",
+    "vef": "vef",
+    "ltl": "ltl",
+    "sll": "sll",
+  };
+
+  if (currencySymbol in currencyMap) {
+    return currencyMap[currencySymbol];
+  } else {
+    return "gbp";
+  }
+}
+
+function generatePaymentId() {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < 15; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
+}
+
+export { getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }

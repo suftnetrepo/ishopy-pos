@@ -5,12 +5,13 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import { YStack, XStack, StyledConfirmDialog, StyledCycle, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import { YStack, XStack, StyledConfirmDialog, StyledCycle, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer } from 'fluent-styles';
 import { theme, fontStyles } from '../../../configs/theme';
 import { StyledMIcon } from '../../../components/icon';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStocks, useDeleteStock } from '../../../hooks/useStock';
 import { FlatList } from 'react-native';
+import { dateConverter } from '../../../utils/help';
 
 const Stock = () => {
   const navigator = useNavigation()
@@ -20,8 +21,6 @@ const Stock = () => {
   const { data, error, loading, loadStocks, resetHandler } = useStocks()
   const { deleteStock, error: deleteError } = useDeleteStock()
   const { product } = route.params
-
-  console.log(data)
 
   useEffect(() => {
     loadStocks(product.product_id)
@@ -37,18 +36,36 @@ const Stock = () => {
   }
 
   const RenderCard = ({ item }) => {
+
+    console.log((item.date.split("T")[0]).toString().Reverse)
     return (
       <XStack paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
         paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
-        <YStack flex={2}>
-          <StyledText paddingHorizontal={8} fontFamily={fontStyles.FontAwesome5_Regular} fontWeight={theme.fontWeight.medium} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+        <YStack justifyContent='flex-start' alignItems='flex-start'>
+          <StyledBadge
+            color={theme.colors.purple[800]}
+            backgroundColor={theme.colors.purple[100]}
+            fontWeight={theme.fontWeight.bold}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={16}
+            paddingVertical={4}
+            fontFamily={fontStyles.FontAwesome5_Regular}
+          >
             {item.stock}
-          </StyledText>
-           <StyledText paddingHorizontal={8} fontFamily={fontStyles.FontAwesome5_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={theme.colors.gray[600]}>
-            {item.date}
-          </StyledText>
+          </StyledBadge>
+          <StyledSpacer marginVertical={4} />
+          <StyledBadge
+            color={theme.colors.green[800]}
+            backgroundColor={theme.colors.green[100]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.medium}
+            paddingHorizontal={10}
+            paddingVertical={1}
+          >
+            {dateConverter(item.date)}
+          </StyledBadge>
         </YStack>
-        <XStack flex={1} justifyContent='flex-end' alignItems='center'>            
+        <XStack flex={1} justifyContent='flex-end' alignItems='center'>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
             <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
