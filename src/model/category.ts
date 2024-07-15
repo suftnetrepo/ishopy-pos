@@ -44,7 +44,7 @@ const queryAllCategories = async (): Promise<Category[]> => {
           name: category.name,
           status: category.status,
           color_code: category.color_code
-        }));
+        }));      
       resolve(categories);
     } catch (error) {
       reject(error);
@@ -65,8 +65,9 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
           name: category.name,
           status: category.status,
           color_code: category.color_code,
-        }));
-      resolve({...categories});
+        }));      
+
+      resolve(categories);
     } catch (error) {
       reject(error);
     }

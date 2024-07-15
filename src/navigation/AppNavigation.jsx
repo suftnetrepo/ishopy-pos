@@ -25,6 +25,8 @@ import AddCategory from '../screens/account/category/add';
 import EditCategory from '../screens/account/category/edit';
 import AddStock from '../screens/account/stock/add';
 import Stock from '../screens/account/stock';
+import Sales from '../screens/sales';
+
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -33,6 +35,13 @@ function Navigator() {
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="sales"
+        component={Sales}
         options={{
           headerShown: false,
         }}

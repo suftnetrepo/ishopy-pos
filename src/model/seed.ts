@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { getRealmInstance } from './store';
+import {getRealmInstance} from './store';
 import {
   Order,
   OrderItem,
@@ -11,8 +11,40 @@ import {
   Stock,
   Tax,
   Discount,
-  Shop
+  Shop,
 } from './types';
+
+const colorPalettes = {
+  rose: ['#e11d48', '#be123c'],
+  pink: ['#db2777', '#be185d'],
+  fuchsia: ['#c026d3', '#a21caf'],
+  purple: ['#9333ea', '#7e22ce'],
+  violet: ['#7c3aed', '#6d28d9'],
+  indigo: ['#4f46e5', '#4338ca'],
+  blue: ['#2563eb', '#1d4ed8'],
+  lightBlue: ['#0284c7', '#0369a1'],
+  darkBlue: ['#005db4', '#004282'],
+  cyan: ['#0891b2', '#0e7490'],
+  teal: ['#0d9488', '#0f766e'],
+  emerald: ['#059669', '#047857'],
+  green: ['#16a34a', '#15803d'],
+  lime: ['#65a30d', '#4d7c0f'],
+  yellow: ['#ca8a04', '#a16207'],
+  amber: ['#d97706', '#b45309'],
+  orange: ['#ea580c', '#c2410c'],
+  red: ['#dc2626', '#b91c1c'],
+  warmGray: ['#57534e', '#44403c'],
+  trueGray: ['#525252', '#404040'],
+  gray: ['#52525b', '#3f3f46'],
+  coolGray: ['#4b5563', '#374151'],
+  blueGray: ['#475569', '#334155'],
+};
+
+const getRandomColorCode = () => {
+  const colors = Object.values(colorPalettes);
+  const randomPalette = colors[Math.floor(Math.random() * colors.length)];
+  return randomPalette[Math.floor(Math.random() * randomPalette.length)];
+};
 
 const seedData = async () => {
   const realm = await getRealmInstance();
@@ -46,11 +78,18 @@ const seedData = async () => {
 
       // Seed Categories
       const categories: Category[] = [
-        {category_id: 1, name: 'Electronics', status: 1},
-        {category_id: 2, name: 'Books', status: 1},
+        {category_id: 1, name: 'Electronics', status: 1, color_code:'#e11d48'},
+        {category_id: 2, name: 'Books', status: 1, color_code:'#be123c'},
+        {category_id: 3, name: 'Clothing', status: 1, color_code:'#db2777'},
+        {category_id: 4, name: 'Furniture', status: 1, color_code:'#c026d3'},
+        {category_id: 5, name: 'Toys', status: 1, color_code:'#7e22ce'},
+        {category_id: 6, name: 'Groceries', status: 1, color_code:'#9333ea'},
+        {category_id: 7, name: 'Jewelry', status: 1, color_code:'#6d28d9'},
+        {category_id: 8, name: 'Sports', status: 1, color_code:'#4338ca'},
+        {category_id: 9, name: 'Beauty', status: 1, color_code:'#005db4'},
+        {category_id: 10, name: 'Automotive', status: 1, color_code:'#0f766e'},
       ];
       categories.forEach(category => realm.create('Category', category));
-
       // Seed Taxes
       const taxes: Tax[] = [
         {tax_id: 1, name: 'VAT', rate: 2.5, status: 1},
@@ -58,7 +97,7 @@ const seedData = async () => {
       ];
       taxes.forEach(tax => realm.create('Tax', tax));
 
-      // Seed Taxes
+      // Seed Discounts
       const discounts: Discount[] = [
         {discount_id: 1, name: 'Season', rate: 2, status: 1},
         {discount_id: 2, name: 'State Tax', rate: 3, status: 1},
@@ -74,134 +113,24 @@ const seedData = async () => {
           mobile: '1234566778',
           description: 'No thing',
           address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
-          currency : '£'
+          currency: '£',
         },
       ];
       shops.forEach(shop => realm.create('Shop', shop));
 
       // Seed Products
-      const products: Product[] = [
-        {
-          product_id: 1,
-          name: 'Laptop',
-          bar_code: '1234567890',
-          color_code: 'silver',
-          price: 999.99,
-          price_offer: 899.99,
-          cost: 700,
-          stock: 50,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 2,
-          name: 'Smartphone',
-          bar_code: '0987654321',
-          color_code: 'black',
-          price: 799.99,
-          price_offer: 699.99,
-          cost: 500,
-          stock: 100,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 3,
-          name: 'Novel',
-          bar_code: '1122334455',
-          color_code: 'blue',
-          price: 19.99,
-          price_offer: 17.99,
-          cost: 10,
-          stock: 200,
-          category_id: 2,
-          status: 1,
-        },
-        {
-          product_id: 4,
-          name: 'Tablet',
-          bar_code: '2233445566',
-          color_code: 'gold',
-          price: 499.99,
-          price_offer: 449.99,
-          cost: 300,
-          stock: 70,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 5,
-          name: 'Headphones',
-          bar_code: '3344556677',
-          color_code: 'white',
-          price: 149.99,
-          price_offer: 129.99,
-          cost: 100,
-          stock: 150,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 6,
-          name: 'Keyboard',
-          bar_code: '4455667788',
-          color_code: 'black',
-          price: 49.99,
-          price_offer: 44.99,
-          cost: 20,
-          stock: 120,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 7,
-          name: 'Mouse',
-          bar_code: '5566778899',
-          color_code: 'red',
-          price: 29.99,
-          price_offer: 24.99,
-          cost: 10,
-          stock: 80,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 8,
-          name: 'Monitor',
-          bar_code: '6677889900',
-          color_code: 'black',
-          price: 199.99,
-          price_offer: 179.99,
-          cost: 150,
-          stock: 60,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 9,
-          name: 'Printer',
-          bar_code: '7788990011',
-          color_code: 'white',
-          price: 99.99,
-          price_offer: 89.99,
-          cost: 70,
-          stock: 90,
-          category_id: 1,
-          status: 1,
-        },
-        {
-          product_id: 10,
-          name: 'Router',
-          bar_code: '8899001122',
-          color_code: 'black',
-          price: 79.99,
-          price_offer: 69.99,
-          cost: 40,
-          stock: 110,
-          category_id: 1,
-          status: 1,
-        },
-      ];
+      const products: Product[] = Array.from({length: 50}, (_, i) => ({
+        product_id: i + 1,
+        name: `Product ${i + 1}`,
+        bar_code: `${1000000000 + i}`,
+        color_code: getRandomColorCode(),
+        price: parseFloat((Math.random() * 900 + 100).toFixed(2)),
+        price_offer: parseFloat((Math.random() * 800 + 100).toFixed(2)),
+        cost: parseFloat((Math.random() * 700 + 100).toFixed(2)),
+        stock: Math.floor(Math.random() * 200 + 1),
+        category_id: (i % 10) + 1,
+        status: 1,
+      }));
       products.forEach(product => realm.create('Product', product));
 
       // Seed Customers
@@ -230,8 +159,8 @@ const seedData = async () => {
           total_price: Math.floor(Math.random() * 1000) + 100,
           customer_id: i % 2 === 0 ? 1 : 2,
           status: i % 2 === 0 ? 'completed' : 'pending',
-          tax : 10,
-          discount : 20,
+          tax: 10,
+          discount: 20,
           date: new Date().toISOString(),
         });
       }
@@ -243,7 +172,7 @@ const seedData = async () => {
         orderItems.push({
           detail_id: i,
           order_id: Math.floor((i - 1) / 2) + 1,
-          product_id: (i % 10) + 1,
+          product_id: (i % 50) + 1,
           quantity: Math.floor(Math.random() * 5) + 1,
           price: Math.floor(Math.random() * 500) + 50,
           date: new Date().toISOString(),
@@ -279,4 +208,4 @@ const seedData = async () => {
   }
 };
 
-export { seedData };
+export {seedData};

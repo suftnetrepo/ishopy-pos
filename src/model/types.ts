@@ -10,6 +10,7 @@ import {Payment} from './payments';
 import {Shop} from './shop';
 import {Discount} from './discount';
 import {Tax} from './tax';
+import {CartItem} from '../hooks/useCartReducer';
 
 export type {
   Product,
@@ -23,4 +24,5 @@ export type {
   Tax,
   Discount,
   Shop,
+  CartItem,
 };

@@ -28,7 +28,7 @@ const useProducts = () => {
 	async function loadProducts() {
 		try {
 			const result = await queryAllProducts();
-			setData({				
+			setData({
 				data: result,
 				error: null,
 				loading: false,
@@ -43,7 +43,7 @@ const useProducts = () => {
 		}
 	}
 
-	useEffect(() => {		
+	useEffect(() => {
 		loadProducts();
 	}, []);
 
@@ -62,32 +62,51 @@ const useProducts = () => {
 	};
 };
 
-const useQueryProductByStatus = async (status: number) => {
+const useQueryProductByStatus = (status: number) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const results = await queryProductByStatus(status);
-				setData({
-					data: results,
-					error: null,
-					loading: false,
-				});
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadProductByStatus(status: number) {
+		try {
+			const results = await queryProductByStatus(status);
+			setData({
+				data: results,
+				error: null,
+				loading: false,
+			});
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
-	}, []);
+	}
+
+	async function loadProductByCategory(category_id: number) {
+		try {
+			setData((prev) => ({ ...prev, loading: true }));
+			const result = category_id === -1 ? await queryProductByStatus(1) : await queryProductByCategory(category_id);
+			setData({
+				data: result,
+				error: null,
+				loading: false,
+			});
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	}
+
+	useEffect(() => {
+		loadProductByStatus(status);
+	}, [status]);
 
 	const resetHandler = () => {
 		setData({
@@ -99,11 +118,12 @@ const useQueryProductByStatus = async (status: number) => {
 
 	return {
 		...data,
-		resetHandler
+		resetHandler,
+		loadProductByCategory
 	};
 };
 
-const useQueryProductByCategory = async (category_id: number) => {
+const useQueryProductByCategory = (category_id: number) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -144,7 +164,7 @@ const useQueryProductByCategory = async (category_id: number) => {
 	};
 };
 
-const useQueryProductById = async (product_id: number) => {
+const useQueryProductById = (product_id: number) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -185,7 +205,7 @@ const useQueryProductById = async (product_id: number) => {
 	};
 };
 
-const useQueryProductByBarCode = async (bar_code: string) => {
+const useQueryProductByBarCode = (bar_code: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -235,7 +255,7 @@ const useInsertProduct = () => {
 
 	const insertHandler = async (product: Omit<Product, "product_id">) => {
 		setData((prev) => ({ ...prev, loading: true }));
-		
+
 		try {
 			const result = await insertProduct(product);
 			setData({

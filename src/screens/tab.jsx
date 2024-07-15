@@ -23,8 +23,16 @@ const Tabs = ({ state, descriptors, navigation }) => {
             const BarIcon = options.tabBarIcon
             const focused = state.index === index
 
+            const handlePress = () => {
+            if (route.name === 'sales') {
+              navigation.push(route.name);
+            } else {
+              navigation.navigate(route.name);
+            }
+          };
+
             return (
-              <StyledButton key={index} onPress={() => navigation.navigate(route.name)} >
+              <StyledButton key={index} onPress={() =>handlePress()} >
                 <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={16} paddingVertical={8}>
                   <BarIcon focused={focused} size={30} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]} />
                   {

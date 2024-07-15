@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import { queryAllCategories, queryCategoriesByStatus, queryCategoryById, deleteCategory, insertCategory, updateCategory } from "../model/category";
 import { Category } from "../model/types";
@@ -44,38 +46,42 @@ const useCategories = () => {
 		});
 	}
 
+	
+
 	return {
-		...data,
+		...data,		
 		loadCategories,
 		resetHandler
 	};
 };
 
-const useQueryCategoriesByStatus = async (status: number) => {
+const useQueryCategoriesByStatus = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const results = await queryCategoriesByStatus(status);
-				setData({
-					data: results,
-					error: null,
-					loading: false,
-				});
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadCategoriesByStatus(status: number) {
+		try {
+			const result = await queryCategoriesByStatus(status);
+			setData({
+				data: result,
+				error: null,
+				loading: false,
+			});
+			return true
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
+	}
+
+	useEffect(() => {		
+		loadCategoriesByStatus(1);
 	}, []);
 
 	const resetHandler = () => {
@@ -85,9 +91,18 @@ const useQueryCategoriesByStatus = async (status: number) => {
 			loading: false,
 		});
 	}
+	const allCategory: Category = {
+		color_code: '',
+		category_id: - 1,
+		name: 'All',
+		status: 1
+	}
 
+	const newData = Array.isArray(data.data) ? [allCategory, ...data.data,] : [allCategory];
+		
 	return {
 		...data,
+		data: newData,		
 		resetHandler
 	};
 };
@@ -132,8 +147,6 @@ const useQueryCategoryById = async (category_id: number) => {
 		resetHandler
 	};
 };
-
-
 const useInsertCategory = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
@@ -180,7 +193,6 @@ const useInsertCategory = () => {
 		resetHandler
 	};
 };
-
 const useUpdateCategory = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
@@ -227,7 +239,6 @@ const useUpdateCategory = () => {
 		resetHandler
 	};
 };
-
 const useDeleteCategory = () => {
 	const [data, setData] = useState<{
 		data: boolean;

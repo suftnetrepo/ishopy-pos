@@ -1,15 +1,27 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, ReactNode, useContext } from "react";
-import { User, Shop } from '../model/types'
+import { User, Shop, CartItem } from '../model/types'
+import { useCartReducer } from "./useCartReducer";
 
-interface Actions {
-    login: (params: { user: User, shop: Shop } ) => Promise<void>;
+interface CartActions {
+    addItem: (item: CartItem) => void;
+    updateItem: (item: CartItem) => void;
+    deleteItem: (id: number) => void;
+    setDiscount: (discount: number) => void;
+    setTax: (tax: number) => void;
+    getItemCount: () => number;
+    getTotalItems: () => number;
+    getTotalPrice: () => number;
+}
+
+interface Actions extends CartActions {
+    login: (params: { user: User, shop: Shop }) => Promise<void>;
     logout: () => Promise<void>;
     updateCurrentUser: (user: User) => void;
     updateCurrentShop: (shop: Shop) => void
 }
 
-interface State {  
+interface State {
     user: User | null;
     shop: Shop | null;
 }
@@ -20,17 +32,26 @@ interface AppProviderProps {
 
 export const AppContext = React.createContext<Actions & State | undefined>(undefined);
 
-const initialState: State = {  
+const initialState: State = {
     user: null,
     shop: null,
 };
 
 const AppProvider = ({ children }: AppProviderProps) => {
     const [state, setState] = useState<State>(initialState);
+    const {
+        addItem,
+        updateItem,
+        deleteItem,
+        setDiscount,
+        setTax,
+        getItemCount,
+        getTotalItems,
+        getTotalPrice } = useCartReducer()
 
     const actions: Actions = {
-        login: async (params: { user: User, shop: Shop }) => {          
-            const { shop, user } = params ;
+        login: async (params: { user: User, shop: Shop }) => {
+            const { shop, user } = params;
             setState((prevState) => ({
                 ...prevState,
                 shop,
@@ -55,10 +76,29 @@ const AppProvider = ({ children }: AppProviderProps) => {
                 shop,
             }));
         },
+
+        addItem,
+        updateItem,
+        deleteItem,
+        setDiscount,
+        setTax,
+        getItemCount,
+        getTotalItems,
+        getTotalPrice,
     };
 
     return (
-        <AppContext.Provider value={{ ...state, ...actions }}>
+        <AppContext.Provider value={{
+            ...state, ...actions,
+            addItem,
+            updateItem,
+            deleteItem,
+            setDiscount,
+            setTax,
+            getItemCount,
+            getTotalItems,
+            getTotalPrice,
+        }}>
             {children}
         </AppContext.Provider>
     );
