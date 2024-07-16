@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/display-name */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { YStack, StyledText, StyledButton, StyledSpinner } from 'fluent-styles';
 import { useQueryProductByStatus } from "../../hooks/useProduct";
 import { FlatList } from "react-native";
@@ -11,7 +12,7 @@ import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
 
 const ProductScrollView = ({ category_id }) => {
-    const { shop, addItem, getTotalItems } = useAppContext()
+    const { shop, addItem } = useAppContext()
     const { data, loading, loadProductByCategory } = useQueryProductByStatus(1);
 
     useEffect(() => {
@@ -19,15 +20,12 @@ const ProductScrollView = ({ category_id }) => {
             loadProductByCategory(category_id))
     }, [category_id])
 
-    const handleAddItem = useCallback((item) => {
-        addItem({ ...item, quantity: 1 });
-    }, [addItem]);
+    const handleAddItem = async (item) => {
+        await addItem({ ...item, quantity: 1 });
+    };
 
-    console.log(getTotalItems())
-
-    const RenderCard = React.memo(({ products }) => {
-        const { item } = products;
-
+    const RenderCard = React.memo(({ item }) => {
+     
         return (
             <YStack flex={1} marginVertical={4} marginHorizontal={4}>
                 <StyledButton
@@ -66,7 +64,7 @@ const ProductScrollView = ({ category_id }) => {
                 data={data}
                 keyExtractor={(item) => item.product_id}
                 initialNumToRender={100}
-                renderItem={(item, index) => <RenderCard key={index} products={item} />}
+                renderItem={({item, index}) => <RenderCard key={index} item={item} />}
                 showsVerticalScrollIndicator={false}
                 numColumns={3}
                       extraData={data}

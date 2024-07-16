@@ -94,6 +94,13 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+
+          release {
+            storeFile file('jerur-release-key.keystore')
+            storePassword "Kcmkcm12345!"
+            keyAlias "jerur-key-alias"
+            keyPassword "Kcmkcm12345!"
+        }
     }
     buildTypes {
         debug {

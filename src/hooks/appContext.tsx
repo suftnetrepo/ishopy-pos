@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, ReactNode, useContext } from "react";
 import { User, Shop, CartItem } from '../model/types'
-import { useCartReducer } from "./useCartReducer";
+import { useCart } from "./useCart";
 
 interface CartActions {
-    addItem: (item: CartItem) => void;
+    addItem: (item: CartItem) => Promise<void>;
     updateItem: (item: CartItem) => void;
     deleteItem: (id: number) => void;
     setDiscount: (discount: number) => void;
@@ -47,7 +47,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         setTax,
         getItemCount,
         getTotalItems,
-        getTotalPrice } = useCartReducer()
+        getTotalPrice } = useCart()
 
     const actions: Actions = {
         login: async (params: { user: User, shop: Shop }) => {
