@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useState, useRef } from 'react';
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledCycle, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
+import { YStack, XStack, StyledSafeAreaView, StyledText, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
 import { Modalize } from 'react-native-modalize';
 import { useNavigation } from '@react-navigation/native';
 import { fontStyles, theme } from '../../configs/theme';
@@ -17,7 +17,7 @@ import { StyledSearchBar } from '../../components/searchBar';
 
 const Sales = () => {
   const navigator = useNavigation()
-  const { shop, getItemCount, getTotalPrice, clearItem, getItems, deleteItem } = useAppContext()
+  const { shop, getItemCount, getTotalPrice, clearItem, getItems } = useAppContext()
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [searchString, setSearchString] = useState(null)
   const [showSearch, setShowSearch] = useState(false)
@@ -89,8 +89,6 @@ const Sales = () => {
     </Modalize>
   )
 
-  console.log("......................getItems", getItems())
-
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[800]}>
       <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[700]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
@@ -154,7 +152,7 @@ const Sales = () => {
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Clear</StyledText>
         </StyledButton>
         <StyledSpacer marginHorizontal={4} />
-        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.indigo[600]} backgroundColor={theme.colors.indigo[600]} onPress={() => { }} >
+        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.indigo[600]} backgroundColor={theme.colors.indigo[600]} onPress={() => navigator.navigate("checkout")} >
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotalPrice())}</StyledText>
         </StyledButton>
       </XStack >

@@ -77,7 +77,7 @@ const useQueryTaxByStatus = (status: number = 0) => {
 			}
 		}
 		load();
-	}, []);
+	}, [status]);
 
 	const resetHandler = () => {
 		setData({
