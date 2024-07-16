@@ -11,21 +11,24 @@ import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
 
-const ProductScrollView = ({ category_id }) => {
+const ProductScrollView = ({ searchString, category_id }) => {
     const { shop, addItem } = useAppContext()
-    const { data, loading, loadProductByCategory } = useQueryProductByStatus(1);
-
+    const { data, loading, loadProductByCategory, loadProductByName } = useQueryProductByStatus(1);
+ 
     useEffect(() => {
         category_id && (
             loadProductByCategory(category_id))
-    }, [category_id])
+        searchString && (
+            loadProductByName(searchString)
+        )
+    }, [category_id, searchString])
 
     const handleAddItem = async (item) => {
-        await addItem({ ...item, quantity: 1 });
+        await addItem(item.product_id, item.name, item.price, 1);
     };
 
     const RenderCard = React.memo(({ item }) => {
-     
+
         return (
             <YStack flex={1} marginVertical={4} marginHorizontal={4}>
                 <StyledButton
@@ -64,10 +67,10 @@ const ProductScrollView = ({ category_id }) => {
                 data={data}
                 keyExtractor={(item) => item.product_id}
                 initialNumToRender={100}
-                renderItem={({item, index}) => <RenderCard key={index} item={item} />}
+                renderItem={({ item, index }) => <RenderCard key={index} item={item} />}
                 showsVerticalScrollIndicator={false}
                 numColumns={3}
-                      extraData={data}
+                extraData={data}
             />
             {
                 (loading) && (

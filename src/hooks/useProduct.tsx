@@ -9,6 +9,7 @@ import {
 	insertProduct,
 	updateProduct,
 	deleteProduct,
+	queryProductByName
 } from "../model/product";
 import { Product } from "../model/product";
 
@@ -104,6 +105,24 @@ const useQueryProductByStatus = (status: number) => {
 		}
 	}
 
+	async function loadProductByName(term: string) {
+		try {
+			setData((prev) => ({ ...prev, loading: true }));
+			const result = await queryProductByName(term);
+			setData({
+				data: result,
+				error: null,
+				loading: false,
+			});
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	}
+
 	useEffect(() => {
 		loadProductByStatus(status);
 	}, [status]);
@@ -119,7 +138,8 @@ const useQueryProductByStatus = (status: number) => {
 	return {
 		...data,
 		resetHandler,
-		loadProductByCategory
+		loadProductByCategory,
+		loadProductByName
 	};
 };
 

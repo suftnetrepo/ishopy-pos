@@ -4,7 +4,10 @@ import { User, Shop, CartItem } from '../model/types'
 import { useCart } from "./useCart";
 
 interface CartActions {
-    addItem: (item: CartItem) => Promise<void>;
+    addItem: (id: number,
+        name: string,
+        price: number,
+        quantity: number) => Promise<void>;
     updateItem: (item: CartItem) => void;
     deleteItem: (id: number) => void;
     setDiscount: (discount: number) => void;
@@ -12,6 +15,8 @@ interface CartActions {
     getItemCount: () => number;
     getTotalItems: () => number;
     getTotalPrice: () => number;
+    clearItem: () => void;
+    getItems: () => CartItem[];
 }
 
 interface Actions extends CartActions {
@@ -47,6 +52,8 @@ const AppProvider = ({ children }: AppProviderProps) => {
         setTax,
         getItemCount,
         getTotalItems,
+        clearItem,
+        getItems,
         getTotalPrice } = useCart()
 
     const actions: Actions = {
@@ -85,6 +92,8 @@ const AppProvider = ({ children }: AppProviderProps) => {
         getItemCount,
         getTotalItems,
         getTotalPrice,
+        clearItem,
+        getItems
     };
 
     return (
@@ -98,6 +107,8 @@ const AppProvider = ({ children }: AppProviderProps) => {
             getItemCount,
             getTotalItems,
             getTotalPrice,
+            clearItem,
+            getItems
         }}>
             {children}
         </AppContext.Provider>

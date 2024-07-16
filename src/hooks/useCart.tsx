@@ -13,29 +13,40 @@ interface CartState {
     discount: number;
     tax: number;
 }
-const useCart = () => {
-    const [cart, setCart] = useState<CartState>({
-        items: [],
-        discount: 0,
-        tax: 0,
-    });
 
-    const addItem = async (item: CartItem) => {    
-        setCart({...cart, items : [ ...cart.items, item ]});
+const initialize = {
+    items: [],
+    discount: 0,
+    tax: 0,
+}
+const useCart = () => {
+    const [cart, setCart] = useState<CartState>(initialize);
+
+    const clearItem = () => {
+        setCart(initialize);
     };
+
+    const addItem = async (id: number,
+        name: string,
+        price: number,
+        quantity: number) => {
+        setCart({ ...cart, items: [...cart.items, { id, name, price, quantity }] });
+    };
+
 
     const updateItem = useCallback((updatedItem: CartItem) => {
         setCart((cart) => {
             return {
                 ...cart,
                 items: cart.items.map(item =>
-                    item.id === item.id ? item : updatedItem
+                    item.id === updatedItem.id ? item : updatedItem
                 )
             }
         })
     }, []);
 
     const deleteItem = useCallback((id: number) => {
+        console.log("....................id", id)
         setCart((cart) => {
             return {
                 ...cart,
@@ -80,6 +91,10 @@ const useCart = () => {
         return total - discount + tax;
     }, [cart.items, cart.discount, cart.tax]);
 
+    const getItems = useCallback(() => {
+        return [...cart.items].sort((a, b) => a.name.localeCompare(b.name));
+    }, [cart.items]);
+
     return {
         cart,
         addItem,
@@ -89,7 +104,9 @@ const useCart = () => {
         setTax,
         getItemCount,
         getTotalItems,
-        getTotalPrice
+        getTotalPrice,
+        clearItem,
+        getItems
     };
 };
 

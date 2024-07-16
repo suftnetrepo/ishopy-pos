@@ -93,6 +93,37 @@ const queryProductByStatus = async (status: number = 1): Promise<Product[]> => {
   });
 };
 
+const queryProductByName = async (name: string): Promise<Product[]> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {     
+      const nameFilter = 'name CONTAINS[c] $0'; 
+      const productsQuery = realm
+        .objects<Product>('Product')
+        .filtered(nameFilter, name);
+
+      const products = productsQuery.sorted('name').map(product => ({
+        product_id: product.product_id,
+        name: product.name,
+        bar_code: product.bar_code,
+        color_code: product.color_code,
+        price: product.price,
+        price_offer: product.price_offer,
+        cost: product.cost,
+        stock: product.stock,
+        category_id: product.category_id,
+        status: product.status,
+        description: product.description,
+      }));
+
+      resolve(products);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+
 const queryProductByCategory = async (category_id: number): Promise<Product[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -242,4 +273,5 @@ export {
   deleteProduct,
   queryProductByStatus,
   queryProductByCategory,
+  queryProductByName,
 };

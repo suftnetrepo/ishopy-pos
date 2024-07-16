@@ -5,10 +5,11 @@
 /* eslint-disable prettier/prettier */
 
 import React from 'react';
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledHeader, StyledSpacer, StyledButton, StyledInput } from 'fluent-styles';
+import { YStack, XStack, StyledSafeAreaView, StyledText, StyledHeader, StyledSpacer, StyledButton } from 'fluent-styles';
 import { StyledMIcon } from '../components/icon';
 import { theme } from '../configs/theme';
 import { useNavigation } from '@react-navigation/native';
+import { StyledInput } from '../components/form';
 
 const Home = () => {
   const navigate = useNavigation()
@@ -47,7 +48,7 @@ const Home = () => {
         >
           See Your Changes
         </StyledText>
-        <StyledInput
+        <StyledInput      
           label={'FirstName'}
           borderColor={theme.colors.gray[400]}
           backgroundColor={theme.colors.gray[1]}
