@@ -59,7 +59,7 @@ const useQueryDiscountByStatus = (status : number = 0) => {
 		loading: true,
 	});
 
-	async function loadDiscount() {
+	async function loadDiscount(status: number = 0) {
 		try {
 			const result = await queryByStatus(status);
 			setData(prev => ({
@@ -77,8 +77,8 @@ const useQueryDiscountByStatus = (status : number = 0) => {
 	}
 
 	useEffect(() => {		
-		loadDiscount();
-	}, []);
+		loadDiscount(status);
+	}, [status]);
 
 	const resetHandler = () => {
 		setData({

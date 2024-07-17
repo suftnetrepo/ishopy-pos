@@ -62,7 +62,7 @@ const queryByStatus = async (status: number): Promise<Discount[]> => {
           rate: discount.rate,
           status: discount.status,
         }));
-      resolve({...discounts});
+      resolve(discounts);
     } catch (error) {
       reject(error);
     }

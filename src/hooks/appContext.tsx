@@ -7,7 +7,7 @@ interface CartActions {
     addItem: (id: number,
         name: string,
         price: number,
-        quantity: number) => Promise<void>;
+        quantity: number) => void;
     updateItem: (item: CartItem) => void;
     deleteItem: (id: number) => void;
     setDiscount: (discount: number) => void;
@@ -15,6 +15,9 @@ interface CartActions {
     getItemCount: () => number;
     getTotalItems: () => number;
     getTotalPrice: () => number;
+    getTotal: () => number;
+    getTotalDiscount: () => number;
+    getTotalTax: () => number;
     clearItem: () => void;
     getItems: () => CartItem[];
 }
@@ -54,6 +57,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
         getTotalItems,
         clearItem,
         getItems,
+        getTotal,
+        getTotalDiscount,
+        getTotalTax,
         getTotalPrice } = useCart()
 
     const actions: Actions = {
@@ -93,6 +99,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
         getTotalItems,
         getTotalPrice,
         clearItem,
+        getTotal,
+        getTotalDiscount,
+        getTotalTax,
         getItems
     };
 
@@ -108,7 +117,10 @@ const AppProvider = ({ children }: AppProviderProps) => {
             getTotalItems,
             getTotalPrice,
             clearItem,
-            getItems
+            getItems,
+            getTotal,
+            getTotalDiscount,
+            getTotalTax,
         }}>
             {children}
         </AppContext.Provider>

@@ -26,13 +26,12 @@ const useCart = () => {
         setCart(initialize);
     };
 
-    const addItem = async (id: number,
+    const addItem = useCallback((id: number,
         name: string,
         price: number,
         quantity: number) => {
         setCart({ ...cart, items: [...cart.items, { id, name, price, quantity }] });
-    };
-
+    },[]);
 
     const updateItem = useCallback((updatedItem: CartItem) => {
         setCart((cart) => {
@@ -45,8 +44,7 @@ const useCart = () => {
         })
     }, []);
 
-    const deleteItem = useCallback((id: number) => {
-        console.log("....................id", id)
+    const deleteItem = useCallback((id: number) => {      
         setCart((cart) => {
             return {
                 ...cart,
@@ -81,6 +79,34 @@ const useCart = () => {
         return cart.items.length;
     }, [cart.items]);
 
+    const getTotalTax = useCallback(() => {
+        const total = cart.items.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        );  
+        
+        const tax = (total * cart.tax) / 100;
+        return tax;
+    }, [cart.items, cart.tax]);
+
+    const getTotalDiscount = useCallback(() => {
+        const total = cart.items.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        );
+
+        const discount = (total * cart.discount) / 100;
+        return discount;
+    }, [cart.items, cart.discount]);
+
+    const getTotal = useCallback(() => {
+        const total = cart.items.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        );  
+        return total;
+    }, [cart.items, cart.discount]);
+
     const getTotalPrice = useCallback(() => {
         const total = cart.items.reduce(
             (total, item) => total + item.price * item.quantity,
@@ -106,7 +132,10 @@ const useCart = () => {
         getTotalItems,
         getTotalPrice,
         clearItem,
-        getItems
+        getItems,
+        getTotal,
+        getTotalDiscount,
+        getTotalTax
     };
 };
 

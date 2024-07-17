@@ -59,24 +59,25 @@ const useQueryTaxByStatus = (status: number = 0) => {
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryByStatus(status);
-				setData(prev => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadTaxes(status: number = 0) {
+		try {
+			const result = await queryByStatus(status);
+			setData(prev => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
+	}
+
+	useEffect(() => {		
+		loadTaxes(status);
 	}, [status]);
 
 	const resetHandler = () => {
