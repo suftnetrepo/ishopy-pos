@@ -4,12 +4,12 @@ import { User, Shop, CartItem } from '../model/types'
 import { useCart } from "./useCart";
 
 interface CartActions {
-    addItem: (id: number,
+    addItem: (id: string,
         name: string,
         price: number,
-        quantity: number) => void;
+        quantity: number) => Promise<void>;
     updateItem: (item: CartItem) => void;
-    deleteItem: (id: number) => void;
+    deleteItem: (id: string) => void;
     setDiscount: (discount: number) => void;
     setTax: (tax: number) => void;
     getItemCount: () => number;
@@ -76,17 +76,17 @@ const AppProvider = ({ children }: AppProviderProps) => {
             setState(initialState);
         },
 
-        updateCurrentUser: (user) => {
+        updateCurrentUser: (updatedUser) => {
             setState((prevState) => ({
                 ...prevState,
-                user,
+                user: updatedUser,
             }));
         },
 
-        updateCurrentShop: (shop) => {
+        updateCurrentShop: (updatedShop) => {
             setState((prevState) => ({
                 ...prevState,
-                shop,
+                shop: updatedShop,
             }));
         },
 

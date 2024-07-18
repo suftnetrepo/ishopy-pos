@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import {getRealmInstance} from './store';
 
 export interface Customer {
-  id: number;
+  id: string;
   name?: string;
   email?: string;
   phone?: string;
@@ -18,7 +19,7 @@ const insertCustomer = async (
     try {
       realm.write(() => {
         const customer: Customer = {
-          id: Math.floor(Math.random() * 1000000),
+          id: guid(),
           name,
           email,
           phone,
@@ -32,13 +33,13 @@ const insertCustomer = async (
   });
 };
 
-const updateCustomer =async (
-  id: number,
+const updateCustomer = async (
+  id: string,
   name: string,
   email: string,
-  phone: string,
+  phone: string
 ): Promise<Customer> => {
-    const realm = await getRealmInstance();
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -58,8 +59,8 @@ const updateCustomer =async (
   });
 };
 
-const deleteCustomer = async (id: number): Promise<boolean> => {
-    const realm = await getRealmInstance();
+const deleteCustomer = async (id: string): Promise<boolean> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -94,8 +95,8 @@ const queryCustomers = async(): Promise<Customer[]> => {
   });
 };
 
-const queryCustomerById = async(id: number): Promise<Customer | null> => {
-    const realm = await getRealmInstance();
+const queryCustomerById = async (id: string): Promise<Customer | null> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const customer = realm.objectForPrimaryKey<Customer>('Customer', id);
@@ -107,7 +108,7 @@ const queryCustomerById = async(id: number): Promise<Customer | null> => {
               email: customer.email,
               phone: customer.phone,
             }
-          : null,
+          : null
       );
     } catch (error) {
       reject(error);

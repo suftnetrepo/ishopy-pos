@@ -2,23 +2,22 @@
 import {getRealmInstance} from './store';
 
 export interface OrderItem {
-  detail_id: number;
-  order_id: number;
-  product_id: number;
+  detail_id: string;
+  order_id: string;
+  product_id: string;
   quantity: number;
   price: number;
   date: string;
 }
 
 const insertOrderItem = async(
-  orderItem: Omit<OrderItem, 'detail_id'>,
+  orderItem: OrderItem
 ): Promise<OrderItem> => {
        const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
-        const newOrderItem: OrderItem = {
-          detail_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+        const newOrderItem: OrderItem = {        
           ...orderItem,
         };
         realm.create('OrderItem', newOrderItem);
@@ -30,7 +29,7 @@ const insertOrderItem = async(
   });
 };
 
-const queryOrderItemByOrderId = async(order_id: number): Promise<OrderItem[]> => {
+const queryOrderItemByOrderId = async(order_id: string): Promise<OrderItem[]> => {
        const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -53,7 +52,7 @@ const queryOrderItemByOrderId = async(order_id: number): Promise<OrderItem[]> =>
   });
 };
 
-const queryOrderItemById = async(detail_id: number): Promise<OrderItem | null> => {
+const queryOrderItemById = async(detail_id: string): Promise<OrderItem | null> => {
        const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -79,8 +78,8 @@ const queryOrderItemById = async(detail_id: number): Promise<OrderItem | null> =
   });
 };
 
-const deleteOrderItem = async(detail_id: number): Promise<boolean> => {
-       const realm = await getRealmInstance();
+const deleteOrderItem = async (detail_id: string): Promise<boolean> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -97,7 +96,7 @@ const deleteOrderItem = async(detail_id: number): Promise<boolean> => {
       });
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 

@@ -14,7 +14,7 @@ interface Initialize {
   loading: boolean;
 }
 
-const useQueryOrderItemByOrder = (order_id: number) => {
+const useQueryOrderItemByOrder = (order_id: string) => {
   const [data, setData] = useState<Initialize>({
     data: [],
     error: null,
@@ -47,7 +47,7 @@ const useQueryOrderItemByOrder = (order_id: number) => {
   };
 };
 
-const useQueryOrderItemById = (detail_id: number) => {
+const useQueryOrderItemById = (detail_id: string) => {
   const [data, setData] = useState<Initialize>({
     data: [],
     error: null,
@@ -87,7 +87,7 @@ const useInsertOrderItem = () => {
     loading: true,
   });
 
-  const insertHandler = async (orderItem: Omit<OrderItem, 'detail_id'>) => {
+  const insertHandler = async (orderItem: OrderItem) => {
     setData(prev => ({...prev, loading: true}));
 
     try {
@@ -123,7 +123,7 @@ const useDeleteOrderItem = () => {
     loading: true,
   });
 
-  const deleteHandler = async (detail_id: number) => {
+  const deleteHandler = async (detail_id: string) => {
     setData(prev => ({...prev, loading: true}));
     try {
       const result = await deleteOrderItem(detail_id);

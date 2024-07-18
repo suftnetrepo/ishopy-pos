@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance} from './store';
 
 export interface Product {
-  product_id: number;
+  product_id: string;
   name: string;
   bar_code?: string;
   color_code?: string;
@@ -10,7 +11,7 @@ export interface Product {
   price_offer?: number;
   cost?: number;
   stock?: number;
-  category_id?: number;
+  category_id?: string;
   status?: number;
   description?: string;
 }
@@ -23,7 +24,7 @@ const insertProduct = async (
     try {
       realm.write(() => {
         const newProduct: Product = {
-          product_id: Math.floor(Math.random() * 1000000),
+          product_id: guid(),
           ...product,
         };
         realm.create('Product', newProduct);

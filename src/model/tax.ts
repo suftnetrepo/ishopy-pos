@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 
 export interface Tax {
-  tax_id: number;
+  tax_id: string;
   name: string;
   status: number;
   rate: number;
@@ -16,7 +17,7 @@ const insertTax = async (
     try {
       realm.write(() => {
         const newTax = {
-          tax_id: Math.floor(Math.random() * 1000000), 
+          tax_id: guid(), 
           ...tax,
         };
         realm.create('Tax', newTax);

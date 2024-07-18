@@ -22,6 +22,7 @@ const Sales = () => {
   const [searchString, setSearchString] = useState(null)
   const [showSearch, setShowSearch] = useState(false)
   const modalizeRef = useRef(null);
+  const items = getItems()
 
   const showBottomSheet = () => {
     if (modalizeRef.current) {
@@ -36,32 +37,32 @@ const Sales = () => {
           <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
             {item.name}
           </StyledText>
-         
+
         </YStack>
-        <XStack gap={2}>           
-            <StyledSpacer marginHorizontal={16} />
-            <StyledBadge
-              color={theme.colors.gray[800]}
-              backgroundColor={theme.colors.gray[200]}
-              fontWeight={theme.fontWeight.normal}
-              fontSize={theme.fontSize.normal}
-              paddingHorizontal={10}
-              paddingVertical={1}
-            >
-              {item.quantity}
-            </StyledBadge>
-              <StyledSpacer marginHorizontal={4} />
-             <StyledBadge
-              color={theme.colors.gray[100]}
-              backgroundColor={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.normal}
-              fontSize={theme.fontSize.normal}  
-                  paddingHorizontal={10}        
-              paddingVertical={1}
-            >
-              {formatCurrency(shop.currency || '£', item.price)}
-            </StyledBadge>
-          </XStack>
+        <XStack gap={2}>
+          <StyledSpacer marginHorizontal={16} />
+          <StyledBadge
+            color={theme.colors.gray[800]}
+            backgroundColor={theme.colors.gray[200]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={10}
+            paddingVertical={1}
+          >
+            {item.quantity}
+          </StyledBadge>
+          <StyledSpacer marginHorizontal={4} />
+          <StyledBadge
+            color={theme.colors.gray[100]}
+            backgroundColor={theme.colors.gray[800]}
+            fontWeight={theme.fontWeight.normal}
+            fontSize={theme.fontSize.normal}
+            paddingHorizontal={10}
+            paddingVertical={1}
+          >
+            {formatCurrency(shop.currency || '£', item.price)}
+          </StyledBadge>
+        </XStack>
       </XStack>
     )
   }
@@ -92,8 +93,11 @@ const Sales = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[800]}>
       <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[700]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
-        <StyledHeader.Header color={theme.colors.gray[1]} onPress={() => navigator.navigate("bottom-tabs", { screen: 'home' })} title='Sales' icon cycleProps={{
+        <StyledHeader.Header color={theme.colors.gray[1]} iconProps={{
+          color: theme.colors.gray[1]
+        }} onPress={() => navigator.navigate("bottom-tabs", { screen: 'home' })} title='Sales' icon cycleProps={{
           borderColor: theme.colors.gray[300],
+          backgroundColor: theme.colors.gray[700],
           marginRight: 8
         }} rightIcon={
           <>
@@ -152,7 +156,7 @@ const Sales = () => {
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Clear</StyledText>
         </StyledButton>
         <StyledSpacer marginHorizontal={4} />
-        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.indigo[600]} backgroundColor={theme.colors.indigo[600]} onPress={() => navigator.navigate("checkout")} >
+        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.indigo[600]} backgroundColor={theme.colors.indigo[600]} onPress={() => items.length > 0 && navigator.navigate("checkout")} >
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotalPrice())}</StyledText>
         </StyledButton>
       </XStack >

@@ -36,8 +36,7 @@ const Stock = () => {
   }
 
   const RenderCard = ({ item }) => {
-
-    console.log((item.date.split("T")[0]).toString().Reverse)
+   
     return (
       <XStack paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
         paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >

@@ -1,20 +1,24 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import {getRealmInstance} from './store';
 
 export interface Stock {
-  stock_id: number;
-  product_id: number;
-  stock: number;
+  stock_id: string;
+  product_id: string;
+  stock: number | undefined;
   date: string;
 }
 
-const insertStock = async (product_id: number, stock: number = 0): Promise<Stock> => {
-     const realm = await getRealmInstance();
+const insertStock = async (
+  product_id: string,
+  stock: number = 0
+): Promise<Stock> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
         const newStock: Stock = {
-          stock_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+          stock_id: guid(),
           product_id,
           stock,
           date: new Date().toISOString(),
@@ -28,7 +32,7 @@ const insertStock = async (product_id: number, stock: number = 0): Promise<Stock
   });
 };
 
-const queryStockById = async (stock_id: number): Promise<Stock | null> => {
+const queryStockById = async (stock_id: string): Promise<Stock | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -39,17 +43,17 @@ const queryStockById = async (stock_id: number): Promise<Stock | null> => {
               stock_id: stock.stock_id,
               product_id: stock.product_id,
               stock: stock.stock,
-              date: stock.date
+              date: stock.date,
             }
           : null
       );
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 
-const queryStockByProductId = async (product_id: number): Promise<Stock[]> => {
+const queryStockByProductId = async (product_id: string): Promise<Stock[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -70,8 +74,8 @@ const queryStockByProductId = async (product_id: number): Promise<Stock[]> => {
 };
 
 const updateStock = async (
-  stock_id: number,
-  product_id: number,
+  stock_id: string,
+  product_id: string,
   stock: number
 ): Promise<Stock> => {
   const realm = await getRealmInstance();
@@ -92,7 +96,7 @@ const updateStock = async (
       });
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 

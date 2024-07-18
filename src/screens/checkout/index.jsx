@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
 import React, { useState, useRef } from 'react';
-import { YStack, XStack, StyledConfirmDialog, StyledCard, StyledCycle, StyledButton, StyledSeparator, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import { YStack, XStack, StyledDialog, StyledCard, StyledCycle, StyledButton, StyledSeparator, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
 import { Modalize } from 'react-native-modalize';
 import { fontStyles, theme } from '../../configs/theme';
 import { useNavigation } from '@react-navigation/native';
@@ -13,18 +13,31 @@ import { useAppContext } from '../../hooks/appContext';
 import { ScrollView } from 'react-native';
 import { formatCurrency, toWordCase } from '../../utils/help';
 import { StyledMIcon } from '../../components/icon';
+import MIcon from "react-native-vector-icons/MaterialIcons";
 import { StyledToggleSwitch } from '../../components/toggleSwitch';
 import { useQueryTaxByStatus } from '../../hooks/useTax';
 import { useQueryDiscountByStatus } from '../../hooks/useDiscount';
+import { useInsertOrder, } from '../../hooks/useOrder';
+import CheckOutCompleted from './checkOutCompleted';
 
 const CheckOut = () => {
     const navigator = useNavigation()
-    const { getItemCount, getItems, getTotalPrice, shop, deleteItem, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
-    const [taxOrDiscount, setTaxOrDiscount] = useState("taxes")
+    const { getItems, getTotalPrice, shop, deleteItem, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
+    const { orderHandler, data, error, loading, resetHandler, printHandler } = useInsertOrder()
+    const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
+    const selectRef = useRef(null);
+    const items = getItems()
 
     const modalizeRef = useRef(null);
+
+    const setSelectValue = (value) => {           
+        if(selectRef.current){
+            console.log("..............", value)
+            selectRef.current.value = value;
+        }      
+    };
 
     const showBottomSheet = () => {
         if (modalizeRef.current) {
@@ -43,7 +56,7 @@ const CheckOut = () => {
                     </YStack>
                     <StyledBadge
                         color={theme.colors.gray[800]}
-                        backgroundColor={theme.colors.gray[200]}
+                        backgroundColor={theme.colors.gray[1]}
                         fontWeight={theme.fontWeight.normal}
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={10}
@@ -58,7 +71,7 @@ const CheckOut = () => {
                         {formatCurrency(shop?.currency || "£", (item?.price || 0))}
                     </StyledText>
                     <StyledSpacer marginHorizontal={4} />
-                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[300]} onPress={() => deleteItem(item.id)} />
+                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteItem(item.id)} />
                 </XStack>
                 <StyledSeparator line lineProps={{
                     borderColor: theme.colors.gray[200]
@@ -71,7 +84,7 @@ const CheckOut = () => {
         return (
             <StyledCard pressable={true} pressableProps={{
                 onPress: () => {
-                    taxOrDiscount === "taxes" ? setTax(item.rate) : setDiscount(item.rate)
+                    selectRef?.current?.value === "taxes" ? setTax(item.rate) : setDiscount(item.rate)
 
                 }
             }} >
@@ -101,7 +114,10 @@ const CheckOut = () => {
     }
 
     const RenderModal = () => {
-        const data = taxOrDiscount === "taxes" ? taxes : discounts
+        console.log("..............x", selectRef?.current?.value)
+        // console.log("..............taxes", taxes)
+        // console.log("..............discounts", discounts)
+        const data = selectRef?.current?.value === "taxes" ? taxes : discounts
         if (!data.length) return
 
         return (
@@ -109,7 +125,9 @@ const CheckOut = () => {
                 ref={modalizeRef}
                 adjustToContentHeight={true}
                 alwaysOpen={false}
-                withHandle={true}
+                withHandle={false}
+                closeOnOverlayTap={true}   
+                closeSnapPointStraightEnabled={true}          
                 scrollViewProps={{
                     showsVerticalScrollIndicator: false,
                     stickyHeaderIndices: [0],
@@ -117,7 +135,7 @@ const CheckOut = () => {
                 <YStack paddingHorizontal={8} marginVertical={8} >
                     <XStack justifyContent='center' alignItems='center'>
                         <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
-                            {toWordCase(taxOrDiscount)}
+                            {selectRef?.current?.value}
                         </StyledText>
                     </XStack>
                     <StyledSpacer marginVertical={4} />
@@ -144,35 +162,33 @@ const CheckOut = () => {
                         <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={8}>
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
-                                <StyledMIcon size={48} name='remove' color={theme.colors.gray[700]} onPress={() => {
-                                    setTaxOrDiscount("taxes")
+                                <MIcon size={48} name='remove' color={theme.colors.gray[700]} onPress={() => {
+                                    setSelectValue("taxes")
                                     showBottomSheet()
                                 }} />
                             </StyledCycle>
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
-                                <StyledMIcon size={48} name='add' color={theme.colors.gray[700]} onPress={() => {
-                                    setTaxOrDiscount("discounts")
+                                <MIcon ref={selectRef} size={48} name='add' color={theme.colors.gray[700]} onPress={() => {
+                                    setSelectValue("discounts")
                                     showBottomSheet()
                                 }} />
                             </StyledCycle>
-
                         </XStack>
                     </>
                 } />
             </StyledHeader>
-
             <YStack flex={1} paddingHorizontal={12} paddingVertical={8} backgroundColor={theme.colors.gray[200]}>
                 <StyledToggleSwitch />
                 <ScrollView showsVerticalScrollIndicator={false} >
                     <StyledSpacer marginVertical={4} />
                     <StyledCard shadow='light' borderColor={theme.colors.gray[200]} borderRadius={16} borderWidth={1} backgroundColor={theme.colors.gray[1]} paddingTop={8}>
                         {
-                            (getItems() || []).map((item, index) =>
+                            (items || []).map((item, index) =>
                                 <RenderItem item={item} key={index} />
                             )
                         }
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={8} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
                                     Subtotal
@@ -188,60 +204,90 @@ const CheckOut = () => {
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={8} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
                                     Discount
                                 </StyledText>
                             </YStack>
                             <StyledSpacer marginHorizontal={8} />
-                            <StyledText color={theme.colors.gray[800]}
-                                fontWeight={theme.fontWeight.normal}
-                                fontSize={theme.fontSize.normal}>
-                                {formatCurrency(shop.currency || "£", (getTotalDiscount() || 0))}
-                            </StyledText>
+                            <XStack justifyContent='flex-end' alignItems='center'>
+                                <StyledText color={theme.colors.gray[800]}
+                                    fontWeight={theme.fontWeight.normal}
+                                    fontSize={theme.fontSize.normal}>
+                                    {formatCurrency(shop.currency || "£", (getTotalDiscount() || 0))}
+                                </StyledText>
+                                <StyledSpacer marginHorizontal={4} />
+                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setDiscount(0)} />
+                            </XStack>
                         </XStack>
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={8} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
                                     Tax
                                 </StyledText>
                             </YStack>
                             <StyledSpacer marginHorizontal={8} />
-                            <StyledText color={theme.colors.gray[800]}
-                                fontWeight={theme.fontWeight.normal}
-                                fontSize={theme.fontSize.normal}>
-                                {formatCurrency(shop.currency || "£", (getTotalTax() || 0))}
-                            </StyledText>
+                            <XStack justifyContent='flex-end' alignItems='center'>
+                                <StyledText color={theme.colors.gray[800]}
+                                    fontWeight={theme.fontWeight.normal}
+                                    fontSize={theme.fontSize.normal}>
+                                    {formatCurrency(shop.currency || "£", (getTotalTax() || 0))}
+                                </StyledText>
+                                <StyledSpacer marginHorizontal={4} />
+                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setTax(0)} />
+                            </XStack>
                         </XStack>
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={8} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                             <YStack >
-                                <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
+                                <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large}>
                                     Total
                                 </StyledText>
                             </YStack>
                             <StyledSpacer marginHorizontal={8} />
                             <StyledText color={theme.colors.gray[800]}
                                 fontWeight={theme.fontWeight.bold}
-                                fontSize={theme.fontSize.normal}>
+                                fontSize={theme.fontSize.large}>
                                 {formatCurrency(shop.currency || "£", (getTotalPrice() || 0))}
                             </StyledText>
                         </XStack>
                     </StyledCard>
                 </ScrollView>
             </YStack>
-            <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8}>
-                <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} onPress={() => navigator.navigate("checkout")} >
-                    <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Confirm Payment</StyledText>
-                </StyledButton>
-            </XStack >
+            {
+                items.length > 0 && (
+                    <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8}>
+                        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} onPress={() => orderHandler().then((result) => result && setModalVisible(true))} >
+                            <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Confirm Payment</StyledText>
+                        </StyledButton>
+                    </XStack >
+                )
+            }
             <RenderModal />
+            {
+                modalVisible &&
+                <StyledDialog visible>
+                    <CheckOutCompleted order={data} printHandler={printHandler} />
+                </StyledDialog>
+            }
+            {
+                (error) && (
+                    <StyledOkDialog title={error?.message} description='please try again' visible={true} onOk={() => {
+                        resetHandler()
+                    }} />
+                )
+            }
+            {
+                (loading) && (
+                    <StyledSpinner />
+                )
+            }
         </StyledSafeAreaView>
     )
 }

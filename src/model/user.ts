@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-useless-catch */
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 
 export interface User {
-  user_id: number;
+  user_id: string;
   first_name: string;
   last_name: string;
   username: string;
@@ -25,7 +27,7 @@ const insertUser = async (
     try {
       realm.write(() => {
         const user = realm.create('User', {
-          user_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+          user_id: guid(),
           username,
           password,
           role,

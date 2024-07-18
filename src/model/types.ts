@@ -10,7 +10,12 @@ import {Payment} from './payments';
 import {Shop} from './shop';
 import {Discount} from './discount';
 import {Tax} from './tax';
-import {CartItem} from '../hooks/useCartReducer';
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 export type {
   Product,

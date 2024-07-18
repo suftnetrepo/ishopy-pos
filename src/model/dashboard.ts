@@ -8,7 +8,7 @@ import { Product } from './product';
 import { OrderItem } from './orderItems';
 
 export interface ProductSalesData {
-    product_id: number;
+    product_id: string;
     name: string;
     total_sold: number;
 }
@@ -19,41 +19,46 @@ export interface WeeklyTransactionsData {
 }
 
 const getBestSellingProducts = async (
-    limit: number = 10
+  limit: number = 10
 ): Promise<ProductSalesData[]> => {
-    const realm = await getRealmInstance();
-    return new Promise((resolve, reject) => {
-        try {
-            const orderItems = realm.objects<OrderItem>('OrderItem');
-            const productSales: {
-                [key: number]: { product_id: number; name: string; total_sold: number };
-            } = {};
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const orderItems = realm.objects<OrderItem>('OrderItem');
+      const productSales: {
+        [key: string]: {
+          product_id: string;
+          name: string;
+          total_sold: number;
+        };
+      } = {};
 
-            orderItems.forEach(orderItem => {
-                if (productSales[orderItem.product_id]) {
-                    productSales[orderItem.product_id].total_sold += orderItem.quantity;
-                } else {
-                    const product = realm.objectForPrimaryKey<Product>(
-                        'Product',
-                        orderItem.product_id
-                    );
-                    productSales[orderItem.product_id] = {
-                        product_id: orderItem.product_id,
-                        name: product ? product.name : 'Unknown',
-                        total_sold: orderItem.quantity,
-                    };
-                }
-            });
+      orderItems.forEach(orderItem => {
+        if (productSales[orderItem.product_id]) {
+          productSales[orderItem.product_id].total_sold += orderItem.quantity;
+        } else {
+          const product = realm.objectForPrimaryKey<Product>(
+            'Product',
+            orderItem.product_id
+          );
+          productSales[orderItem.product_id] = {
+            product_id: orderItem.product_id,
+            name: product ? product.name : 'Unknown',
+            total_sold: orderItem.quantity,
+          };
+        }
+      });
 
-            const sortedProducts = Object.values(productSales)
-                .sort((a, b) => b.total_sold - a.total_sold)
-                .slice(0, limit);
-            resolve(sortedProducts);
-        } catch (error) {
-            reject(error);
-        } 
-    });
+      const sortedProducts = Object.values(productSales)
+        .sort((a, b) => b.total_sold - a.total_sold)
+        .slice(0, limit);
+      resolve(sortedProducts);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
+
 
 const getDailyTransaction = async (): Promise<number> => {
     const realm = await getRealmInstance();

@@ -1,9 +1,10 @@
+/* eslint-disable react/display-name */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { forwardRef } from "react";
 import MIcon from "react-native-vector-icons/MaterialIcons";
 // import { styled } from 'fluent-styles';
 import { theme } from "../../configs/theme";
@@ -25,9 +26,9 @@ const Icon = styled(MIcon, {
     }
 })
 
-const StyledMIcon = ({ size = 48, name = 'home', focused = false, color = theme.colors.green[500], onPress, ...rest }) => {   
+const StyledMIcon = forwardRef(({ size = 48, name = 'home', focused = false, color = theme.colors.green[500], onPress, ...rest }, ref) => {   
     return (
-        <Icon {...rest} size={size} focused={focused} name={name} color={color} onPress={() => onPress && onPress()} />
+        <Icon ref={ref} {...rest} size={size} focused={focused} name={name} color={color} onPress={() => onPress && onPress()} />
     )
-}
+})
 export { StyledMIcon }

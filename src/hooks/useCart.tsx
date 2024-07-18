@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 
 export interface CartItem {
-    id: number;
+    id: string;
     name: string;
     price: number;
     quantity: number;
@@ -26,12 +26,13 @@ const useCart = () => {
         setCart(initialize);
     };
 
-    const addItem = useCallback((id: number,
+    const addItem = async (id: string,
         name: string,
         price: number,
         quantity: number) => {
         setCart({ ...cart, items: [...cart.items, { id, name, price, quantity }] });
-    },[]);
+    };
+
 
     const updateItem = useCallback((updatedItem: CartItem) => {
         setCart((cart) => {
@@ -44,7 +45,7 @@ const useCart = () => {
         })
     }, []);
 
-    const deleteItem = useCallback((id: number) => {      
+    const deleteItem = useCallback((id: string) => {      
         setCart((cart) => {
             return {
                 ...cart,
@@ -134,8 +135,8 @@ const useCart = () => {
         clearItem,
         getItems,
         getTotal,
-        getTotalDiscount,
-        getTotalTax
+        getTotalDiscount ,
+        getTotalTax       
     };
 };
 

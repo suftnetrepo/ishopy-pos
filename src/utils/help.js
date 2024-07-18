@@ -46,6 +46,15 @@ const dateConverter = (stringDate) => {
  return stringDate.split("T")[0].split("-").reverse().join("-")
 };
 
+function formatDateTime(dateTimeString) {
+  const [datePart, timePart] = dateTimeString.split("T");
+  const formattedDate = datePart.split("-").reverse().join("-"); 
+  const formattedTime = timePart.split(".")[0]; 
+
+  return `${formattedDate} ${formattedTime}`;
+}
+
+
 function formatCurrency(currencySymbol, amount) {
   const numericAmount = parseFloat(amount);
 
@@ -96,4 +105,11 @@ function generatePaymentId() {
   return result;
 }
 
-export { getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }
+ function guid() {
+    var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+        return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+  }
+
+export {guid,formatDateTime, getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }

@@ -10,6 +10,8 @@ import { theme } from '../configs/theme';
 import Home from './home';
 import Sales from './sales';
 import Account from './account';
+import Order from './order';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -24,11 +26,11 @@ const Tabs = ({ state, descriptors, navigation }) => {
             const focused = state.index === index
 
             const handlePress = () => {
-            if (route.name === 'sales') {
+              if (route.name === 'sales' || route.name === 'orders') {
               navigation.push(route.name);
             } else {
               navigation.navigate(route.name);
-            }
+            }             
           };
 
             return (
@@ -67,7 +69,7 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='report' component={Home} options={{
+      <Tab.Screen name='orders' component={Order} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='square-outline' />

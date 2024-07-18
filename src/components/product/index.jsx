@@ -24,7 +24,7 @@ const ProductScrollView = ({ searchString, category_id }) => {
     }, [category_id, searchString])
 
     const handleAddItem = async (item) => {
-        await addItem(item.product_id, item.name, item.price, 1);
+      await addItem(item.product_id, item.name, item.price, 1);
     };
 
     const RenderCard = React.memo(({ item }) => {

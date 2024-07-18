@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import {getRealmInstance} from './store';
 
 export interface Payment {
-  id: number;
-  order_id: number;
+  id: string;
+  order_id: string;
   amount: number;
   payment_method: string;
   date: string;
@@ -15,7 +16,7 @@ const insertPayment = async (payment: Omit<Payment, 'id'>): Promise<Payment> => 
     try {
       realm.write(() => {
         const newPayment: Payment = {
-          id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+          id:guid(),
           ...payment,
         };
         realm.create('Payment', newPayment);

@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 
 export interface Discount {
-  discount_id: number;
+  discount_id: string;
   name: string;
   status: number;
   rate: number;
@@ -16,7 +17,7 @@ const insertDiscount = async (
     try {
       realm.write(() => {
         const newDiscount = {
-          discount_id: Math.floor(Math.random() * 1000000),
+          discount_id: guid(),
           ...discount,
         };
         realm.create('Discount', newDiscount);

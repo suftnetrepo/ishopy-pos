@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import {getRealmInstance} from './store';
 
+
 export interface Order {
-  order_id: number;
-  user_id: number;
+  order_id: string;
+  user_id?: string;
   total_price: number;
-  customer_id?: number;
   status: string;
   date: string;
   tax?: number;
@@ -15,13 +16,13 @@ export interface Order {
 const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
      const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
-    try {
+    try {          
       realm.write(() => {
         const newOrder: Order = {
-          order_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+          order_id: guid(),
           ...order,
         };
-        realm.create('Order', newOrder);
+        realm.create('Order', newOrder);     
         resolve(newOrder);
       });
     } catch (error) {
@@ -40,8 +41,7 @@ const queryAllOrders = async(): Promise<Order[]> => {
         .map(order => ({
           order_id: order.order_id,
           user_id: order.user_id,
-          total_price: order.total_price,
-          customer_id: order.customer_id,
+          total_price: order.total_price,       
           status: order.status,
           date: order.date,
           tax: order.tax,
@@ -54,7 +54,7 @@ const queryAllOrders = async(): Promise<Order[]> => {
   });
 };
 
-const queryOrderById = async(order_id: number): Promise<Order | null> => {
+const queryOrderById = async(order_id: string): Promise<Order | null> => {
        const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -64,8 +64,7 @@ const queryOrderById = async(order_id: number): Promise<Order | null> => {
           ? {
               order_id: order.order_id,
               user_id: order.user_id,
-              total_price: order.total_price,
-              customer_id: order.customer_id,
+              total_price: order.total_price,             
               status: order.status,
               date: order.date,
               tax: order.tax,
@@ -79,8 +78,8 @@ const queryOrderById = async(order_id: number): Promise<Order | null> => {
   });
 };
 
-const deleteOrder = async (order_id: number): Promise<boolean> => {
-       const realm = await getRealmInstance();
+const deleteOrder = async (order_id: string): Promise<boolean> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const orderItemsCount = realm
@@ -105,7 +104,7 @@ const deleteOrder = async (order_id: number): Promise<boolean> => {
       }
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 

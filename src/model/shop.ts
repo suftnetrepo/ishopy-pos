@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 
 export interface Shop {
-  shop_id: number;
+  shop_id: string;
   name: string;
   mobile: string;
   email: string;
@@ -19,7 +20,7 @@ const insertShop = async (
     try {
       realm.write(() => {
         const newShop = {
-          shop_id: Math.floor(Math.random() * 1000000),
+          shop_id: guid(),
           ...shop,
         };
         realm.create('Shop', newShop);
@@ -54,7 +55,7 @@ const queryAllShops = async (): Promise<Shop[]> => {
   });
 };
 
-const queryShopById = async (shop_id: number): Promise<Shop | null> => {
+const queryShopById = async (shop_id: string): Promise<Shop | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -104,7 +105,7 @@ const updateShop = async (
   });
 };
 
-const deleteShop = async (shop_id: number): Promise<boolean> => {
+const deleteShop = async (shop_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

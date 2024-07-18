@@ -16,12 +16,12 @@ const Shop = () => {
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(shopRules.fields)
   const { updateHandler, error, loading, resetHandler } = useUpdateShop()
-
+ 
   useEffect(() => {
     setFields((pre) => {
       return {
         ...pre,
-        ...shop[0]
+        ...shop
       }
     })
   }, [shop])
@@ -35,7 +35,7 @@ const Shop = () => {
     }
 
     const update = () => {
-      updateCurrentShop(fields)
+      updateCurrentShop(fields)   
       navigator.navigate("bottom-tabs", { screen: 'profile' })
     }
 

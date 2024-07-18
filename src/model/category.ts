@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
+import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 
 export interface Category {
-  category_id: number;
+  category_id: string;
   name: string;
   status: number;
   color_code?: string;
@@ -18,7 +19,7 @@ const insertCategory = async (
     try {
       realm.write(() => {
         const category: Category = {
-          category_id: Math.floor(Math.random() * 1000000), // Replace with a proper id generator
+          category_id: guid(),
           name,
           status,
           color_code,
