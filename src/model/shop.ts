@@ -32,7 +32,7 @@ const insertShop = async (
   });
 };
 
-const queryAllShops = async (): Promise<Shop[]> => {
+const queryAllShops = async (): Promise<Shop> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -46,9 +46,9 @@ const queryAllShops = async (): Promise<Shop[]> => {
           email: shop.email,
           address: shop.address,
           description: shop.description,
-          currency: shop.currency
-        }));  
-      resolve(shops);
+          currency: shop.currency,
+        }))[0];  
+      resolve(shops || null);
     } catch (error) {
       reject(error);
     }

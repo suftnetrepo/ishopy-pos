@@ -54,7 +54,6 @@ function formatDateTime(dateTimeString) {
   return `${formattedDate} ${formattedTime}`;
 }
 
-
 function formatCurrency(currencySymbol, amount) {
   const numericAmount = parseFloat(amount);
 

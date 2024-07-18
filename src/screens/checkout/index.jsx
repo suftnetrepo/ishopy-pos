@@ -11,7 +11,7 @@ import { fontStyles, theme } from '../../configs/theme';
 import { useNavigation } from '@react-navigation/native';
 import { useAppContext } from '../../hooks/appContext';
 import { ScrollView } from 'react-native';
-import { formatCurrency, toWordCase } from '../../utils/help';
+import { formatCurrency } from '../../utils/help';
 import { StyledMIcon } from '../../components/icon';
 import MIcon from "react-native-vector-icons/MaterialIcons";
 import { StyledToggleSwitch } from '../../components/toggleSwitch';
@@ -23,7 +23,7 @@ import CheckOutCompleted from './checkOutCompleted';
 const CheckOut = () => {
     const navigator = useNavigation()
     const { getItems, getTotalPrice, shop, deleteItem, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
-    const { orderHandler, data, error, loading, resetHandler, printHandler } = useInsertOrder()
+    const { orderHandler, data, error, loading, resetHandler, printHandler, shareReceipt } = useInsertOrder()
     const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
@@ -132,7 +132,7 @@ const CheckOut = () => {
                     showsVerticalScrollIndicator: false,
                     stickyHeaderIndices: [0],
                 }}>
-                <YStack paddingHorizontal={8} marginVertical={8} >
+                <YStack paddingHorizontal={8} marginVertical={8} key={selectRef?.current?.value} >
                     <XStack justifyContent='center' alignItems='center'>
                         <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
                             {selectRef?.current?.value}
@@ -264,7 +264,7 @@ const CheckOut = () => {
                 items.length > 0 && (
                     <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8}>
                         <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} onPress={() => orderHandler().then((result) => result && setModalVisible(true))} >
-                            <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Confirm Payment</StyledText>
+                            <StyledText paddingHorizontal={16} paddingVertical={16} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Confirm Payment</StyledText>
                         </StyledButton>
                     </XStack >
                 )
@@ -273,7 +273,7 @@ const CheckOut = () => {
             {
                 modalVisible &&
                 <StyledDialog visible>
-                    <CheckOutCompleted order={data} printHandler={printHandler} />
+                        <CheckOutCompleted order={data} printHandler={printHandler} shareReceipt={shareReceipt} />
                 </StyledDialog>
             }
             {

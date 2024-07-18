@@ -5,6 +5,7 @@ export interface OrderItem {
   detail_id: string;
   order_id: string;
   product_id: string;
+  product_name: string;
   quantity: number;
   price: number;
   date: string;
@@ -41,10 +42,12 @@ const queryOrderItemByOrderId = async(order_id: string): Promise<OrderItem[]> =>
           detail_id: orderItem.detail_id,
           order_id: orderItem.order_id,
           product_id: orderItem.product_id,
+          product_name: orderItem.product_name,
           quantity: orderItem.quantity,
           price: orderItem.price,
           date: orderItem.date,
-        }));
+        }));     
+
       resolve(orderItems);
     } catch (error) {
       reject(error);
@@ -66,6 +69,7 @@ const queryOrderItemById = async(detail_id: string): Promise<OrderItem | null> =
               detail_id: orderItem.detail_id,
               order_id: orderItem.order_id,
               product_id: orderItem.product_id,
+              product_name: orderItem.product_name,
               quantity: orderItem.quantity,
               price: orderItem.price,
               date: orderItem.date,

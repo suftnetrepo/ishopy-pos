@@ -39,11 +39,10 @@ const useQueryOrderItemByOrder = (order_id: string) => {
       }
     }
     load();
-  }, []);
+  }, [order_id]);
 
   return {
-    data: data.data,
-    error: data.error,
+    ...data
   };
 };
 
@@ -72,11 +71,10 @@ const useQueryOrderItemById = (detail_id: string) => {
       }
     }
     load();
-  }, []);
+  }, [detail_id]);
 
   return {
-    data: data.data,
-    error: data.error,
+    ...data
   };
 };
 

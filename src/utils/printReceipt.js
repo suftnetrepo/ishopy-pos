@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-useless-catch */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
@@ -66,6 +67,7 @@ const printReceipt = async (receiptData) => {
         await BluetoothEscposPrinter.printText(`${padRight('Total :', 24)}${padLeft(total.toFixed(2), 8)}\n`, { fonttype: 3 });
 
         // Print Footer
+        await BluetoothEscposPrinter.printText("\n", {});
         await BluetoothEscposPrinter.printerAlign(ALIGN.CENTER);
         await BluetoothEscposPrinter.printText(`${footerMessage}\n`, {});
 
@@ -81,11 +83,11 @@ const printReceipt = async (receiptData) => {
 
 const receiptTestData = {
     businessName: 'Shop Business Center',
-    address: '23232, JAVA CITY, SELANGOR',  
+    address: '23232, JAVA CITY, SELANGOR',
     phone: '03-435435435',
     email: 'tester@test.com',
-    orderNumber: '622967',  
-    date: '11/01/2020',   
+    orderNumber: '622967',
+    date: '11/01/2020',
     cashier: 'David Smith',
     items: [
         { quantity: 4, name: 'Chinese Buffet', total: 51.96 },

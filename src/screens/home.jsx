@@ -4,71 +4,239 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 
-import React from 'react';
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledHeader, StyledSpacer, StyledButton } from 'fluent-styles';
+import React, { useCallback } from 'react';
+import {
+  YStack,
+  XStack,
+  StyledSafeAreaView,
+  StyledCycle,
+  StyledText,
+  StyledHeader,
+  StyledSpacer,
+  StyledButton,
+  StyledCard
+} from 'fluent-styles';
+import { BarChart } from 'react-native-gifted-charts';
 import { StyledMIcon } from '../components/icon';
-import { theme } from '../configs/theme';
+import { fontStyles, theme } from '../configs/theme';
 import { useNavigation } from '@react-navigation/native';
-import { StyledInput } from '../components/form';
+import {
+  useDailyTransaction,
+  useWeeklyTransactions,
+  useTransactionTrend,
+  useMonthlySales,
+} from '../hooks/useDashboard';
+import { useAppContext } from '../hooks/appContext';
+import { formatCurrency, toWordCase } from '../utils/help';
+import { ScrollView } from 'react-native';
 
 const Home = () => {
-  const navigate = useNavigation()
+  const navigate = useNavigation();
+  const { user, shop } = useAppContext();
+  const { data } = useWeeklyTransactions();
+  const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
+  const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  
+
+  const chart = useCallback(() => {
+    const chartData = labels.map((label, index) => {
+      const dayData = data?.find(day => day.weekday === index);
+      return {
+        label,
+        value: dayData ? dayData.total : 0,
+        frontColor: index === 4 ? '#916aff' : '#d3d3d3',
+      };
+    });
+
+    return chartData;
+  }, [data, labels]);
 
   const RenderHeader = () => {
     return (
-      <XStack flex={1} backgroundColor={theme.colors.gray[1]} justifyContent='flex-end' alignItems='center' paddingVertical={8} paddingHorizontal={16}>
-        <StyledMIcon name='lock-clock' color={theme.colors.gray[800]} onPress={() => navigate.reset({
-          index: 0,
-          routes: [{ name: 'keypad' }]
-        })} />
-        <StyledSpacer marginHorizontal={4} />
-        <StyledMIcon name='exit-to-app' color={theme.colors.gray[800]} onPress={() => navigate.reset({
-          index: 0,
-          routes: [{ name: 'login' }]
-        })} />
+      <XStack
+        flex={1}
+        backgroundColor={theme.colors.gray[100]}
+        justifyContent="space-between"
+        alignItems="center"
+        paddingVertical={8}
+        paddingHorizontal={16}>
+        <YStack>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.normal}
+            fontWeight={theme.fontWeight.bold}
+            color={theme.colors.gray[800]}>
+            {toWordCase(user.first_name)} {toWordCase(user.last_name)}
+          </StyledText>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.small}
+            fontWeight={theme.fontWeight.normal}
+            color={theme.colors.gray[600]}>
+            {user.role}
+          </StyledText>
+        </YStack>
+
+        <XStack>
+          <StyledCycle
+            paddingHorizontal={10}
+            borderWidth={1}
+            borderColor={theme.colors.gray[1]}>
+            <StyledMIcon
+              size={30}
+              name="lock-clock"
+              color={theme.colors.gray[800]}
+              onPress={() =>
+                navigate.reset({
+                  index: 0,
+                  routes: [{ name: 'keypad' }],
+                })
+              }
+            />
+          </StyledCycle>
+          <StyledSpacer marginHorizontal={4} />
+          <StyledCycle
+            paddingHorizontal={10}
+            borderWidth={1}
+            borderColor={theme.colors.gray[1]}>
+            <StyledMIcon
+              size={30}
+              name="exit-to-app"
+              color={theme.colors.gray[800]}
+              onPress={() =>
+                navigate.reset({
+                  index: 0,
+                  routes: [{ name: 'login' }],
+                })
+              }
+            />
+          </StyledCycle>
+        </XStack>
       </XStack>
-    )
-  }
+    );
+  };
 
   return (
-    <StyledSafeAreaView >
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
+    <StyledSafeAreaView>
+      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }}>
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>
       </StyledHeader>
-
+      <StyledSpacer marginVertical={8} />
+      <ScrollView>
       <YStack
         flex={1}
         marginHorizontal={16}
-        justifyContent='center' alignItems='center'
-      >
-
-        <StyledText
-        >
-          See Your Changes
-        </StyledText>
-        <StyledInput      
-          label={'FirstName'}
-          borderColor={theme.colors.gray[400]}
-          backgroundColor={theme.colors.gray[1]}
-          borderRadius={32}
-        />
-        <StyledButton borderColor={theme.colors.gray[400]}
-          backgroundColor={theme.colors.gray[1]}
-          borderRadius={32}
-        >
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        backgroundColor={theme.colors.gray[1]}
+        borderRadius={32}
+        paddingHorizontal={16}
+        paddingVertical={16}>
+          <StyledSpacer marginVertical={2} />
           <StyledText
-            paddingVertical={8}
-            paddingHorizontal={20}
-          >
-            See Your Changes
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.large}
+            fontWeight={theme.fontWeight.normal}
+            paddingHorizontal={8}
+            color={theme.colors.gray[800]}>
+            Daily transaction
           </StyledText>
-        </StyledButton>
+          <XStack justifyContent="flex-start"
+            alignItems="center">
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              fontSize={theme.fontSize.xxxlarge}
+              fontWeight={theme.fontWeight.bold}
+              paddingHorizontal={8}
+              color={theme.colors.gray[800]}>
+              {formatCurrency(shop.currency || '£', dailyTransaction)}
+            </StyledText>
+            <StyledSpacer marginHorizontal={8} />
+            <StyledButton backgroundColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]} borderColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]}>
+              <XStack justifyContent="flex-start" paddingHorizontal={8} paddingVertical={1}
+                alignItems="center">
+                <StyledMIcon size={24} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />
+                <StyledSpacer marginHorizontal={1} />
+                <StyledText
+                  fontFamily={fontStyles.Roboto_Regular}
+                  fontSize={theme.fontSize.normal}
+                  fontWeight={theme.fontWeight.bold}
+                  color={theme.colors.gray[1]}>
+                  {percentageChange}%
+                </StyledText>
+              </XStack>
+            </StyledButton>
+          </XStack>
+          <StyledSpacer marginVertical={8} />
+          <BarChart
+            barWidth={22}
+            noOfSections={3}
+            barBorderRadius={4}
+            frontColor="lightgray"
+            data={chart()}
+            yAxisThickness={0}
+            xAxisThickness={0}
+            key={data}
+          /> 
+     
       </YStack>
-    </StyledSafeAreaView>
+        <StyledSpacer marginVertical={4} />
+        <XStack marginHorizontal={16} justifyContent='space-between' alignItems='center' gap={8}>
+          <StyledCard
+            borderColor={theme.colors.yellow[300]}
+            backgroundColor={theme.colors.yellow[100]}
+            paddingHorizontal={8}
+            borderRadius={32}
+            flex={1}
+          >
+            <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
 
+              <StyledText fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.normal}
+                fontWeight={theme.fontWeight.bold}
+                color={theme.colors.gray[700]}>
+                Monthly sales
+              </StyledText>
+              <StyledSpacer marginVertical={8} />
+              <StyledText fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.xxxlarge}
+                fontWeight={theme.fontWeight.bold}
+                color={theme.colors.gray[700]}>
+                24
+              </StyledText>
+            </YStack>
+          </StyledCard>
+
+          <StyledCard
+            borderColor={theme.colors.orange[100]}
+            backgroundColor={theme.colors.orange[100]}
+            paddingHorizontal={8}
+            borderRadius={32}
+            flex={1}
+          >
+            <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
+              <StyledText fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.large}
+                fontWeight={theme.fontWeight.bold}
+                color={theme.colors.gray[700]}>
+                Lower stocks
+              </StyledText>
+              <StyledSpacer marginVertical={8} />
+              <StyledText fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.xxxlarge}
+                fontWeight={theme.fontWeight.bold}
+                color={theme.colors.gray[700]}>
+                24
+              </StyledText>
+
+            </YStack>
+          </StyledCard>
+        </XStack>
+      </ScrollView>
+    </StyledSafeAreaView>
   );
-}
+};
 
 export default Home;

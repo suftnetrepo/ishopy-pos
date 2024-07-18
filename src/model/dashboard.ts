@@ -64,12 +64,17 @@ const getDailyTransaction = async (): Promise<number> => {
     const realm = await getRealmInstance();
     return new Promise((resolve, reject) => {
         try {
-            const today = new Date().toISOString().split('T')[0];           
-            const result = realm
-              .objects<Order>('Order')
-              .filtered('date BEGINSWITH $0', today)
-              .sum('total_price');              
-            resolve(result);
+          const startOfDay = new Date();
+          startOfDay.setHours(0, 0, 0, 0); 
+
+          const endOfDay = new Date();
+          endOfDay.setHours(23, 59, 59, 999); 
+          const result = realm
+            .objects<Order>('Order')
+            .filtered('date >= $0 && date <= $1', startOfDay, endOfDay)
+            .sum('total_price');     
+
+          resolve(result);
         } catch (error) {
             reject(error);
         } 
@@ -77,48 +82,66 @@ const getDailyTransaction = async (): Promise<number> => {
 };
 
 const getDailyTransactionPercentageChange = async (): Promise<number> => {
-    const realm = await getRealmInstance();
-    return new Promise((resolve, reject) => {
-        try {
-            const today = new Date();
-            const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
 
-            const todayStr = today.toISOString().split('T')[0];
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+      const startOfYesterday = new Date(yesterday);
+      startOfYesterday.setHours(0, 0, 0, 0);
+      const endOfYesterday = new Date(yesterday);
+      endOfYesterday.setHours(23, 59, 59, 999);
 
-            const todayTotal = realm
-              .objects<Order>('Order')
-              .filtered('date BEGINSWITH $0', todayStr)
-              .sum('total_price');
-            const yesterdayTotal = realm
-              .objects<Order>('Order')
-              .filtered('date BEGINSWITH  $0', yesterdayStr)
-              .sum('total_price');
+      const todayTotal = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 && date <= $1', today, endOfToday)
+        .sum('total_price');
+      const yesterdayTotal = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 && date <= $1', startOfYesterday, endOfYesterday)
+        .sum('total_price');
 
-            const percentageChange =
-                ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
-            resolve(percentageChange);
-        } catch (error) {
-            reject(error);
-        } 
-    });
+      const percentageChange =
+        yesterdayTotal === 0
+          ? 0
+          : ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
+      resolve(percentageChange);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 const getMonthlySales = async (): Promise<number> => {
-    const realm = await getRealmInstance();
-    return new Promise((resolve, reject) => {
-        try {
-            const currentMonth = new Date().toISOString().split('T')[0].slice(0, 7);
-            const result = realm
-                .objects<Order>('Order')
-                .filtered('date BEGINSWITH $0', currentMonth)
-                .sum('total_price');
-            resolve(result);
-        } catch (error) {
-            reject(error);
-        } 
-    });
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0,
+        23,
+        59,
+        59,
+        999
+      );
+
+      const result = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 && date <= $1', startOfMonth, endOfMonth)
+        .sum('total_price');
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 const getLowStocks = async (threshold: number = 10): Promise<number> => {
@@ -135,80 +158,98 @@ const getLowStocks = async (threshold: number = 10): Promise<number> => {
     });
 };
 
-const getWeeklyTransactions = async (): Promise<
-    WeeklyTransactionsData[]
-> => {
-    const realm = await getRealmInstance();
-    return new Promise((resolve, reject) => {
-        try {
-            const lastWeek = new Date();
-            lastWeek.setDate(lastWeek.getDate() - 6);
-            const lastWeekStr = lastWeek.toISOString().split('T')[0];
 
-            const orders = realm
-                .objects<Order>('Order')
-                .filtered('date >= $0', lastWeekStr);
+const getWeeklyTransactions = async (): Promise<WeeklyTransactionsData[]> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const today = new Date();
+      const lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 6);
+      lastWeek.setHours(0, 0, 0, 0);
 
-            const result = orders
-                .map(order => ({
-                    weekday: new Date(order.date).getDay(),
-                    total: order.total_price,
-                }))
-                .reduce<{ weekday: number; total: number }[]>((acc, curr) => {
-                    const existingDay = acc.find(day => day.weekday === curr.weekday);
-                    if (existingDay) {
-                        existingDay.total += curr.total;
-                    } else {
-                        acc.push({ weekday: curr.weekday, total: curr.total });
-                    }
-                    return acc;
-                }, [])
-                .sort((a, b) => a.weekday - b.weekday);
+      const orders = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0', lastWeek);
 
-            resolve(result);
-        } catch (error) {
-            reject(error);
-        }
-    });
+      const result = orders
+        .map(order => ({
+          weekday: new Date(order.date).getDay(),
+          total: order.total_price,
+        }))
+        .reduce<{weekday: number; total: number}[]>((acc, curr) => {
+          const existingDay = acc.find(day => day.weekday === curr.weekday);
+          if (existingDay) {
+            existingDay.total += curr.total;
+          } else {
+            acc.push({weekday: curr.weekday, total: curr.total});
+          }
+          return acc;
+        }, [])
+        .sort((a, b) => a.weekday - b.weekday);
+
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 
 const getPreviousDayTransaction = async (): Promise<number> => {
-    const realm = await getRealmInstance();
-    return new Promise((resolve, reject) => {
-        try {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      yesterday.setHours(0, 0, 0, 0); // Start of yesterday
+      const endOfYesterday = new Date(yesterday);
+      endOfYesterday.setHours(23, 59, 59, 999); // End of yesterday
 
-            const result = realm
-              .objects<Order>('Order')
-              .filtered('date BEGINSWITH $0', yesterdayStr)
-              .sum('total_price');
-            resolve(result);
-        } catch (error) {
-            reject(error);
-        } 
-    });
+      const result = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 && date <= $1', yesterday, endOfYesterday)
+        .sum('total_price');
+
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 const getDailyTransactionTrend = (): Promise<{
-    dailyTransaction: number;
-    trend: string;
+  dailyTransaction: number;
+  trend: string;
+  percentageChange: number;
 }> => {
-    return new Promise((resolve, reject) => {
-        Promise.all([getDailyTransaction(), getPreviousDayTransaction()])
-            .then(([dailyTransaction, previousDayTransaction]) => {
-                let trend = 'neutral';
-                if (dailyTransaction > previousDayTransaction) {
-                    trend = 'up';
-                } else if (dailyTransaction < previousDayTransaction) {
-                    trend = 'down';
-                }
-                resolve({ dailyTransaction, trend });
-            })
-            .catch(error => reject(error));
-    });
+  return new Promise((resolve, reject) => {
+    Promise.all([getDailyTransaction(), getPreviousDayTransaction()])
+      .then(([dailyTransaction, previousDayTransaction]) => {
+        let trend = 'neutral';
+        let percentageChange = 0;
+
+        if (previousDayTransaction === 0) {
+          // No transactions on the previous day
+          percentageChange = dailyTransaction === 0 ? 0 : 100;
+          trend = dailyTransaction === 0 ? 'neutral' : 'up';
+        } else {
+          // Calculate percentage change
+          percentageChange =
+            ((dailyTransaction - previousDayTransaction) /
+              previousDayTransaction) *
+            100;
+          if (dailyTransaction > previousDayTransaction) {
+            trend = 'up';
+          } else if (dailyTransaction < previousDayTransaction) {
+            trend = 'down';
+          }
+        }
+
+        resolve({dailyTransaction, trend, percentageChange});
+      })
+      .catch(error => reject(error));
+  });
 };
 
 export {

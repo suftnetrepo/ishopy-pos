@@ -187,12 +187,13 @@ const seedData = async () => {
       for (let i = 1; i <= 20; i++) {
         orders.push({
           order_id: guid(),
-          user_id: users[i % 2].user_id,      
+          user_id: users[i % 2].user_id,
           total_price: Math.floor(Math.random() * 1000) + 100,
+          total: Math.floor(Math.random() * 200) + 100,
           status: i % 2 === 0 ? 'completed' : 'pending',
           tax: 10,
           discount: 20,
-          date: new Date().toISOString(),
+          date: new Date(),
         });
       }
       orders.forEach(order => realm.create('Order', order));
@@ -204,6 +205,7 @@ const seedData = async () => {
           detail_id: guid(),
           order_id: orders[Math.floor((i - 1) / 2)].order_id,
           product_id: products[i % 50].product_id,
+          product_name: products[i % 50].name,
           quantity: Math.floor(Math.random() * 5) + 1,
           price: Math.floor(Math.random() * 500) + 50,
           date: new Date().toISOString(),

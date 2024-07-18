@@ -77,7 +77,7 @@ export const OrderSchema: ObjectSchema = {
     total_discount: 'double?',
     total_price: 'double',
     status: 'string?',
-    date: 'string?',
+    date: 'date',
   },
 };
 
@@ -88,6 +88,7 @@ export const OrderItemSchema: ObjectSchema = {
     detail_id: 'string',
     order_id: 'string',
     product_id: 'string',
+    product_name: 'string',
     quantity: 'int',
     price: 'double',
     date: 'string?',
@@ -179,7 +180,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: 'pos__j.realm',
+    path: '___pos___j.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

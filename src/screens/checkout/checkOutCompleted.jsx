@@ -8,7 +8,7 @@ import { StyledMIcon } from '../../components/icon';
 import { fontStyles, theme } from '../../configs/theme';
 import { useAppContext } from '../../hooks/appContext';
 
-const CheckOutCompleted = ({ order, printHandler }) => {
+const CheckOutCompleted = ({ order, printHandler, shareReceipt }) => {
     const { clearItem } = useAppContext()
     const navigator = useNavigation()
 
@@ -19,6 +19,10 @@ const CheckOutCompleted = ({ order, printHandler }) => {
 
     const print = () => {
         printHandler(order)
+    }
+
+    const share = () => {
+        shareReceipt(order)
     }
 
     return (
@@ -65,7 +69,7 @@ const CheckOutCompleted = ({ order, printHandler }) => {
                     </StyledButton>
                     <StyledSpacer marginHorizontal={4}></StyledSpacer>
                     <StyledButton borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
-                        navigator.navigate("home");
+                        share()
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
                             <StyledMIcon

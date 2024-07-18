@@ -2,13 +2,13 @@
 import { guid } from '../utils/help';
 import {getRealmInstance} from './store';
 
-
 export interface Order {
   order_id: string;
   user_id?: string;
   total_price: number;
+  total: number;
   status: string;
-  date: string;
+  date: Date;
   tax?: number;
   discount?: number;
 }
@@ -41,16 +41,45 @@ const queryAllOrders = async(): Promise<Order[]> => {
         .map(order => ({
           order_id: order.order_id,
           user_id: order.user_id,
-          total_price: order.total_price,       
+          total_price: order.total_price,
+          total: order.total,
           status: order.status,
           date: order.date,
           tax: order.tax,
-          discount: order.discount
+          discount: order.discount,
         }));
       resolve(orders);
     } catch (error) {
       reject(error);
     } 
+  });
+};
+
+const queryOrdersByDateRange = async (
+  startDate: Date,
+  endDate: Date
+): Promise<Order[]> => {
+  const realm = await getRealmInstance();
+   return new Promise((resolve, reject) => {
+    try {
+      const orders = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 AND date <= $1', startDate, endDate)
+        .sorted('date', true)
+        .map(order => ({
+          order_id: order.order_id,
+          user_id: order.user_id,
+          total_price: order.total_price,
+          total: order.total,
+          status: order.status,
+          date: order.date,
+          tax: order.tax,
+          discount: order.discount,
+        }));     
+      resolve(orders);
+    } catch (error) {
+      reject(error);
+    }
   });
 };
 
@@ -64,7 +93,8 @@ const queryOrderById = async(order_id: string): Promise<Order | null> => {
           ? {
               order_id: order.order_id,
               user_id: order.user_id,
-              total_price: order.total_price,             
+              total_price: order.total_price,
+              total: order.total,
               status: order.status,
               date: order.date,
               tax: order.tax,
@@ -108,4 +138,10 @@ const deleteOrder = async (order_id: string): Promise<boolean> => {
   });
 };
 
-export {insertOrder, deleteOrder, queryAllOrders, queryOrderById};
+export {
+  insertOrder,
+  deleteOrder,
+  queryAllOrders,
+  queryOrderById,
+  queryOrdersByDateRange,
+};

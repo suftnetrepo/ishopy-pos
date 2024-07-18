@@ -1,10 +1,14 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
+import { Share } from "react-native";
 import {
 	queryAllOrders,
 	queryOrderById,
 	insertOrder,
 	deleteOrder,
+	queryOrdersByDateRange
 } from "../model/orders";
 import { Order, OrderItem, Payment } from "../model/types";
 import { insertOrderItem } from "../model/orderItems";
@@ -23,10 +27,11 @@ const order: Order = {
 	order_id: "",
 	user_id: "",
 	total_price: 0,
+	total : 0,
 	status: "pending",
 	tax: 0,
 	discount: 0,
-	date: new Date().toISOString(),
+	date: new Date(),
 };
 
 const payment: Payment = {
@@ -37,32 +42,50 @@ const payment: Payment = {
 	date: new Date().toISOString(),
 };
 
-const useOrders = () => {
+const useOrders = (load : boolean) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryAllOrders();
-				setData((prev) => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadOrders() {
+		try {
+			const result = await queryAllOrders();
+			setData((prev) => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
-	}, []);
+	}
+
+	useEffect(() => {		
+		loadOrders();
+	}, [load]);
+
+	async function loadOrdersByDateRange(startDate: Date, endDate: Date) {
+		try {
+			const result = await queryOrdersByDateRange(startDate, endDate);
+			setData((prev) => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	}
 
 	const resetHandler = () => {
 		setData({
@@ -74,7 +97,8 @@ const useOrders = () => {
 
 	return {
 		...data,
-		resetHandler
+		resetHandler,
+		loadOrdersByDateRange		
 	};
 };
 
@@ -106,7 +130,7 @@ const useQueryOrderById = (order_id: string) => {
 	}, []);
 
 	return {
-		...data
+		...data,
 	};
 };
 
@@ -153,6 +177,7 @@ const useInsertOrder = () => {
 			order.user_id = user?.user_id;
 			order.discount = getTotalDiscount() || 0;
 			order.tax = getTotalTax() || 0;
+			order.total = getTotal() || 0;
 			order.status = "completed";
 			order.total_price = getTotalPrice() || 0;
 
@@ -165,6 +190,7 @@ const useInsertOrder = () => {
 						order_id: orderResult.order_id,
 						price: item.price,
 						product_id: item.id,
+						product_name: item.name,
 						quantity: 1,
 						date: new Date().toISOString(),
 					};
@@ -198,9 +224,9 @@ const useInsertOrder = () => {
 
 	const printHandler = (order: Order) => {
 		try {
-			const receiptTestData = {
+			const receiptData = {
 				name: shop?.name,
-				address: shop?.address,			
+				address: shop?.address,
 				phone: shop?.mobile,
 				email: shop?.email,
 				orderNumber: order.order_id.slice(0, 8),
@@ -218,8 +244,84 @@ const useInsertOrder = () => {
 				footerMessage:
 					"Your satisfaction is our priority. Thank you for shopping with us!",
 			};
-			printReceipt(receiptTestData);
+
+			printReceipt(receiptData);
 		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	};
+
+	const shareReceipt = async (order: Order) => {
+		const receiptData = {
+			name: shop?.name,
+			address: shop?.address,
+			phone: shop?.mobile,
+			email: shop?.email,
+			orderNumber: order.order_id.slice(0, 8),
+			date: order.date,
+			cashier: `${user?.first_name} ${user?.last_name}`,
+			items: items.map((item) => ({
+				quantity: item.quantity,
+				name: item.name,
+				total: item.price,
+			})),
+			subtotal: getTotal(),
+			tax: getTotalTax(),
+			discount: getTotalDiscount(),
+			total: getTotalPrice(),
+			footerMessage:
+				"Your satisfaction is our priority. Thank you for shopping with us!",
+		};
+		const {
+			name,
+			address,
+			phone,
+			email,
+			cashier,
+			date,
+			orderNumber,
+			subtotal,
+			tax,
+			total,
+			footerMessage,
+		} = receiptData;
+		const receiptText =
+			`Receipt from ${name}\n\n` +
+			`Order Number: ${orderNumber}\n` +
+			`Date: ${new Date(date).toLocaleString()}\n` +
+			`Cashier: ${cashier}\n\n` +
+			`Items:\n` +
+			items
+				.map((item) => `${item.name} - ${item.quantity} x ${item.price}\n`)
+				.join("") +
+			`\nSubtotal: ${subtotal.toFixed(2)}\n` +
+			`Tax: ${tax.toFixed(2)}\n` +
+			`Total: ${total.toFixed(2)}\n\n` +
+			`Address: ${address}\n` +
+			`Phone: ${phone}\n` +
+			`Email: ${email}\n\n` +
+			`${footerMessage}`;
+
+		try {
+			const result = await Share.share({
+				title: "Receipt",
+				message: receiptText,
+			});
+
+			if (result.action === Share.sharedAction) {
+				if (result.activityType) {
+					// Shared via activity type
+				} else {
+					// Shared
+				}
+			} else if (result.action === Share.dismissedAction) {
+				// Dismissed
+			}
+		} catch (error) {			
 			setData({
 				data: null,
 				error: error as Error,
@@ -242,6 +344,7 @@ const useInsertOrder = () => {
 		orderHandler,
 		resetHandler,
 		printHandler,
+		shareReceipt,
 	};
 };
 

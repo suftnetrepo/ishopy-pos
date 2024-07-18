@@ -1728,6 +1728,13 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
+"@react-native-community/datetimepicker@^8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-8.2.0.tgz#f62ac4fc12bd527fbbe93934e6c1cfbb7ba570f3"
+  integrity sha512-qrUPhiBvKGuG9Y+vOqsc56RPFcHa1SU2qbAMT0hfGkoFIj3FodE0VuPVrEa8fgy7kcD5NQmkZIKgHOBLV0+hWg==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/slider@^4.5.2":
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.2.tgz#c3835788dbc1bd83d3778b83ca15533c805db149"
@@ -3858,7 +3865,7 @@ flow-parser@0.*:
   resolved "https://registry.npmjs.org/flow-parser/-/flow-parser-0.238.2.tgz"
   integrity sha512-fs7FSnzzKF6oSzjk14JlBHt82DPchYHVsXtPi4Fkn+qrunVjWaBZY7nSO/mC9X4l9+wRah/R69DRd5NGDOrWqw==
 
-fluent-styles@1.28.0:
+fluent-styles@^1.27.0:
   version "1.28.0"
   resolved "https://registry.yarnpkg.com/fluent-styles/-/fluent-styles-1.28.0.tgz#8b1b6631d241f3db782288dbc0821a3f373d6832"
   integrity sha512-W0G+LxN2pBpdiYradGP3N5aw3kKlVxHu+s0BviZEVdoi/pGi6sZABd3M/zzxZBkWf0us1ZDd+E2pKO0clByw2g==

@@ -61,10 +61,18 @@ const useDailyTransaction = () => {
 };
 
 const useTransactionTrend = () => {
-	const [data, setData] = useState<Initialize>({
-		data: [],
-		error: null,
-		loading: true,
+	const [data, setData] = useState<{
+		dailyTransaction: number;
+		trend: string;
+		percentageChange: number;
+		error: Error | null;
+		loading: boolean
+	}>({
+		dailyTransaction: 0,
+		trend: "",
+		percentageChange: 0,
+		error : null,
+		loading : false
 	});
 
 	useEffect(() => {
@@ -73,12 +81,14 @@ const useTransactionTrend = () => {
 				const result = await getDailyTransactionTrend();
 				setData((prev) => ({
 					...prev,
-					data: result,
+					...result,
 					loading: false,
 				}));
 			} catch (error) {
 				setData({
-					data: null,
+					dailyTransaction: 0,
+					trend: "",
+					percentageChange: 0,
 					error: error as Error,
 					loading: false,
 				});
@@ -88,8 +98,7 @@ const useTransactionTrend = () => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
