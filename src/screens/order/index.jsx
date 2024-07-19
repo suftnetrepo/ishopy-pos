@@ -14,6 +14,7 @@ import { dateConverter, formatCurrency, formatDateTime } from '../../utils/help'
 import { StyledMIcon } from '../../components/icon';
 import { useAppContext } from '../../hooks/appContext';
 import CompletedOrder from './order';
+import { convertJsonToCsv } from '../../utils/convertJsonToCsv';
 
 const Order = () => {
     const navigator = useNavigation()
@@ -160,6 +161,9 @@ const Order = () => {
                             <StyledMIcon size={32} name={showFilter ? "cancel" : 'filter-list'} color={theme.colors.gray[800]} onPress={() => handleFilter()} />
                         </StyledCycle>
                         <StyledSpacer marginHorizontal={4} />
+                        <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
+                            <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
+                        </StyledCycle>
                     </XStack>
                 } />
             </StyledHeader>

@@ -12,6 +12,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStocks, useDeleteStock } from '../../../hooks/useStock';
 import { FlatList } from 'react-native';
 import { dateConverter } from '../../../utils/help';
+import { convertJsonToCsv } from '../../../utils/convertJsonToCsv';
 
 const Stock = () => {
   const navigator = useNavigation()
@@ -36,7 +37,7 @@ const Stock = () => {
   }
 
   const RenderCard = ({ item }) => {
-   
+
     return (
       <XStack paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
         paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
@@ -90,6 +91,10 @@ const Stock = () => {
               <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-stock", {
                 product
               })} />
+            </StyledCycle>
+            <StyledSpacer marginHorizontal={2} />
+            <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
+              <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
             </StyledCycle>
           </XStack>
         } />

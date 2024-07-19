@@ -31,8 +31,9 @@ const printReceipt = async (receiptData) => {
         // Print Business Header
         await BluetoothEscposPrinter.printerAlign(ALIGN.CENTER);
         await BluetoothEscposPrinter.printText(`${name}\n`, { fonttype: 3 });
-        await BluetoothEscposPrinter.printText(`${address}\n`, {});
-        await BluetoothEscposPrinter.printText(`Email : ${email}\n\n`, {});
+        const paddedAddress = padRight(address, receiptWidth);
+        await BluetoothEscposPrinter.printText(`${paddedAddress}\n`, {});
+        await BluetoothEscposPrinter.printText(`Email : ${email}\n`, {});
         await BluetoothEscposPrinter.printText(`TEL : ${phone}\n\n`, {});
 
         // Print Table and Check Info
@@ -42,16 +43,18 @@ const printReceipt = async (receiptData) => {
         await BluetoothEscposPrinter.printText(`Cashier: ${cashier}\n\n`, {});
 
         // Print Items
-        await BluetoothEscposPrinter.printText("--------------------------------\n", {});
+        const receiptWidth = 48; // Adjust based on your printer's width
         for (const item of items) {
-            const itemLine = `${padRight(`${item.quantity} ${item.name}`, 24)}${padLeft(item.total.toFixed(2), 8)}\n`;
+            const itemName = `${item.quantity} ${item.name}`;
+            const itemTotal = item.total.toFixed(2);
+            const itemLine = `${padRight(itemName, receiptWidth - 8)}${padLeft(itemTotal, 8)}\n`;
             await BluetoothEscposPrinter.printText(itemLine, {});
         }
-        await BluetoothEscposPrinter.printText("--------------------------------\n", {});
 
+        await BluetoothEscposPrinter.printText("\n", {});
         // Print Totals
         const printTotalLine = async (label, amount) => {
-            const totalLine = `${padRight(label, 24)}${padLeft(amount.toFixed(2), 8)}\n`;
+            const totalLine = `${padRight(label, receiptWidth - 8)}${padLeft(amount.toFixed(2), 8)}\n`;
             await BluetoothEscposPrinter.printText(totalLine, {});
         };
 
@@ -64,7 +67,7 @@ const printReceipt = async (receiptData) => {
             await printTotalLine('discount :', discount);
         }
 
-        await BluetoothEscposPrinter.printText(`${padRight('Total :', 24)}${padLeft(total.toFixed(2), 8)}\n`, { fonttype: 3 });
+        await printTotalLine('Total :', total);
 
         // Print Footer
         await BluetoothEscposPrinter.printText("\n", {});
@@ -82,7 +85,7 @@ const printReceipt = async (receiptData) => {
 };
 
 const receiptTestData = {
-    businessName: 'Shop Business Center',
+    name: 'Shop Business Center',
     address: '23232, JAVA CITY, SELANGOR',
     phone: '03-435435435',
     email: 'tester@test.com',

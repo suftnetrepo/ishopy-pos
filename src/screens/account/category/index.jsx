@@ -13,6 +13,7 @@ import { useCategories, useDeleteCategory } from '../../../hooks/useCategory';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
+import { convertJsonToCsv } from '../../../utils/convertJsonToCsv';
 
 const Category = () => {
   const navigator = useNavigation()
@@ -68,6 +69,10 @@ const Category = () => {
           <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={16}>
             <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
               <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-category")} />
+            </StyledCycle>
+            <StyledSpacer marginHorizontal={2} />
+            <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
+              <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
             </StyledCycle>
           </XStack>
         } />

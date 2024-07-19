@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { guid } from '../utils/help';
 import { getRealmInstance} from './store';
+import { Category } from './types';
 
 export interface Product {
   product_id: string;
@@ -12,6 +13,7 @@ export interface Product {
   cost?: number;
   stock?: number;
   category_id?: string;
+  category_name?: string;
   status?: number;
   description?: string;
 }
@@ -59,7 +61,22 @@ const queryAllProducts = async (
           status: product.status,
           description: product.description
         }));
-      resolve(products);
+
+        const categories = realm.objects<Category>('Category');
+        const categoryMap = categories.reduce(
+          (acc: {[key: string]: string}, category) => {
+            acc[category.category_id] = category.name;
+            return acc;
+          },
+          {}
+        );
+       
+        const enrichedProducts = products.map(product => ({
+          ...product,
+          category_name: categoryMap[product?.category_id || 0] || 'Unknown Category',
+        }));
+        
+      resolve(enrichedProducts);
     } catch (error) {
       reject(error);
     } 

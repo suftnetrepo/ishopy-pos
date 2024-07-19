@@ -14,6 +14,7 @@ import { FlatList } from 'react-native';
 import { toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
 import { useAppContext } from '../../../hooks/appContext';
+import { convertJsonToCsv } from '../../../utils/convertJsonToCsv';
 
 const Products = () => {
   const navigator = useNavigation()
@@ -22,7 +23,7 @@ const Products = () => {
   const [product, setProduct] = useState()
   const { data, error, loading, loadProducts, resetHandler } = useProducts()
   const { deleteProduct, error: deleteError } = useDeleteProduct()
-
+ 
   const onConfirm = () => {
     deleteProduct(product?.product_id).then(async (result) => {
       result && (
@@ -101,6 +102,10 @@ const Products = () => {
           <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={16}>
             <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
               <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-product")} />
+            </StyledCycle>
+            <StyledSpacer marginHorizontal={2} />
+            <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
+              <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
             </StyledCycle>
           </XStack>
         } />
