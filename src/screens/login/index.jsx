@@ -27,8 +27,7 @@ const Login = () => {
         await login(result)
         navigator.navigate("bottom-tabs")
       }
-    })
-    
+    })    
   }
 
   const RenderHeader = () => {

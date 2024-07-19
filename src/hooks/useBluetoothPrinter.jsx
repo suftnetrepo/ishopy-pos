@@ -33,7 +33,7 @@ const useBluetoothPrinter = () => {
                 ) {
                     checkBluetoothStatus();
                 } else {
-                    Alert.alert('Permissions not granted');
+                    Alert.alert('Bluetooth Permissions not granted, please grant this permission to enable printing');
                 }
             } catch (err) {
                 setError(err)

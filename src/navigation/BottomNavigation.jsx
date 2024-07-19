@@ -7,11 +7,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { theme } from '../configs/theme';
-import Home from './home';
-import Sales from './sales';
-import Account from './account';
-import Order from './order';
-
+import Home from '../screens/home';
+import Sales from '../screens/sales';
+import Account from '../screens/account';
+import Order from '../screens/order';
 
 const Tab = createBottomTabNavigator();
 

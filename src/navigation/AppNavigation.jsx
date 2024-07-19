@@ -3,7 +3,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/login';
 import Keypad from '../screens/lock';
-import BottomTabs from '../screens/tab';
+import BottomTabs from './BottomNavigation';
 import SignUp from '../screens/signUp';
 import SignUpCompleted from '../screens/signUp/signUpCompleted';
 import Printer from '../screens/account/printer';

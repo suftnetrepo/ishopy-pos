@@ -4,9 +4,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { YStack, XStack, StyledDialog, StyledCard, StyledCycle, StyledButton, StyledSeparator, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
-import { Modalize } from 'react-native-modalize';
 import { fontStyles, theme } from '../../configs/theme';
 import { useNavigation } from '@react-navigation/native';
 import { useAppContext } from '../../hooks/appContext';
@@ -27,27 +26,8 @@ const CheckOut = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
-    const [test, setTest ] = useState([])
-    const selectRef = useRef(null);
-    const items = getItems()
-
-    const modalizeRef = useRef(null);
-
-    const setSelectValue = (value) => {           
-        if(selectRef.current){
-            console.log("..............", value)
-            selectRef.current.value = value;
-
-            const data = selectRef?.current?.value === "taxes" ? taxes : discounts
-            setTest(data)
-        }      
-    };
-
-    const showBottomSheet = () => {
-        if (modalizeRef.current) {
-            modalizeRef.current.open();
-        }
-    };
+    const [selectValue, setSelectValue ] = useState()   
+    const items = getItems()      
 
     const RenderItem = ({ item }) => {
         return (
@@ -84,20 +64,19 @@ const CheckOut = () => {
         )
     }
 
-    const RenderTaxOrDiscountCard = ({ item }) => {
+    const RenderDiscountCard = ({ item }) => {       
         return (
             <StyledCard pressable={true} pressableProps={{
                 onPress: () => {
-                    selectRef?.current?.value === "taxes" ? setTax(item.rate) : setDiscount(item.rate)
-
+                    setDiscount(item.rate)
+                    setSelectValue()
                 }
             }} >
-                <XStack flex={1} marginVertical={4} paddingHorizontal={8} paddingVertical={8} justifyContent='space-between' alignItems='center' borderWidth={1} borderColor={theme.colors.gray[400]} borderRadius={16}>
+                <XStack flex={1} marginVertical={4} paddingHorizontal={8} paddingVertical={8} justifyContent='space-between' alignItems='center' borderWidth={1} backgroundColor={theme.colors.gray[1]} borderColor={theme.colors.gray[1]} borderRadius={16}>
                     <YStack paddingHorizontal={8} justifyContent='flex-start' alignItems='flex-start'>
                         <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
                             {item.name}
                         </StyledText>
-
                     </YStack>
                     <XStack gap={2}>
                         <StyledSpacer marginHorizontal={16} />
@@ -117,36 +96,37 @@ const CheckOut = () => {
         )
     }
 
-    const RenderModal = () => {
-              
+    const RenderTaxCard = ({ item }) => {
         return (
-            <Modalize
-                ref={modalizeRef}
-                adjustToContentHeight={true}            
-                closeSnapPointStraightEnabled={true}  
-                key={selectRef?.current?.value}        
-                scrollViewProps={{
-                    showsVerticalScrollIndicator: false,
-                    stickyHeaderIndices: [0],
-                }}>
-                <YStack paddingHorizontal={8} marginVertical={8} >
-                    <XStack justifyContent='center' alignItems='center'>
-                        <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
-                            {selectRef?.current?.value}
+            <StyledCard pressable={true} pressableProps={{
+                onPress: () => {
+                     setTax(item.rate) 
+                    setSelectValue()
+                }
+            }} >
+                <XStack flex={1} marginVertical={4} paddingHorizontal={8} paddingVertical={8} justifyContent='space-between' alignItems='center' borderWidth={1} backgroundColor={theme.colors.gray[1]} borderColor={theme.colors.gray[1]} borderRadius={16}>
+                    <YStack paddingHorizontal={8} justifyContent='flex-start' alignItems='flex-start'>
+                        <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
+                            {item.name}
                         </StyledText>
+                    </YStack>
+                    <XStack gap={2}>
+                        <StyledSpacer marginHorizontal={16} />
+                        <StyledBadge
+                            color={theme.colors.gray[100]}
+                            backgroundColor={theme.colors.gray[800]}
+                            fontWeight={theme.fontWeight.bold}
+                            fontSize={theme.fontSize.normal}
+                            paddingHorizontal={10}
+                            paddingVertical={1}
+                        >
+                            {item.rate} %
+                        </StyledBadge>
                     </XStack>
-                    <StyledSpacer marginVertical={4} />
-                    {
-                        test?.map((item, index) => {
-                            return (
-                                <RenderTaxOrDiscountCard key={index} item={item} />
-                            )
-                        })
-                    }
-                </YStack>
-            </Modalize>
+                </XStack>
+            </StyledCard>
         )
-    }
+    }   
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[200]}>
@@ -160,24 +140,61 @@ const CheckOut = () => {
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
                                 <MIcon size={48} name='remove' color={theme.colors.gray[700]} onPress={() => {
-                                    setSelectValue("taxes")
-                                    showBottomSheet()
+                                    setSelectValue("discounts")                    
                                 }} />
                             </StyledCycle>
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
-                                <MIcon ref={selectRef} size={48} name='add' color={theme.colors.gray[700]} onPress={() => {
-                                    setSelectValue("discounts")
-                                    showBottomSheet()
+                                <MIcon size={48} name='add' color={theme.colors.gray[700]} onPress={() => {                               
+                                    setSelectValue("taxes")                                
                                 }} />
                             </StyledCycle>
                         </XStack>
                     </>
                 } />
-            </StyledHeader>
+            </StyledHeader>          
+           
             <YStack flex={1} paddingHorizontal={12} paddingVertical={8} backgroundColor={theme.colors.gray[200]}>
-                <StyledToggleSwitch />
+                <StyledToggleSwitch />                
                 <ScrollView showsVerticalScrollIndicator={false} >
+                    {
+                        selectValue === "discounts" && (
+                            <YStack marginTop={8} >
+                                <XStack justifyContent='center' alignItems='center'>
+                                    <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.normal}>
+                                        Discounts
+                                    </StyledText>
+                                </XStack>
+                                <StyledSpacer marginVertical={4} />
+                                {
+                                    discounts?.map((item, index) => {
+                                        return (
+                                            <RenderDiscountCard key={index} item={item} />
+                                        )
+                                    })
+                                }
+                            </YStack>
+                        )
+                    }
+                    {
+                        selectValue === "taxes" && (
+                            <YStack marginTop={8}  >
+                                <XStack justifyContent='center' alignItems='center'>
+                                    <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
+                                        Taxes
+                                    </StyledText>
+                                </XStack>
+                                <StyledSpacer marginVertical={4} />
+                                {
+                                    taxes?.map((item, index) => {
+                                        return (
+                                            <RenderTaxCard key={index} item={item} />
+                                        )
+                                    })
+                                }
+                            </YStack>
+                        )
+                    }
                     <StyledSpacer marginVertical={4} />
                     <StyledCard shadow='light' borderColor={theme.colors.gray[200]} borderRadius={16} borderWidth={1} backgroundColor={theme.colors.gray[1]} paddingTop={8}>
                         {
@@ -265,12 +282,11 @@ const CheckOut = () => {
                         </StyledButton>
                     </XStack >
                 )
-            }
-            <RenderModal />
+            }           
             {
                 modalVisible &&
                 <StyledDialog visible>
-                        <CheckOutCompleted order={data} printHandler={printHandler} shareReceipt={shareReceipt} />
+                    <CheckOutCompleted order={data} printHandler={printHandler} shareReceipt={shareReceipt} />
                 </StyledDialog>
             }
             {

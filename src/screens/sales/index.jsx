@@ -92,7 +92,7 @@ const Sales = () => {
  
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[800]}>
-      <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[700]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
+      <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[800]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
         <StyledHeader.Header color={theme.colors.gray[1]} iconProps={{
           color: theme.colors.gray[1]
         }} onPress={() => navigator.reset({

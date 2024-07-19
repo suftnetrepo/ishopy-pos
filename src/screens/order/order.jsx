@@ -114,7 +114,7 @@ const CompletedOrder = ({ order, setModal }) => {
 
     return (
         <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
+            <YStack  borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
                 <XStack justifyContent='flex-end' alignItems='center' >
                     <StyledSpacer flex={1}></StyledSpacer>
                     <StyledMIcon
@@ -127,7 +127,7 @@ const CompletedOrder = ({ order, setModal }) => {
                 <StyledSpacer marginVertical={4} />
                 <RenderOrder />
                 <StyledSpacer marginVertical={4} />
-                <YStack width={'100%'} height={'50%'}>
+                <YStack width={'100%'} height={'30%'}>
                     <ScrollView showsVerticalScrollIndicator={false} >
                         <RenderOrderItems />
                     </ScrollView>
