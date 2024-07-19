@@ -73,8 +73,9 @@ export const OrderSchema: ObjectSchema = {
   properties: {
     order_id: 'string',
     user_id: 'string?',
-    total_tax: 'double?',
-    total_discount: 'double?',
+    total: 'double?',
+    tax: 'double?',
+    discount: 'double?',
     total_price: 'double',
     status: 'string?',
     date: 'date',
@@ -91,7 +92,7 @@ export const OrderItemSchema: ObjectSchema = {
     product_name: 'string',
     quantity: 'int',
     price: 'double',
-    date: 'string?',
+    date: 'date',
   },
 };
 
@@ -143,7 +144,7 @@ export const PaymentSchema: ObjectSchema = {
     order_id: 'string',
     amount: 'double',
     payment_method: 'string?',
-    date: 'string?',
+    date: 'date',
   },
 };
 
@@ -180,7 +181,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '___pos___j.realm',
+    path: '____pos___j.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

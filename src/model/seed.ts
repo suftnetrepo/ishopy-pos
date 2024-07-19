@@ -183,35 +183,57 @@ const seedData = async () => {
       customers.forEach(customer => realm.create('Customer', customer));
 
       // Seed Orders
-      const orders: Order[] = [];
-      for (let i = 1; i <= 20; i++) {
-        orders.push({
-          order_id: guid(),
-          user_id: users[i % 2].user_id,
-          total_price: Math.floor(Math.random() * 1000) + 100,
-          total: Math.floor(Math.random() * 200) + 100,
-          status: i % 2 === 0 ? 'completed' : 'pending',
-          tax: 10,
-          discount: 20,
-          date: new Date(),
-        });
-      }
-      orders.forEach(order => realm.create('Order', order));
+     const orders: Order[] = [];
+     const now = new Date();
+
+     for (let i = 1; i <= 20; i++) {
+       const orderDate = new Date(
+         now.getFullYear(),
+         now.getMonth(),
+         now.getDate() - Math.floor(Math.random() * 7),
+         Math.floor(Math.random() * 24),
+         Math.floor(Math.random() * 60),
+         Math.floor(Math.random() * 60)
+       );
+
+       orders.push({
+         order_id: guid(),
+         user_id: users[i % 2].user_id,
+         total_price: Math.floor(Math.random() * 1000) + 100,
+         total: Math.floor(Math.random() * 200) + 100,
+         status: i % 2 === 0 ? 'completed' : 'pending',
+         tax: 10,
+         discount: 20,
+         date: orderDate,
+       });
+     }
+
+     orders.forEach(order => realm.create('Order', order));
 
       // Seed OrderItems
-      const orderItems: OrderItem[] = [];
-      for (let i = 1; i <= 20; i++) {
-        orderItems.push({
-          detail_id: guid(),
-          order_id: orders[Math.floor((i - 1) / 2)].order_id,
-          product_id: products[i % 50].product_id,
-          product_name: products[i % 50].name,
-          quantity: Math.floor(Math.random() * 5) + 1,
-          price: Math.floor(Math.random() * 500) + 50,
-          date: new Date().toISOString(),
-        });
-      }
-      orderItems.forEach(orderItem => realm.create('OrderItem', orderItem));
+     const orderItems: OrderItem[] = [];
+     for (let i = 1; i <= 20; i++) {
+       const orderItemDate = new Date(
+         now.getFullYear(),
+         now.getMonth(),
+         now.getDate() - Math.floor(Math.random() * 7),
+         Math.floor(Math.random() * 24),
+         Math.floor(Math.random() * 60),
+         Math.floor(Math.random() * 60)
+       );
+
+       orderItems.push({
+         detail_id: guid(),
+         order_id: orders[Math.floor((i - 1) / 2)].order_id,
+         product_id: products[i % 50].product_id,
+         product_name: products[i % 50].name,
+         quantity: Math.floor(Math.random() * 5) + 1,
+         price: Math.floor(Math.random() * 500) + 50,
+         date: orderItemDate,
+       });
+     }
+
+     orderItems.forEach(orderItem => realm.create('OrderItem', orderItem));
 
       const stock: Stock[] = products.map(product => ({
         stock_id: guid(),
@@ -229,7 +251,7 @@ const seedData = async () => {
           order_id: orders[i - 1].order_id,
           amount: Math.floor(Math.random() * 1000) + 100,
           payment_method: i % 2 === 0 ? 'credit_card' : 'paypal',
-          date: new Date().toISOString(),
+          date: new Date(),
         });
       }
       payments.forEach(payment => realm.create('Payment', payment));

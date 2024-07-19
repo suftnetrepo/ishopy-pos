@@ -39,7 +39,7 @@ const payment: Payment = {
 	payment_method: "",
 	order_id: "",
 	amount: 0,
-	date: new Date().toISOString(),
+	date: new Date(),
 };
 
 const useOrders = (load : boolean) => {
@@ -192,7 +192,7 @@ const useInsertOrder = () => {
 						product_id: item.id,
 						product_name: item.name,
 						quantity: 1,
-						date: new Date().toISOString(),
+						date: new Date(),
 					};
 
 					await insertOrderItem(orderItem);

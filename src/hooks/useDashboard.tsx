@@ -12,6 +12,7 @@ import {
 	getDailyTransactionTrend,
 	ProductSalesData,
 	WeeklyTransactionsData,
+	getWeeklySales
 } from "../model/dashboard";
 
 interface Initialize {
@@ -55,8 +56,7 @@ const useDailyTransaction = () => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -130,8 +130,7 @@ const useBestSellingProducts = (limit: number) => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -163,8 +162,7 @@ const useDailyTransactionPercentageChange = () => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -196,8 +194,7 @@ const useMonthlySales = () => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -229,8 +226,7 @@ const useLowStocks = (threshold: number = 1) => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
 	};
 };
 
@@ -262,8 +258,39 @@ const useWeeklyTransactions = () => {
 	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
+		...data
+	};
+};
+
+const useWeeklySales = () => {
+	const [data, setData] = useState<Initialize>({
+		data: [],
+		error: null,
+		loading: true,
+	});
+
+	useEffect(() => {
+		async function load() {
+			try {
+				const result = await getWeeklySales();
+				setData((prev) => ({
+					...prev,
+					data: result,
+					loading: false,
+				}));
+			} catch (error) {
+				setData({
+					data: null,
+					error: error as Error,
+					loading: false,
+				});
+			}
+		}
+		load();
+	}, []);
+
+	return {
+		...data
 	};
 };
 
@@ -275,4 +302,5 @@ export {
 	useTransactionTrend,
 	useDailyTransactionPercentageChange,
 	useMonthlySales,
+	useWeeklySales
 };

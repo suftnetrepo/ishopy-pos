@@ -8,7 +8,7 @@ export interface OrderItem {
   product_name: string;
   quantity: number;
   price: number;
-  date: string;
+  date: Date;
 }
 
 const insertOrderItem = async(

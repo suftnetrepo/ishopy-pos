@@ -158,6 +158,36 @@ const getLowStocks = async (threshold: number = 10): Promise<number> => {
     });
 };
 
+const getWeeklySales = async (): Promise<number> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const now = new Date();
+      const startOfWeek = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - now.getDay()
+      );
+      const endOfWeek = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - now.getDay() + 6,
+        23,
+        59,
+        59,
+        999
+      );
+
+      const result = realm
+        .objects<Order>('Order')
+        .filtered('date >= $0 && date <= $1', startOfWeek, endOfWeek)
+        .sum('total_price');
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 const getWeeklyTransactions = async (): Promise<WeeklyTransactionsData[]> => {
   const realm = await getRealmInstance();
@@ -195,7 +225,6 @@ const getWeeklyTransactions = async (): Promise<WeeklyTransactionsData[]> => {
   });
 };
 
-
 const getPreviousDayTransaction = async (): Promise<number> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -229,16 +258,16 @@ const getDailyTransactionTrend = (): Promise<{
         let trend = 'neutral';
         let percentageChange = 0;
 
-        if (previousDayTransaction === 0) {
-          // No transactions on the previous day
+        if (previousDayTransaction === 0) {         
           percentageChange = dailyTransaction === 0 ? 0 : 100;
           trend = dailyTransaction === 0 ? 'neutral' : 'up';
         } else {
-          // Calculate percentage change
+        
           percentageChange =
             ((dailyTransaction - previousDayTransaction) /
               previousDayTransaction) *
             100;
+          percentageChange = Math.round(percentageChange * 100) / 100; 
           if (dailyTransaction > previousDayTransaction) {
             trend = 'up';
           } else if (dailyTransaction < previousDayTransaction) {
@@ -252,13 +281,16 @@ const getDailyTransactionTrend = (): Promise<{
   });
 };
 
+
+
 export {
-    getBestSellingProducts,
-    getDailyTransactionPercentageChange,
-    getLowStocks,
-    getMonthlySales,
-    getWeeklyTransactions,
-    getDailyTransaction,
-    getPreviousDayTransaction,
-    getDailyTransactionTrend
+  getBestSellingProducts,
+  getDailyTransactionPercentageChange,
+  getLowStocks,
+  getMonthlySales,
+  getWeeklyTransactions,
+  getDailyTransaction,
+  getPreviousDayTransaction,
+  getDailyTransactionTrend,
+  getWeeklySales
 };

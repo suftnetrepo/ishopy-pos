@@ -46,7 +46,7 @@ const CompletedOrder = ({ order, setModal }) => {
                         <StyledMIcon size={16} name='date-range' color={theme.colors.gray[600]} />
                         <StyledText
                             fontWeight={theme.fontWeight.normal}
-                            fontSize={theme.fontSize.medium}
+                            fontSize={theme.fontSize.small}
                             paddingHorizontal={4}
                             paddingVertical={1}
                         >
@@ -59,7 +59,7 @@ const CompletedOrder = ({ order, setModal }) => {
                         color={theme.colors.green[800]}
                         backgroundColor={theme.colors.green[50]}
                         fontWeight={theme.fontWeight.bold}
-                        fontSize={theme.fontSize.normal}
+                        fontSize={theme.fontSize.small}
                         paddingHorizontal={16}
                         paddingVertical={4}
                         fontFamily={fontStyles.FontAwesome5_Regular}>{toWordCase(order.status)}</StyledBadge>
@@ -114,7 +114,7 @@ const CompletedOrder = ({ order, setModal }) => {
 
     return (
         <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={8} paddingVertical={8}>
+            <YStack borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
                 <XStack justifyContent='flex-end' alignItems='center' >
                     <StyledSpacer flex={1}></StyledSpacer>
                     <StyledMIcon
@@ -135,7 +135,7 @@ const CompletedOrder = ({ order, setModal }) => {
                 <YStack width={'100%'}>
                     <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                         <YStack >
-                            <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
+                            <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
                                 Subtotal
                             </StyledText>
                         </YStack>
@@ -151,7 +151,7 @@ const CompletedOrder = ({ order, setModal }) => {
                     }} />
                     <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                         <YStack >
-                            <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
+                            <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
                                 Discount
                             </StyledText>
                         </YStack>
@@ -169,7 +169,7 @@ const CompletedOrder = ({ order, setModal }) => {
                     }} />
                     <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                         <YStack >
-                            <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
+                            <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
                                 Tax
                             </StyledText>
                         </YStack>

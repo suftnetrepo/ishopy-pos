@@ -32,7 +32,6 @@ const Account = () => {
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader skipAndroid={false} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
       </StyledHeader>
-      {/* <StyledSpacer marginVertical={16} /> */}
       <StyledText paddingHorizontal={24} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
         Profile
       </StyledText>
@@ -61,27 +60,27 @@ const Account = () => {
               {toWordCase(user.role)}
             </StyledText>
           </YStack>
-        </XStack>    
+        </XStack>
       </YStack>
-          <StyledSpacer marginVertical={8} />
+      <StyledSpacer marginVertical={8} />
       <StyledScrollView>
         <YStack
-          flex={2}         
+          flex={2}
           backgroundColor={theme.colors.gray[100]}
           borderTopLeftRadius={16}
           borderTopRightRadius={16}>
           <StyledSeparator left={
             <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
-              Application
+              Settings
             </StyledText>
           }>
           </StyledSeparator>
-          <RenderRow icon="local-printshop" title='Printer' screen='printer' />
+          <RenderRow icon="outlet" title='Store' screen='shop' />
           <RenderRow icon="person" title='User' screen='users' />
-          <RenderRow icon="outlet" title='Shop' screen='shop' />
+          <RenderRow icon="local-printshop" title='Printer' screen='printer' />
           <StyledSeparator left={
             <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
-              Shop
+              Store
             </StyledText>
           }></StyledSeparator>
           <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />

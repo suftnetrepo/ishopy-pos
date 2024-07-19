@@ -7,7 +7,7 @@ export interface Payment {
   order_id: string;
   amount: number;
   payment_method: string;
-  date: string;
+  date: Date;
 }
 
 const insertPayment = async (payment: Omit<Payment, 'id'>): Promise<Payment> => {

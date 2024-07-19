@@ -26,7 +26,7 @@ const Tabs = ({ state, descriptors, navigation }) => {
             const focused = state.index === index
 
             const handlePress = () => {
-              if (route.name === 'sales' || route.name === 'orders') {
+              if (route.name === 'sales') {
               navigation.push(route.name);
             } else {
               navigation.navigate(route.name);
@@ -69,14 +69,6 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='orders' component={Order} options={{
-        tabBarIcon: ({ size, color }) => {
-          return (
-            <Icon color={color} size={size} name='square-outline' />
-          )
-        }
-      }} />
-
       <Tab.Screen name='sales' component={Sales} options={{
         tabBarIcon: ({ size, color }) => {
           return (
@@ -84,6 +76,14 @@ export default function BottomTabs() {
           )
         }
       }} />
+
+      <Tab.Screen name='orders' component={Order} options={{
+        tabBarIcon: ({ size, color }) => {
+          return (
+            <Icon color={color} size={size} name='square-outline' />
+          )
+        }
+      }} />     
 
       <Tab.Screen name='profile' component={Account} options={{
         tabBarIcon: ({ size, color }) => {

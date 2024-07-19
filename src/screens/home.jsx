@@ -14,21 +14,19 @@ import {
   StyledHeader,
   StyledSpacer,
   StyledButton,
-  StyledCard
 } from 'fluent-styles';
 import { BarChart } from 'react-native-gifted-charts';
 import { StyledMIcon } from '../components/icon';
 import { fontStyles, theme } from '../configs/theme';
 import { useNavigation } from '@react-navigation/native';
-import {
-  useDailyTransaction,
+import { 
   useWeeklyTransactions,
-  useTransactionTrend,
-  useMonthlySales,
+  useTransactionTrend, 
 } from '../hooks/useDashboard';
 import { useAppContext } from '../hooks/appContext';
-import { formatCurrency, toWordCase } from '../utils/help';
+import { formatCurrency, getGreetings, toWordCase } from '../utils/help';
 import { ScrollView } from 'react-native';
+import { SalesTrend } from './home/salesTrend';
 
 const Home = () => {
   const navigate = useNavigation();
@@ -36,15 +34,15 @@ const Home = () => {
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  
-
+   
   const chart = useCallback(() => {
+    const currentDate = new Date()
     const chartData = labels.map((label, index) => {
       const dayData = data?.find(day => day.weekday === index);
       return {
         label,
         value: dayData ? dayData.total : 0,
-        frontColor: index === 4 ? '#916aff' : '#d3d3d3',
+        frontColor: index === currentDate.getDay() ? '#916aff' : '#d3d3d3',
       };
     });
 
@@ -64,17 +62,18 @@ const Home = () => {
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.normal}
+            fontWeight={theme.fontWeight.normal}
+            color={theme.colors.gray[400]}>
+            {getGreetings()}
+          </StyledText>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.normal}
             fontWeight={theme.fontWeight.bold}
             color={theme.colors.gray[800]}>
             {toWordCase(user.first_name)} {toWordCase(user.last_name)}
           </StyledText>
-          <StyledText
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.small}
-            fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[600]}>
-            {user.role}
-          </StyledText>
+          
         </YStack>
 
         <XStack>
@@ -122,8 +121,7 @@ const Home = () => {
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>
-      </StyledHeader>
-      <StyledSpacer marginVertical={8} />
+      </StyledHeader>    
       <ScrollView>
       <YStack
         flex={1}
@@ -132,14 +130,14 @@ const Home = () => {
         alignItems="flex-start"
         backgroundColor={theme.colors.gray[1]}
         borderRadius={32}
-        paddingHorizontal={16}
-        paddingVertical={16}>
+        paddingHorizontal={8}
+        paddingVertical={8}>
           <StyledSpacer marginVertical={2} />
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.large}
             fontWeight={theme.fontWeight.normal}
-            paddingHorizontal={8}
+            paddingHorizontal={16}
             color={theme.colors.gray[800]}>
             Daily transaction
           </StyledText>
@@ -149,7 +147,7 @@ const Home = () => {
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.xxxlarge}
               fontWeight={theme.fontWeight.bold}
-              paddingHorizontal={8}
+              paddingHorizontal={16}
               color={theme.colors.gray[800]}>
               {formatCurrency(shop.currency || '£', dailyTransaction)}
             </StyledText>
@@ -183,57 +181,7 @@ const Home = () => {
      
       </YStack>
         <StyledSpacer marginVertical={4} />
-        <XStack marginHorizontal={16} justifyContent='space-between' alignItems='center' gap={8}>
-          <StyledCard
-            borderColor={theme.colors.yellow[300]}
-            backgroundColor={theme.colors.yellow[100]}
-            paddingHorizontal={8}
-            borderRadius={32}
-            flex={1}
-          >
-            <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
-
-              <StyledText fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.normal}
-                fontWeight={theme.fontWeight.bold}
-                color={theme.colors.gray[700]}>
-                Monthly sales
-              </StyledText>
-              <StyledSpacer marginVertical={8} />
-              <StyledText fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.xxxlarge}
-                fontWeight={theme.fontWeight.bold}
-                color={theme.colors.gray[700]}>
-                24
-              </StyledText>
-            </YStack>
-          </StyledCard>
-
-          <StyledCard
-            borderColor={theme.colors.orange[100]}
-            backgroundColor={theme.colors.orange[100]}
-            paddingHorizontal={8}
-            borderRadius={32}
-            flex={1}
-          >
-            <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
-              <StyledText fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.large}
-                fontWeight={theme.fontWeight.bold}
-                color={theme.colors.gray[700]}>
-                Lower stocks
-              </StyledText>
-              <StyledSpacer marginVertical={8} />
-              <StyledText fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.xxxlarge}
-                fontWeight={theme.fontWeight.bold}
-                color={theme.colors.gray[700]}>
-                24
-              </StyledText>
-
-            </YStack>
-          </StyledCard>
-        </XStack>
+        <SalesTrend />
       </ScrollView>
     </StyledSafeAreaView>
   );

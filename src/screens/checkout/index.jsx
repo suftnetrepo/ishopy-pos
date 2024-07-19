@@ -27,6 +27,7 @@ const CheckOut = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
+    const [test, setTest ] = useState([])
     const selectRef = useRef(null);
     const items = getItems()
 
@@ -36,6 +37,9 @@ const CheckOut = () => {
         if(selectRef.current){
             console.log("..............", value)
             selectRef.current.value = value;
+
+            const data = selectRef?.current?.value === "taxes" ? taxes : discounts
+            setTest(data)
         }      
     };
 
@@ -114,25 +118,18 @@ const CheckOut = () => {
     }
 
     const RenderModal = () => {
-        console.log("..............x", selectRef?.current?.value)
-        // console.log("..............taxes", taxes)
-        // console.log("..............discounts", discounts)
-        const data = selectRef?.current?.value === "taxes" ? taxes : discounts
-        if (!data.length) return
-
+              
         return (
             <Modalize
                 ref={modalizeRef}
-                adjustToContentHeight={true}
-                alwaysOpen={false}
-                withHandle={false}
-                closeOnOverlayTap={true}   
-                closeSnapPointStraightEnabled={true}          
+                adjustToContentHeight={true}            
+                closeSnapPointStraightEnabled={true}  
+                key={selectRef?.current?.value}        
                 scrollViewProps={{
                     showsVerticalScrollIndicator: false,
                     stickyHeaderIndices: [0],
                 }}>
-                <YStack paddingHorizontal={8} marginVertical={8} key={selectRef?.current?.value} >
+                <YStack paddingHorizontal={8} marginVertical={8} >
                     <XStack justifyContent='center' alignItems='center'>
                         <StyledText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[600]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
                             {selectRef?.current?.value}
@@ -140,7 +137,7 @@ const CheckOut = () => {
                     </XStack>
                     <StyledSpacer marginVertical={4} />
                     {
-                        data?.map((item, index) => {
+                        test?.map((item, index) => {
                             return (
                                 <RenderTaxOrDiscountCard key={index} item={item} />
                             )

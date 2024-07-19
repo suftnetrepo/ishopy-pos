@@ -89,13 +89,17 @@ const Sales = () => {
       </YStack>
     </Modalize>
   )
-
+ 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[800]}>
       <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[700]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
         <StyledHeader.Header color={theme.colors.gray[1]} iconProps={{
           color: theme.colors.gray[1]
-        }} onPress={() => navigator.navigate("bottom-tabs", { screen: 'home' })} title='Sales' icon cycleProps={{
+        }} onPress={() => navigator.reset({
+          key: "bottom-tabs",
+          index: 0,
+          routes: [{ name: 'bottom-tabs' }]
+        })} title='Sales' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           backgroundColor: theme.colors.gray[700],
           marginRight: 8
@@ -156,7 +160,7 @@ const Sales = () => {
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Clear</StyledText>
         </StyledButton>
         <StyledSpacer marginHorizontal={4} />
-        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.indigo[600]} backgroundColor={theme.colors.indigo[600]} onPress={() => items.length > 0 && navigator.navigate("checkout")} >
+        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[600]} backgroundColor={theme.colors.cyan[600]} onPress={() => items.length > 0 && navigator.navigate("checkout")} >
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotalPrice())}</StyledText>
         </StyledButton>
       </XStack >
