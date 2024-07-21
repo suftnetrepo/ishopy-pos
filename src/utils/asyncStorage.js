@@ -3,24 +3,38 @@
 /* eslint-disable prettier/prettier */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const STORAGE_KEYS = {
-  IS_FULL_APP_PURCHASED: '@is_full_app_purchased',
+  PURCHASED_STATUS: 'purchased_status',
 };
 
-export const storeBooleanData = async (key, value) => {
+/**
+ * Stores a value in AsyncStorage.
+ *
+ * @param {string} key - The key under which the value will be stored.
+ * @param {any} value - The value to store. Will be converted to string.
+ * @returns {Promise<void>}
+ */
+export const store = async (key, value = 0) => {
   try {
-    const stringValue = value.toString();
+    // Convert value to a string before storing
+    const stringValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, stringValue);
   } catch (e) {
-    console.log(e);
+    console.error(`Error storing data for key "${key}":`, e);
   }
 };
 
-// getItem returns a promise that either resolves to stored value when data is found for given key, or returns null otherwise.
-export const getBooleanData = async (key) => {
+/**
+ * Retrieves a value from AsyncStorage.
+ *
+ * @param {string} key - The key for the value to retrieve.
+ * @returns {Promise<any>} - The retrieved value, parsed from JSON.
+ */
+export const getStore = async (key) => {
   try {
+    // Get value and parse it from JSON
     const value = await AsyncStorage.getItem(key);
-    return value === 'true';
+    return value ? JSON.parse(value) : null;
   } catch (e) {
-    console.log(e);
+    console.error(`Error retrieving data for key "${key}":`, e);
   }
 };

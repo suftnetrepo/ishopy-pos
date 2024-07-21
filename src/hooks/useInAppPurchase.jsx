@@ -3,63 +3,56 @@
 /* eslint-disable prettier/prettier */
 
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
 import { requestPurchase, useIAP } from 'react-native-iap';
-import { STORAGE_KEYS, storeBooleanData, getBooleanData } from '../utils/asyncStorage';
+import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage';
 
-const { IS_FULL_APP_PURCHASED } = STORAGE_KEYS;
-
-// Define item SKUs based on platform
-const itemSKUs = Platform.select({
-    android: ['full_app', 'test_4'],
-    ios: [], // Add iOS SKUs if needed
-});
+const { PURCHASED_STATUS } = STORAGE_KEYS;
 
 const useInAppPurchase = () => {
-    const [isFullAppPurchased, setIsFullAppPurchased] = useState(false);
-    const [connectionErrorMsg, setConnectionErrorMsg] = useState('');
+    const [data, setData] = useState({
+        error: null,
+        loading: false,
+        status: false
+    })
 
     const {
         connected,
         products,
-        getProducts,
         finishTransaction,
         currentPurchase,
         currentPurchaseError,
     } = useIAP();
 
-    // Effect to handle fetching purchase status, products, and processing purchases/errors
     useEffect(() => {
-        const initialize = async () => {
-            try {
-                // Fetch initial purchase status
-                const data = await getBooleanData(IS_FULL_APP_PURCHASED);
-                setIsFullAppPurchased(data);
-
-                // Fetch products if connected
-                if (connected) {
-                    await getProducts(itemSKUs);
-                }
-            } catch (error) {
-                console.error('Initialization error:', error);
-                setConnectionErrorMsg('An error occurred during initialization.');
-            }
-        };
-
-        initialize();
-    }, [connected, getProducts]);
+        async function init() {
+            const status = await getStore(PURCHASED_STATUS)
+            setData({
+                status: status === 0 || status === null ? false : true,
+                error: null,
+                loading: false,
+            });
+        }
+        init()
+    }, [])
 
     useEffect(() => {
         const processPurchase = async () => {
             if (currentPurchase?.transactionReceipt) {
-                console.log('Received receipt:', currentPurchase.transactionReceipt);
-                setAndStoreFullAppPurchase(true);
 
                 try {
                     await finishTransaction(currentPurchase);
-                    console.log('Transaction acknowledged');
+                    store(PURCHASED_STATUS, 1)
+                    setData({
+                        status: true,
+                        error: null,
+                        loading: false,
+                    });
                 } catch (error) {
-                    console.error('Failed to acknowledge transaction:', error);
+                    setData({
+                        status: false,
+                        error,
+                        loading: false,
+                    });
                 }
             }
         };
@@ -68,44 +61,40 @@ const useInAppPurchase = () => {
     }, [currentPurchase])
 
     useEffect(() => {
-        if (currentPurchaseError?.code === 'E_ALREADY_OWNED' && !isFullAppPurchased) {
-            setAndStoreFullAppPurchase(true);
-        } else if (currentPurchaseError) {
-            console.error('Purchase error:', currentPurchaseError);
-        }
-    }, [currentPurchaseError, isFullAppPurchased]);
+        setData({
+            status: currentPurchaseError?.code === "E_ALREADY_OWNED" ? true : false,
+            error: currentPurchaseError,
+            loading: false,
+        });
+    }, [currentPurchaseError]);
 
-    const purchaseFullApp = async () => {
+    const purchaseHandler = async () => {
         if (!connected) {
-            setConnectionErrorMsg('Please check your internet connection');
+            setData({
+                status: false,
+                error: 'Please check your internet connection',
+                loading: false,
+            });
             return;
         }
 
         try {
             if (products?.length > 0) {
-                await requestPurchase(itemSKUs[1]);
-                console.log('Requested purchase');
-            } else {
-                await getProducts(itemSKUs);
-                await requestPurchase(itemSKUs[1]);
-                console.log('Requested purchase after fetching products');
+                await requestPurchase({ skus: ['ishopy_sa_premium_upgrade'] });
             }
         } catch (error) {
-            setConnectionErrorMsg('Failed to make purchase');
-            console.error('Purchase request error:', error);
+            setData({
+                status: false,
+                error,
+                loading: false,
+            });
         }
     };
 
-    const setAndStoreFullAppPurchase = (value) => {
-        setIsFullAppPurchased(value);
-        storeBooleanData(IS_FULL_APP_PURCHASED, value);
-    };
-
     return {
-        isFullAppPurchased,
-        connectionErrorMsg,
-        purchaseFullApp,
+        ...data,
+        purchaseHandler,
     };
 };
 
-export default useInAppPurchase;
+export { useInAppPurchase };

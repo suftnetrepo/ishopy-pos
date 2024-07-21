@@ -69,7 +69,7 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
-android {
+android { 
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -79,14 +79,16 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }   
 
-    namespace "com.ishopypos"
+    namespace "com.suftnet.shop.sa"
     defaultConfig {
-        applicationId "com.ishopypos"
+        applicationId "com.suftnet.shop.sa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-    }
+        versionCode 25
+        versionName "1.0.1"
+        missingDimensionStrategy "store", "play"
+    }   
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')

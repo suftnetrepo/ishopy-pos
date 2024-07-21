@@ -2,6 +2,7 @@
 import React, { useState, ReactNode, useContext } from "react";
 import { User, Shop, CartItem } from '../model/types'
 import { useCart } from "./useCart";
+import { useInAppPurchase } from "./useInAppPurchase";
 
 interface CartActions {
     addItem: (id: string,
@@ -32,6 +33,7 @@ interface Actions extends CartActions {
 interface State {
     user: User | null;
     shop: Shop | null;
+    purchaseStatus : boolean
 }
 
 interface AppProviderProps {
@@ -43,10 +45,12 @@ export const AppContext = React.createContext<Actions & State | undefined>(undef
 const initialState: State = {
     user: null,
     shop: null,
+    purchaseStatus : false
 };
 
 const AppProvider = ({ children }: AppProviderProps) => {
     const [state, setState] = useState<State>(initialState);
+    const { status: purchaseStatus } = useInAppPurchase()
     const {
         addItem,
         updateItem,
@@ -121,6 +125,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
             getTotal,
             getTotalDiscount,
             getTotalTax,
+            purchaseStatus
         }}>
             {children}
         </AppContext.Provider>

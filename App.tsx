@@ -10,12 +10,13 @@ import { StyledToast } from './src/components/toast'
 import AppProvider from './src/hooks/appContext'
 import RadioProvider from './src/hooks/radioContext';
 import {BluetoothPrinterProvider} from './src/hooks/bluetoothPrinterProvider';
+import { withIAPContext } from 'react-native-iap';
 
 function App(): React.JSX.Element {
-
+ 
   useEffect(() => {
     async function init() {
-      await seedData()
+      await seedData()   
     }
     init()
   }, [])
@@ -45,4 +46,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default App;
+export default withIAPContext(App);

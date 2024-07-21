@@ -1,4 +1,4 @@
-package com.ishopypos
+package com.suftnet.shop.sa
 
 import android.app.Application
 import com.facebook.react.PackageList
