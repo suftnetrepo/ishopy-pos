@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import {
-	queryAllPayments,
-	queryPaymentById,
+	queryAllPayments,	
 	queryPaymentsByDateRange,
 	queryPaymentsByOrderId,
 	insertPayment,
@@ -16,102 +15,63 @@ interface Initialize {
 	loading: boolean;
 }
 
-const usePayments = () => {
+const usePayments = (load: boolean) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryAllPayments();
-				setData((prev) => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
+	async function loadPayment() {
+		try {
+			const result = await queryAllPayments();
+			setData((prev) => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
 		}
-		load();
-	}, []);
+	}
 
-	return {
-		data: data.data,
-		error: data.error,
+	useEffect(() => {		
+		loadPayment();
+	}, [load]);
+
+	async function loadPaymentsByDateRange(startDate: Date, endDate: Date) {
+		try {
+			const result = await queryPaymentsByDateRange(startDate, endDate);
+			setData((prev) => ({
+				...prev,
+				data: result,
+				loading: false,
+			}));
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	}
+
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
 	};
-};
-
-const useQueryPaymentById = (id: number) => {
-	const [data, setData] = useState<Initialize>({
-		data: [],
-		error: null,
-		loading: true,
-	});
-
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryPaymentById(id);
-				setData((prev) => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
-		}
-		load();
-	}, []);
 
 	return {
-		data: data.data,
-		error: data.error,
-	};
-};
-
-const useQueryPaymentsByDateRange = (startDate: string, endDate: string) => {
-	const [data, setData] = useState<Initialize>({
-		data: [],
-		error: null,
-		loading: true,
-	});
-
-	useEffect(() => {
-		async function load() {
-			try {
-				const result = await queryPaymentsByDateRange(startDate, endDate);
-				setData((prev) => ({
-					...prev,
-					data: result,
-					loading: false,
-				}));
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
-		}
-		load();
-	}, []);
-
-	return {
-		data: data.data,
-		error: data.error,
+		...data,
+		resetHandler,
+		loadPaymentsByDateRange
 	};
 };
 
@@ -219,7 +179,5 @@ export {
 	useDeletePayment,
 	useInsertPayment,
 	usePayments,
-	usePaymentsByOrderId,
-	useQueryPaymentById,
-	useQueryPaymentsByDateRange,
+	usePaymentsByOrderId	
 };

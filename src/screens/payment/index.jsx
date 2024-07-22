@@ -4,19 +4,18 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledButton, StyledInput, StyledDialog, StyledCycle, StyledBadge, StyledHeader, StyledSpinner, StyledOkDialog, StyledSpacer } from 'fluent-styles';
+import { YStack, XStack, StyledSafeAreaView, StyledText, StyledButton, StyledInput, StyledCycle, StyledBadge, StyledHeader, StyledSpinner, StyledOkDialog, StyledSpacer } from 'fluent-styles';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { fontStyles, theme } from '../../configs/theme';
-import { useOrders } from '../../hooks/useOrder';
+import { usePayments } from '../../hooks/usePayment';
 import { FlatList } from 'react-native';
 import { dateConverter, formatCurrency, formatDateTime } from '../../utils/help';
 import { StyledMIcon } from '../../components/icon';
 import { useAppContext } from '../../hooks/appContext';
-import CompletedOrder from './order';
-import { convertJsonToCsv } from '../../utils/convertJsonToCsv';
+import { DownloadPayment } from './downloadPayment';
 
-const Order = () => {
+const Payment = () => {
     const navigator = useNavigation()
     const { shop } = useAppContext()
     const [startDate, setStartDate] = useState(new Date());
@@ -24,12 +23,8 @@ const Order = () => {
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
-    const { data, error, loading, resetHandler, loadOrdersByDateRange } = useOrders(showFilter)
-    const [modal, setModal] = useState({
-        visible: false,
-        order: null
-    })
-   
+    const { data, error, loading, resetHandler, loadPaymentsByDateRange } = usePayments(showFilter)
+      
     const handleStartDateChange = (event, selectedDate) => {
         const currentDate = selectedDate || startDate;
         setShowStartPicker(false);
@@ -85,18 +80,8 @@ const Order = () => {
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={8}
                         paddingVertical={4}
-                        fontFamily={fontStyles.FontAwesome5_Regular}>{formatCurrency(shop.currency || "£", item.total_price)}</StyledBadge>
-                    <StyledSpacer marginHorizontal={4} />
-                    <StyledMIcon size={32} name='view-list' color={theme.colors.gray[400]} onPress={() => {
-                        setModal((pre) => {
-                            return {
-                                ...pre,
-                                visible: true,
-                                order: item
-                            }
-                        })
-                    }
-                    } />
+                        fontFamily={fontStyles.FontAwesome5_Regular}>{formatCurrency(shop.currency || "£", item.amount)}</StyledBadge>
+                    <StyledSpacer marginHorizontal={4} />                    
                 </XStack>
             </XStack>
         )
@@ -119,7 +104,7 @@ const Order = () => {
                     <StyledMIcon size={44} name='date-range' color={theme.colors.gray[800]} onPress={() => { setShowEndPicker(true) }} />
                 </XStack>
                 <StyledSpacer marginHorizontal={1} />
-                <StyledButton backgroundColor={theme.colors.cyan[500]} onPress={() => loadOrdersByDateRange(startDate, endDate)} >
+                <StyledButton backgroundColor={theme.colors.cyan[500]} onPress={() => loadPaymentsByDateRange(startDate, endDate)} >
                     <StyledText color={theme.colors.gray[1]} fontWeight={theme.fontWeight.normal}
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={16}
@@ -151,7 +136,7 @@ const Order = () => {
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-                <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.navigate("bottom-tabs", { screen: 'Home' })} title='Orders' icon cycleProps={{
+                <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.navigate("bottom-tabs", { screen: 'Home' })} title='Payment' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8
                 }} rightIcon={
@@ -160,10 +145,7 @@ const Order = () => {
                         <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
                             <StyledMIcon size={32} name={showFilter ? "cancel" : 'filter-list'} color={theme.colors.gray[800]} onPress={() => handleFilter()} />
                         </StyledCycle>
-                        <StyledSpacer marginHorizontal={4} />
-                        <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
-                            <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
-                        </StyledCycle>
+                        <StyledSpacer marginHorizontal={4} />                        
                     </XStack>
                 } />
             </StyledHeader>
@@ -179,12 +161,11 @@ const Order = () => {
             <YStack flex={1} paddingHorizontal={8} backgroundColor={theme.colors.gray[100]}>
                 <FlatList
                     data={data}
-                    keyExtractor={(item) => item.order_id}
+                    keyExtractor={(item) => item.id}
                     initialNumToRender={100}
                     renderItem={({ item, index }) => <RenderCard key={index} item={item} />}
                     showsVerticalScrollIndicator={false}
-                    numColumns={1}
-                    extraData={data}
+                    numColumns={1}                  
                 />
                 {
                     (loading) && (
@@ -197,16 +178,16 @@ const Order = () => {
                             resetHandler()
                         }} />
                     )
-                }
-                {
-                    modal.visible &&
-                    <StyledDialog visible>
-                        <CompletedOrder order={modal?.order} setModal={setModal} />
-                    </StyledDialog>
-                }
+                }                
             </YStack>
+            {
+                data.length >  0 && (
+                    <DownloadPayment data={data} currency={shop.currency} />
+                )
+            }
+       
         </StyledSafeAreaView>
     );
 }
 
-export default Order;
+export default Payment;

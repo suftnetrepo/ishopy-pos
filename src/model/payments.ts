@@ -32,7 +32,7 @@ const queryAllPayments = async (): Promise<Payment[]> => {
     const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-      const payments = realm.objects<Payment>('Payment').map(payment => ({
+      const payments = realm.objects<Payment>('Payment').sorted('date', true).map(payment => ({
         id: payment.id,
         order_id: payment.order_id,
         amount: payment.amount,
@@ -46,22 +46,25 @@ const queryAllPayments = async (): Promise<Payment[]> => {
   });
 };
 
-const queryPaymentById = async (id: number): Promise<Payment | null> => {
-    const realm = await getRealmInstance();
+const queryPaymentsByDateRange = async (
+  startDate: Date,
+  endDate: Date
+): Promise<Payment[]> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-      const payment = realm.objectForPrimaryKey<Payment>('Payment', id);
-      resolve(
-        payment
-          ? {
-              id: payment.id,
-              order_id: payment.order_id,
-              amount: payment.amount,
-              payment_method: payment.payment_method,
-              date: payment.date,
-            }
-          : null,
-      );
+      const payments = realm
+        .objects<Payment>('Payment')
+        .filtered('date >= $0 AND date <= $1', startDate, endDate)
+        .sorted('date', true)
+        .map(payment => ({
+          id: payment.id,
+          order_id: payment.order_id,
+          amount: payment.amount,
+          payment_method: payment.payment_method,
+          date: payment.date,
+        }));
+      resolve(payments);
     } catch (error) {
       reject(error);
     }
@@ -108,34 +111,9 @@ const deletePayment = async (id: number): Promise<boolean> => {
   });
 };
 
-const queryPaymentsByDateRange = async (
-  startDate: string,
-  endDate: string,
-): Promise<Payment[]> => {
-    const realm = await getRealmInstance();
-  return new Promise((resolve, reject) => {
-    try {
-      const payments = realm
-        .objects<Payment>('Payment')
-        .filtered('date >= $0 AND date <= $1', startDate, endDate)
-        .map(payment => ({
-          id: payment.id,
-          order_id: payment.order_id,
-          amount: payment.amount,
-          payment_method: payment.payment_method,
-          date: payment.date,
-        }));
-      resolve(payments);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 export {
   insertPayment,
   queryAllPayments,
-  queryPaymentById,
   queryPaymentsByOrderId, 
   deletePayment,
   queryPaymentsByDateRange,

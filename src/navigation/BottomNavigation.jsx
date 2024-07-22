@@ -11,13 +11,15 @@ import Home from '../screens/home';
 import Sales from '../screens/sales';
 import Account from '../screens/account';
 import Order from '../screens/order';
+import Payment from '../screens/payment';
+
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = ({ state, descriptors, navigation }) => {
   {
     return (
-      <XStack justifyContent='space-between' borderRadius={32} marginHorizontal={8} backgroundColor={theme.colors.gray[1]} alignItems='center' paddingHorizontal={8} paddingVertical={16}>
+      <XStack justifyContent='space-between' borderRadius={32} backgroundColor={theme.colors.gray[1]} alignItems='center' paddingHorizontal={8} paddingVertical={8}>
         {
           state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
@@ -34,8 +36,8 @@ const Tabs = ({ state, descriptors, navigation }) => {
 
             return (
               <StyledButton key={index} onPress={() =>handlePress()} >
-                <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={16} paddingVertical={8}>
-                  <BarIcon focused={focused} size={30} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]} />
+                <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={12} paddingVertical={8}>
+                  <BarIcon focused={focused} size={24} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]} />
                   {
                     focused && (
                       <>
@@ -60,7 +62,7 @@ export default function BottomTabs() {
       tabBar={(props) => <Tabs {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      <Tab.Screen name='home' component={Home} options={{
+      <Tab.Screen name='Home' component={Home} options={{
         tabBarIcon: ({ focused, size, color }) => {
           return (
             <Icon focused={focused} color={color} size={size} name='home' />
@@ -68,7 +70,7 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='sales' component={Sales} options={{
+      <Tab.Screen name='Sales' component={Sales} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='basket-outline' />
@@ -76,15 +78,22 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='orders' component={Order} options={{
+      <Tab.Screen name='Orders' component={Order} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='square-outline' />
           )
         }
-      }} />     
+      }} />   
+      <Tab.Screen name='Payment' component={Payment} options={{
+        tabBarIcon: ({ size, color }) => {
+          return (
+            <Icon color={color} size={size} name='cash-plus' />
+          )
+        }
+      }} />    
 
-      <Tab.Screen name='profile' component={Account} options={{
+      <Tab.Screen name='Profile' component={Account} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='account-outline' />

@@ -47,11 +47,16 @@ const getRandomColorCode = () => {
   return randomPalette[Math.floor(Math.random() * randomPalette.length)];
 };
 
+const clearSeedData = async () => {
+ const realm = await getRealmInstance();
+  realm.write(() => {   
+      realm.deleteAll();
+  })
+}
 const seedData = async () => {
   const realm = await getRealmInstance();
   try {
-    realm.write(() => {
-      console.log('..................work at last');
+    realm.write(() => {  
       realm.deleteAll();
 
       // Seed Users
@@ -263,4 +268,4 @@ const seedData = async () => {
   }
 };
 
-export {seedData};
+export {seedData, clearSeedData};

@@ -181,7 +181,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '____pos___j.realm',
+    path: '_____pos___j.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

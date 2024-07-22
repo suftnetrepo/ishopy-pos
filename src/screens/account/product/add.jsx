@@ -2,14 +2,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, XStack, StyledOkDialog, StyledHeader, StyledCheckBox, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, XStack, StyledOkDialog, StyledInput, StyledHeader, StyledCheckBox, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useInsertProduct } from "../../../hooks/useProduct";
 import { ShowToast } from "../../../components/toast";
 import { productRules } from "./validatorRules";
-import { StyledInput } from "../../../components/form";
+// import { StyledInput } from "../../../components/form";
 import { StyledDropdown } from "../../../components/dropdown";
 import ColorPicker from "../../../components/colorPicker";
 import { useCategories } from "../../../hooks/useCategory";
@@ -34,7 +34,7 @@ const AddProduct = () => {
       setFields(productRules.reset)
     }
 
-    await insert({...fields, price : parseFloat(fields.price), cost : parseFloat(fields.cost)}).then(async (result) => {
+    await insert({...fields, stock: 0, price : parseFloat(fields.price), cost : parseFloat(fields.cost || 0)}).then(async (result) => {
       result && handleResult()
     })
 
@@ -76,46 +76,42 @@ const AddProduct = () => {
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
           />
-          <XStack justifyContent='space-between' alignItems='center'>
-            <StyledInput
-              flex={1}
-              label={'Price'}
-              keyboardType='number-pad'
-              placeholder='Enter your price'
-              returnKeyType='next'
-              maxLength={50}
-              fontSize={theme.fontSize.small}
-              borderColor={theme.colors.yellow[800]}
-              backgroundColor={theme.colors.gray[1]}
-              borderRadius={32}
-              paddingHorizontal={8}
-              value={fields.price.toString()}
-              placeholderTextColor={theme.colors.gray[400]}
-              onChangeText={(text) => setFields({ ...fields, price: text })}
-              error={!!errorMessages?.price}
-              errorMessage={errorMessages?.price?.message}
-            />
-            <StyledSpacer marginHorizontal={8} />
-            <StyledInput
-              flex={1}
-              label={'Cost'}
-              keyboardType='number-pad'
-              placeholder='Enter your cost'
-              returnKeyType='next'
-              maxLength={50}
-              fontSize={theme.fontSize.small}
-              borderColor={theme.colors.yellow[800]}
-              backgroundColor={theme.colors.gray[1]}
-              borderRadius={32}
-              paddingHorizontal={8}
-              value={fields.cost.toString()}
-              placeholderTextColor={theme.colors.gray[400]}
-              onChangeText={(text) => setFields({ ...fields, cost: text })}
-              error={!!errorMessages?.cost}
-              errorMessage={errorMessages?.cost?.message}
-            />
-          </XStack>
+          <StyledInput
+            label={'Price'}
+            keyboardType='number-pad'
+            placeholder='Enter your price'
+            returnKeyType='next'
+            maxLength={50}
+            fontSize={theme.fontSize.small}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.price.toString()}
+            placeholderTextColor={theme.colors.gray[400]}
+            onChangeText={(text) => setFields({ ...fields, price: text })}
+            error={!!errorMessages?.price}
+            errorMessage={errorMessages?.price?.message}
+          />
 
+          <StyledInput
+            label={'Cost'}
+            keyboardType='number-pad'
+            placeholder='Enter your cost'
+            returnKeyType='next'
+            maxLength={50}
+            fontSize={theme.fontSize.small}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.cost.toString()}
+            placeholderTextColor={theme.colors.gray[400]}
+            onChangeText={(text) => setFields({ ...fields, cost: text })}
+            error={!!errorMessages?.cost}
+            errorMessage={errorMessages?.cost?.message}
+          />
+          
           <StyledDropdown
             placeholder={'Select a category'}
             label={'Category'}

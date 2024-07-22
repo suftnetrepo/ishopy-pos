@@ -10,10 +10,13 @@ import { signUpValidatorRules } from "./validatorRules";
 import { generateRandomData } from "../../utils/help";
 import { useInsertShop } from "../../hooks/useShop";
 import { useAppContext } from "../../hooks/appContext";
+import { FEATURE_FLAG } from "../../feature-flags";
+import { useUtil } from "../../store";
 
 const SignUp = () => {
   const navigator = useNavigation()
   const { login } = useAppContext()
+  const { setPaymentStatus } = useUtil()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(signUpValidatorRules.fields)
   const { error, loading, insertHandler, resetHandler } = useInsertShop()
@@ -28,53 +31,51 @@ const SignUp = () => {
 
     await insertHandler(fields).then(async (result) => {
       if (result) {
+        setPaymentStatus(false)
         await login(result)
         navigator.navigate("sign-up-completed")
       }
     })
   }
 
-  const RenderHeader = () => {
-
-    return (
-      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-        <StyledButton onPress={() => setFields({ ...fields, ...generateRandomData() })}>
-          <StyledBadge
-            color={theme.colors.orange[800]}
-            backgroundColor={theme.colors.orange[100]}
-            fontWeight={theme.fontWeight.normal}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={10}
-            paddingVertical={5}
-          >
-            Mock Store
-          </StyledBadge>
-        </StyledButton>
-        <StyledSpacer marginHorizontal={4} />
-        <StyledButton onPress={() => setFields({ ...fields, password: '', user_name: '' })}>
-          <StyledBadge
-            color={theme.colors.gray[800]}
-            backgroundColor={theme.colors.gray[100]}
-            fontWeight={theme.fontWeight.normal}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={10}
-            paddingVertical={5}
-          >
-            Clear
-          </StyledBadge>
-        </StyledButton>
-
-      </XStack>
-    )
-  }
-
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: false }} >
-        <StyledHeader.Full>
-          <RenderHeader />
-        </StyledHeader.Full>
-
+      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
+        <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.goBack()} icon cycleProps={{
+          borderColor: theme.colors.gray[300],
+          marginRight: 8
+        }} rightIcon={
+          FEATURE_FLAG && (
+            <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={8}>
+              <StyledButton onPress={() => setFields({ ...fields, ...generateRandomData() })}>
+                <StyledBadge
+                  color={theme.colors.pink[800]}
+                  backgroundColor={theme.colors.pink[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock Store
+                </StyledBadge>
+              </StyledButton>
+              <StyledSpacer marginHorizontal={4} />
+              <StyledButton onPress={async () => await clearSeedData()}>
+                <StyledBadge
+                  color={theme.colors.gray[800]}
+                  backgroundColor={theme.colors.gray[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Clear
+                </StyledBadge>
+              </StyledButton>              
+              <StyledSpacer marginHorizontal={4} />
+            </XStack>
+          )
+        } />
       </StyledHeader>
       <YStack
         flex={1}

@@ -64,7 +64,7 @@ const Discount = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={()=> navigator.navigate("bottom-tabs", { screen : 'profile'})} title='Discounts' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Profile'})} title='Discounts' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={

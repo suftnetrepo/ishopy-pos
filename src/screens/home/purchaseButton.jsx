@@ -4,8 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {
-    YStack,
+import { 
     XStack,
     StyledText,
     StyledSpacer,
@@ -15,17 +14,23 @@ import { StyledMIcon } from '../../components/icon';
 import { fontStyles, theme } from '../../configs/theme';
 import { useInAppPurchase } from '../../hooks/useInAppPurchase';
 
-const SalesTrend = () => {
-    const { shop, purchaseStatus } = useAppContext();
-    const { purchaseHandler,  } = useInAppPurchase();
+const PurchaseButton = () => { 
+    const { purchaseHandler } = useInAppPurchase();
 
     return (
-        <XStack marginHorizontal={16} justifyContent='space-between' alignItems='center' gap={8}>
-            <StyledButton>
-                <StyledText>Buy</StyledText>
+        <XStack absolute bottom={8} right={16}>
+            <StyledSpacer flex={1} />
+            <StyledButton backgroundColor={theme.colors.red[400]} onPress={ async() => await purchaseHandler()}>
+                <XStack justifyContent='flex-end' alignItems='center' paddingHorizontal={16} paddingVertical={8}>
+                    <StyledMIcon size={24} name='apps' color={theme.colors.gray[1]} />
+                    <StyledSpacer marginHorizontal={4} />
+                    <StyledText color={theme.colors.gray[1]} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
+                        Purchase
+                    </StyledText>
+                </XStack>
             </StyledButton>
         </XStack>
     )
 }
 
-export { SalesTrend }
+export { PurchaseButton }

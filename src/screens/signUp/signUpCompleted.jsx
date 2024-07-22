@@ -37,7 +37,7 @@ const SignUpCompleted = () => {
                     <StyledSpacer marginVertical={16}></StyledSpacer>
                     <XStack justifyContent='flex-end' alignItems='flex-end'>
                         <StyledButton  color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} flex={1} onPress={() => {
-                            navigator.navigate("home");
+                            navigator.navigate("bottom-tabs");
                         }
                         } >
                             <StyledText paddingVertical={8} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Go to Dashboard</StyledText>

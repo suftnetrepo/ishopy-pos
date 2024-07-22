@@ -6,10 +6,13 @@ import { validatorRules } from "./validatorRules";
 import { useLogin } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
 import { useAppContext } from "../../hooks/appContext";
+import { seedData, clearSeedData } from "../../model/seed";
+import { FEATURE_FLAG } from "../../feature-flags";
+
 
 const Login = () => {
   const navigator = useNavigation()
-  const { login } = useAppContext()
+  const { login, purchaseStatus } = useAppContext()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(validatorRules.fields)
   const { error, loading, loginUser, resetHandler } = useLogin()
@@ -27,61 +30,98 @@ const Login = () => {
         await login(result)
         navigator.navigate("bottom-tabs")
       }
-    })    
+    })
   }
 
   const RenderHeader = () => {
 
     return (
       <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-        <StyledButton onPress={() => setFields({ ...fields, password: 'admin123', user_name: 'admin' })}>
-          <StyledBadge
-            color={theme.colors.green[800]}
-            backgroundColor={theme.colors.green[100]}
-            fontWeight={theme.fontWeight.normal}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={10}
-            paddingVertical={5}
-          >
-            Mock Admin
-          </StyledBadge>
-        </StyledButton>
+        {
+          !purchaseStatus && (
+            <>
+              <StyledButton onPress={() => setFields({ ...fields, password: 'admin123', user_name: 'admin' })}>
+                <StyledBadge
+                  color={theme.colors.green[800]}
+                  backgroundColor={theme.colors.green[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock Admin
+                </StyledBadge>
+              </StyledButton>
 
-        <StyledSpacer marginHorizontal={4} />
-        <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
-          <StyledBadge
-            color={theme.colors.orange[800]}
-            backgroundColor={theme.colors.orange[100]}
-            fontWeight={theme.fontWeight.normal}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={10}
-            paddingVertical={5}
-          >
-            Mock User
-          </StyledBadge>
-        </StyledButton>
+              <StyledSpacer marginHorizontal={4} />
+              <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
+                <StyledBadge
+                  color={theme.colors.orange[800]}
+                  backgroundColor={theme.colors.orange[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock User
+                </StyledBadge>
+              </StyledButton>
 
-        <StyledSpacer marginHorizontal={4} />
-        <StyledButton onPress={() => setFields({ ...fields, password: '', user_name: '' })}>
-          <StyledBadge
-            color={theme.colors.gray[800]}
-            backgroundColor={theme.colors.gray[100]}
-            fontWeight={theme.fontWeight.normal}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={10}
-            paddingVertical={5}
-          >
-            Clear
-          </StyledBadge>
-        </StyledButton>
+              <StyledSpacer marginHorizontal={4} />
+            </>
+          )
+        }
+        {
+          FEATURE_FLAG.MOCK_STORE && (
+            <>
+              <StyledSpacer marginHorizontal={4} />
+              <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
+                <StyledBadge
+                  color={theme.colors.green[800]}
+                  backgroundColor={theme.colors.green[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock User
+                </StyledBadge>
+              </StyledButton>
 
+              <StyledButton onPress={async () => await seedData()}>
+                <StyledBadge
+                  color={theme.colors.orange[800]}
+                  backgroundColor={theme.colors.orange[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock Store
+                </StyledBadge>
+              </StyledButton>
+              <StyledButton onPress={async () => clearSeedData()}>
+                <StyledBadge
+                  color={theme.colors.gray[800]}
+                  backgroundColor={theme.colors.gray[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Clear
+                </StyledBadge>
+              </StyledButton>              
+            </>
+          )
+        }
       </XStack>
     )
   }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true  }} >
+      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>
@@ -92,7 +132,7 @@ const Login = () => {
         marginHorizontal={16}
 
       >
-        <StyledSpacer marginVertical={44} />
+        <StyledSpacer marginVertical={32} />
         <YStack
           justifyContent='flex-start' alignItems='center'
         >

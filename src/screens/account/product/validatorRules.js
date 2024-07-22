@@ -6,7 +6,7 @@ const reset = {
   bar_code: "",
   color_code: "",
   price: '',
-  cost: '0',
+  cost: '',
   stock: '',
   status: 0,
   category_id: ''

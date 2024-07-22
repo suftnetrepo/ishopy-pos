@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   YStack,
   XStack,
@@ -19,22 +19,32 @@ import { BarChart } from 'react-native-gifted-charts';
 import { StyledMIcon } from '../components/icon';
 import { fontStyles, theme } from '../configs/theme';
 import { useNavigation } from '@react-navigation/native';
-import { 
+import {
   useWeeklyTransactions,
-  useTransactionTrend, 
+  useTransactionTrend,
 } from '../hooks/useDashboard';
 import { useAppContext } from '../hooks/appContext';
 import { formatCurrency, getGreetings, toWordCase } from '../utils/help';
 import { ScrollView } from 'react-native';
 import { SalesTrend } from './home/salesTrend';
+import { PurchaseButton } from './home/purchaseButton';
+import { state } from '../store';
+import { useSelector } from '@legendapp/state/react';
 
 const Home = () => {
   const navigate = useNavigation();
-  const { user, shop } = useAppContext();
+  const { user, shop, purchaseStatus } = useAppContext();  
+  const paymentStatus = useSelector(() => state.payment_status.get());
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-   
+
+  useEffect(() => {
+    if (paymentStatus) {
+      navigate.navigate("sign-up")
+    }
+  }, [paymentStatus])
+
   const chart = useCallback(() => {
     const currentDate = new Date()
     const chartData = labels.map((label, index) => {
@@ -73,7 +83,7 @@ const Home = () => {
             color={theme.colors.gray[800]}>
             {toWordCase(user.first_name)} {toWordCase(user.last_name)}
           </StyledText>
-          
+
         </YStack>
 
         <XStack>
@@ -121,17 +131,17 @@ const Home = () => {
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>
-      </StyledHeader>    
+      </StyledHeader>
       <ScrollView>
-      <YStack
-        flex={1}
-        marginHorizontal={16}
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        backgroundColor={theme.colors.gray[1]}
-        borderRadius={32}
-        paddingHorizontal={8}
-        paddingVertical={8}>
+        <YStack
+          flex={1}
+          marginHorizontal={16}
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          backgroundColor={theme.colors.gray[1]}
+          borderRadius={32}
+          paddingHorizontal={8}
+          paddingVertical={8}>
           <StyledSpacer marginVertical={2} />
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
@@ -177,12 +187,18 @@ const Home = () => {
             yAxisThickness={0}
             xAxisThickness={0}
             key={data}
-          /> 
-     
-      </YStack>
+          />
+
+        </YStack>
         <StyledSpacer marginVertical={4} />
-        <SalesTrend />
+        <SalesTrend />       
       </ScrollView>
+      {
+        !purchaseStatus && (
+          <PurchaseButton />
+        )
+      }
+
     </StyledSafeAreaView>
   );
 };

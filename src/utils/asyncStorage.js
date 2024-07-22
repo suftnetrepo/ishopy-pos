@@ -4,6 +4,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const STORAGE_KEYS = {
   PURCHASED_STATUS: 'purchased_status',
+  SIGN_UP_STATUS :'signup_status'
 };
 
 /**

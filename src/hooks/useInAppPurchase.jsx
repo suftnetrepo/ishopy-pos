@@ -4,11 +4,13 @@
 
 import { useEffect, useState } from 'react';
 import { requestPurchase, useIAP } from 'react-native-iap';
-import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage';
+import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage';import { seedData, clearSeedData } from '../model/seed';
+import { useUtil } from '../store';
 
 const { PURCHASED_STATUS } = STORAGE_KEYS;
 
 const useInAppPurchase = () => {
+    const { setPaymentStatus } = useUtil()
     const [data, setData] = useState({
         error: null,
         loading: false,
@@ -18,14 +20,22 @@ const useInAppPurchase = () => {
     const {
         connected,
         products,
+        getProducts,
         finishTransaction,
         currentPurchase,
         currentPurchaseError,
+        purchaseHistory,
+        getPurchaseHistory
     } = useIAP();
 
     useEffect(() => {
         async function init() {
             const status = await getStore(PURCHASED_STATUS)
+                               
+            if (!status) {                          
+                await getPurchaseHistory()
+            }
+
             setData({
                 status: status === 0 || status === null ? false : true,
                 error: null,
@@ -37,11 +47,12 @@ const useInAppPurchase = () => {
 
     useEffect(() => {
         const processPurchase = async () => {
-            if (currentPurchase?.transactionReceipt) {
-
+            if (currentPurchase?.transactionReceipt) {               
                 try {
                     await finishTransaction(currentPurchase);
                     store(PURCHASED_STATUS, 1)
+                    await clearSeedData()
+                    setPaymentStatus(true)
                     setData({
                         status: true,
                         error: null,
@@ -68,6 +79,18 @@ const useInAppPurchase = () => {
         });
     }, [currentPurchaseError]);
 
+    useEffect(() => {       
+        async function init() {           
+            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_premium_upgrade")
+            if (purchases && PURCHASED_STATUS !== 1) {
+                await store(PURCHASED_STATUS, 1)                 
+            } else {                              
+                await seedData()
+            }
+        }
+        init()      
+    }, [purchaseHistory, data]);
+
     const purchaseHandler = async () => {
         if (!connected) {
             setData({
@@ -79,6 +102,7 @@ const useInAppPurchase = () => {
         }
 
         try {
+            await getProducts({ skus: ['ishopy_sa_premium_upgrade'] })
             if (products?.length > 0) {
                 await requestPurchase({ skus: ['ishopy_sa_premium_upgrade'] });
             }

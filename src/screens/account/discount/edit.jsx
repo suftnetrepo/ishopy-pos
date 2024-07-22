@@ -16,9 +16,7 @@ const EditDiscount = () => {
   const [fields, setFields] = useState(discountRules.fields)
   const { update, error, loading, resetHandler } = useUpdateDiscount()
   const { discount } = route.params
-
-  console.log(".............fields", fields)
-
+ 
   useEffect(() => {
     setFields((pre) => {
       return {
