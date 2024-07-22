@@ -37,7 +37,7 @@ const Login = () => {
 
     return (
       <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-        {
+        {/* {
           !purchaseStatus && (
             <>
               <StyledButton onPress={() => setFields({ ...fields, password: 'admin123', user_name: 'admin' })}>
@@ -70,7 +70,7 @@ const Login = () => {
               <StyledSpacer marginHorizontal={4} />
             </>
           )
-        }
+        } */}
         {
           FEATURE_FLAG.MOCK_STORE && (
             <>
@@ -88,18 +88,23 @@ const Login = () => {
                 </StyledBadge>
               </StyledButton>
 
-              <StyledButton onPress={async () => await seedData()}>
-                <StyledBadge
-                  color={theme.colors.orange[800]}
-                  backgroundColor={theme.colors.orange[100]}
-                  fontWeight={theme.fontWeight.normal}
-                  fontSize={theme.fontSize.normal}
-                  paddingHorizontal={10}
-                  paddingVertical={5}
-                >
-                  Mock Store
-                </StyledBadge>
-              </StyledButton>
+              {
+                purchaseStatus && (
+                  <StyledButton onPress={async () => await seedData()}>
+                    <StyledBadge
+                      color={theme.colors.orange[800]}
+                      backgroundColor={theme.colors.orange[100]}
+                      fontWeight={theme.fontWeight.normal}
+                      fontSize={theme.fontSize.normal}
+                      paddingHorizontal={10}
+                      paddingVertical={5}
+                    >
+                      Mock Store
+                    </StyledBadge>
+                  </StyledButton>
+                )
+              }
+
               <StyledButton onPress={async () => clearSeedData()}>
                 <StyledBadge
                   color={theme.colors.gray[800]}
@@ -111,7 +116,7 @@ const Login = () => {
                 >
                   Clear
                 </StyledBadge>
-              </StyledButton>              
+              </StyledButton>
             </>
           )
         }
@@ -188,17 +193,24 @@ const Login = () => {
           </StyledText>
         </StyledButton>
         <StyledSpacer marginVertical={4} />
-        <XStack paddingHorizontal={20} justifyContent='center' alignItems='center'>
-          <StyledText  >
-            {`Don't have an account?`}  { }
-          </StyledText>
-          <StyledSpacer marginHorizontal={2} />
-          <StyledButton link onPress={() => { navigator.navigate("sign-up") }} >
-            <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
-              Sign up
-            </StyledText>
-          </StyledButton>
-        </XStack>
+        {
+          purchaseStatus && (
+            <>
+              <XStack paddingHorizontal={20} justifyContent='center' alignItems='center'>
+                <StyledText  >
+                  {`Don't have an account?`}  { }
+                </StyledText>
+                <StyledSpacer marginHorizontal={2} />
+                <StyledButton link onPress={() => { navigator.navigate("sign-up") }} >
+                  <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
+                    Sign up
+                  </StyledText>
+                </StyledButton>
+              </XStack>
+            </>
+          )
+        }
+
       </YStack>
       {
         (error) && (

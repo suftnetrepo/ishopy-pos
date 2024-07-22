@@ -81,8 +81,8 @@ const useInAppPurchase = () => {
 
     useEffect(() => {       
         async function init() {           
-            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_premium_upgrade")
-            if (purchases && PURCHASED_STATUS !== 1) {
+            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_premium_upgrade")       
+            if (purchases && data.status !== 1) {
                 await store(PURCHASED_STATUS, 1)                 
             } else {                              
                 await seedData()

@@ -160,8 +160,7 @@ const Home = () => {
               paddingHorizontal={16}
               color={theme.colors.gray[800]}>
               {formatCurrency(shop.currency || '£', dailyTransaction)}
-            </StyledText>
-            <StyledSpacer marginHorizontal={8} />
+            </StyledText>        
             <StyledButton backgroundColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]} borderColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]}>
               <XStack justifyContent="flex-start" paddingHorizontal={8} paddingVertical={1}
                 alignItems="center">
@@ -169,7 +168,7 @@ const Home = () => {
                 <StyledSpacer marginHorizontal={1} />
                 <StyledText
                   fontFamily={fontStyles.Roboto_Regular}
-                  fontSize={theme.fontSize.normal}
+                  fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.bold}
                   color={theme.colors.gray[1]}>
                   {percentageChange}%

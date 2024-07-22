@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import { useState, useEffect } from 'react';
-import { PermissionsAndroid, Platform, Alert } from 'react-native';
+import { PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BluetoothManager } from 'tp-react-native-bluetooth-printer';
 import { printReceipt, receiptTestData } from '../utils/printReceipt';
@@ -22,24 +22,47 @@ const useBluetoothPrinter = () => {
 
     const requestPermissions = async () => {
         if (Platform.OS === 'android') {
-            try {
-                const granted = await PermissionsAndroid.requestMultiple([
-                    PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-                    PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                ]);
-                if (
-                    granted['android.permission.BLUETOOTH_SCAN'] === PermissionsAndroid.RESULTS.GRANTED &&
-                    granted['android.permission.BLUETOOTH_CONNECT'] === PermissionsAndroid.RESULTS.GRANTED
-                ) {
-                    checkBluetoothStatus();
-                } else {
-                    Alert.alert('Bluetooth Permissions not granted, please grant this permission to enable printing');
+            if (Platform.Version >= 29) { // Android 10 and above
+                try {
+                    const permissions = [
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+                    ];
+
+                    const granted = await PermissionsAndroid.requestMultiple(permissions);
+
+                    const bluetoothScanGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN] === PermissionsAndroid.RESULTS.GRANTED;
+                    const bluetoothConnectGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT] === PermissionsAndroid.RESULTS.GRANTED;
+
+                    if (bluetoothScanGranted && bluetoothConnectGranted) {
+                        checkBluetoothStatus();  // Call function if permissions granted
+                    } else {
+                        Alert.alert(
+                            'Permission Required',
+                            'Bluetooth permissions are required to enable printing. Please grant these permissions.',
+                            [
+                                { text: 'Cancel', style: 'cancel' },
+                                {
+                                    text: 'Open Settings',
+                                    onPress: () => {
+                                        Linking.openSettings().catch(() => {
+                                            Alert.alert('Unable to open settings');
+                                        });
+                                    },
+                                },
+                            ]
+                        );
+                    }
+                } catch (err) {
+                    console.error('Failed to request permissions', err);  // Log the error for debugging
+                    Alert.alert('Permission Request Failed', 'An error occurred while requesting Bluetooth permissions.');
                 }
-            } catch (err) {
-                setError(err)
+            } else {
+                // Android 8 and below do not require runtime permission requests
+                checkBluetoothStatus();  // Call function directly
             }
         } else {
-            checkBluetoothStatus();
+            checkBluetoothStatus();  // Call function if not Android
         }
     };
 
