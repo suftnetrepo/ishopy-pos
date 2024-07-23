@@ -27,13 +27,14 @@ interface Actions extends CartActions {
     login: (params: { user: User, shop: Shop }) => Promise<void>;
     logout: () => Promise<void>;
     updateCurrentUser: (user: User) => void;
-    updateCurrentShop: (shop: Shop) => void
+    updateCurrentShop: (shop: Shop) => void   
 }
 
 interface State {
     user: User | null;
-    shop: Shop | null;
-    purchaseStatus : boolean
+    shop: Shop | null;  
+    purchase_status: boolean;
+    payment_status: boolean;
 }
 
 interface AppProviderProps {
@@ -45,12 +46,13 @@ export const AppContext = React.createContext<Actions & State | undefined>(undef
 const initialState: State = {
     user: null,
     shop: null,
-    purchaseStatus : false
+    purchase_status: false,
+    payment_status: false  
 };
 
 const AppProvider = ({ children }: AppProviderProps) => {
-    const [state, setState] = useState<State>(initialState);
-    const { status: purchaseStatus } = useInAppPurchase()
+    const [state, setState] = useState<State>(initialState); 
+    const { payment_status, purchase_status} = useInAppPurchase()
     const {
         addItem,
         updateItem,
@@ -92,7 +94,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
                 ...prevState,
                 shop: updatedShop,
             }));
-        },
+        },       
 
         addItem,
         updateItem,
@@ -106,7 +108,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         getTotal,
         getTotalDiscount,
         getTotalTax,
-        getItems
+        getItems       
     };
 
     return (
@@ -125,7 +127,8 @@ const AppProvider = ({ children }: AppProviderProps) => {
             getTotal,
             getTotalDiscount,
             getTotalTax,
-            purchaseStatus
+            payment_status,
+            purchase_status          
         }}>
             {children}
         </AppContext.Provider>

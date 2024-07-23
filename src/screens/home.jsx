@@ -33,17 +33,17 @@ import { useSelector } from '@legendapp/state/react';
 
 const Home = () => {
   const navigate = useNavigation();
-  const { user, shop, purchaseStatus } = useAppContext();  
-  const paymentStatus = useSelector(() => state.payment_status.get());
+  const { user, shop } = useAppContext();  
+  const {payment_status, purchase_status} = useSelector(() => state.get());
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   useEffect(() => {
-    if (paymentStatus) {
+    if (payment_status) {
       navigate.navigate("sign-up")
     }
-  }, [paymentStatus])
+  }, [payment_status])
 
   const chart = useCallback(() => {
     const currentDate = new Date()
@@ -193,7 +193,7 @@ const Home = () => {
         <SalesTrend />       
       </ScrollView>
       {
-        !purchaseStatus && (
+        !purchase_status && (
           <PurchaseButton />
         )
       }

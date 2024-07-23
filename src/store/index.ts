@@ -2,17 +2,19 @@
 import { observable } from '@legendapp/state';
 
 interface appState {
-    payment_status: boolean;
+  payment_status: boolean;
+  purchase_status: boolean;
 }
 
 const initialize = {
-    payment_status: false
+  payment_status: false,
+  purchase_status: false
 };
 
 const state = observable<appState>(initialize);
 
 const useUtil = () => {
-    const clearPaymentStatus = () => {
+    const clear = () => {
         state.set(initialize);
     };
 
@@ -24,10 +26,20 @@ const useUtil = () => {
       return state.payment_status.get();
     };
 
+    const setPurchaseStatus = (value: boolean) => {
+      state.purchase_status.set(value);
+    };
+
+    const getPurchaseStatus = () => {
+      return state.purchase_status.get();
+    };
+
     return {
-      clearPaymentStatus,
+      clear,
       getPaymentStatus,
       setPaymentStatus,
+      setPurchaseStatus,
+      getPurchaseStatus,
     };
 }
 

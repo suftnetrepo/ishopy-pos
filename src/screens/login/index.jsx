@@ -8,15 +8,17 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppContext } from "../../hooks/appContext";
 import { seedData, clearSeedData } from "../../model/seed";
 import { FEATURE_FLAG } from "../../feature-flags";
-
+import { state } from "../../store";
+import { useSelector } from "@legendapp/state/react";
 
 const Login = () => {
   const navigator = useNavigation()
-  const { login, purchaseStatus } = useAppContext()
+  const { login } = useAppContext()
+  const purchase_status = useSelector(() => state.purchase_status.get());
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(validatorRules.fields)
   const { error, loading, loginUser, resetHandler } = useLogin()
-
+   
   const onSubmit = async () => {
     setErrorMessages({})
     const { hasError, errors } = validate(fields, validatorRules.rules)
@@ -36,43 +38,9 @@ const Login = () => {
   const RenderHeader = () => {
 
     return (
-      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-        {/* {
-          !purchaseStatus && (
-            <>
-              <StyledButton onPress={() => setFields({ ...fields, password: 'admin123', user_name: 'admin' })}>
-                <StyledBadge
-                  color={theme.colors.green[800]}
-                  backgroundColor={theme.colors.green[100]}
-                  fontWeight={theme.fontWeight.normal}
-                  fontSize={theme.fontSize.normal}
-                  paddingHorizontal={10}
-                  paddingVertical={5}
-                >
-                  Mock Admin
-                </StyledBadge>
-              </StyledButton>
-
-              <StyledSpacer marginHorizontal={4} />
-              <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
-                <StyledBadge
-                  color={theme.colors.orange[800]}
-                  backgroundColor={theme.colors.orange[100]}
-                  fontWeight={theme.fontWeight.normal}
-                  fontSize={theme.fontSize.normal}
-                  paddingHorizontal={10}
-                  paddingVertical={5}
-                >
-                  Mock User
-                </StyledBadge>
-              </StyledButton>
-
-              <StyledSpacer marginHorizontal={4} />
-            </>
-          )
-        } */}
+      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>       
         {
-          FEATURE_FLAG.MOCK_STORE && (
+          (FEATURE_FLAG.MOCK_STORE || !purchase_status) && (
             <>
               <StyledSpacer marginHorizontal={4} />
               <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
@@ -89,7 +57,7 @@ const Login = () => {
               </StyledButton>
 
               {
-                purchaseStatus && (
+                purchase_status && (
                   <StyledButton onPress={async () => await seedData()}>
                     <StyledBadge
                       color={theme.colors.orange[800]}
@@ -194,7 +162,7 @@ const Login = () => {
         </StyledButton>
         <StyledSpacer marginVertical={4} />
         {
-          purchaseStatus && (
+          purchase_status && (
             <>
               <XStack paddingHorizontal={20} justifyContent='center' alignItems='center'>
                 <StyledText  >
