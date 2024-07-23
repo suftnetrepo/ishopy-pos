@@ -56,22 +56,18 @@ const Login = () => {
                 </StyledBadge>
               </StyledButton>
 
-              {
-                purchase_status && (
-                  <StyledButton onPress={async () => await seedData()}>
-                    <StyledBadge
-                      color={theme.colors.orange[800]}
-                      backgroundColor={theme.colors.orange[100]}
-                      fontWeight={theme.fontWeight.normal}
-                      fontSize={theme.fontSize.normal}
-                      paddingHorizontal={10}
-                      paddingVertical={5}
-                    >
-                      Mock Store
-                    </StyledBadge>
-                  </StyledButton>
-                )
-              }
+              <StyledButton onPress={async () => await seedData()}>
+                <StyledBadge
+                  color={theme.colors.orange[800]}
+                  backgroundColor={theme.colors.orange[100]}
+                  fontWeight={theme.fontWeight.normal}
+                  fontSize={theme.fontSize.normal}
+                  paddingHorizontal={10}
+                  paddingVertical={5}
+                >
+                  Mock Store
+                </StyledBadge>
+              </StyledButton>
 
               <StyledButton onPress={async () => clearSeedData()}>
                 <StyledBadge
