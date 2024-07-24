@@ -28,6 +28,8 @@ import Stock from '../screens/account/stock';
 import Sales from '../screens/sales';
 import CheckOut from '../screens/checkout';
 import Order from '../screens/order';
+import HelpCenter from '../screens/account/helpCenter';
+import FAQ from '../screens/account/faq';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -36,6 +38,20 @@ function Navigator() {
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="faq"
+        component={FAQ}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="help-center"
+        component={HelpCenter}
         options={{
           headerShown: false,
         }}

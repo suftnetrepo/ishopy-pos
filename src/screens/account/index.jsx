@@ -92,8 +92,8 @@ const Account = () => {
               Help
             </StyledText>
           }></StyledSeparator>
-          <RenderRow icon="help-outline" title='FAQ' />
-          <RenderRow icon="info-outline" title='Help Center' />
+          <RenderRow icon="help-outline" title='FAQ' screen='faq' />
+          <RenderRow icon="info-outline" title='Help Center' screen='help-center' />
         </YStack>
       </StyledScrollView>
 

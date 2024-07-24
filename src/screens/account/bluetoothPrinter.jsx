@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { YStack, XStack, StyledButton, StyledImage, StyledSeparator, StyledBadge, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import { YStack, XStack, StyledButton, StyledImage, StyledBadge, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme, fontStyles } from '../../configs/theme';
 import { StyledMIcon } from '../../components/icon';
 import { useBluetoothPrinterContext } from '../../hooks/bluetoothPrinterProvider';
@@ -28,28 +28,8 @@ const BluetoothPrinter = () => {
     }
 
     return (
-        <YStack width={'100%'} paddingBottom={8} backgroundColor={theme.colors.gray[1]}>
-            <XStack
-                justifyContent='flex-start'
-                alignItems='center'
-                paddingVertical={8}
-                paddingHorizontal={16}
-                backgroundColor={theme.colors.gray[1]}
-                borderRadius={16}
-            >
-                <StyledText
-                    fontFamily={fontStyles.FontAwesome5_Regular}
-                    fontWeight={theme.fontWeight.normal}
-                    color={theme.colors.gray[800]}
-                    fontSize={theme.fontSize.normal}
-                >
-                    Bluetooth (small POS printer)
-                </StyledText>
-            </XStack>
-            <StyledSeparator line lineProps={{
-                borderColor: theme.colors.gray[300]
-            }} />
-            <YStack
+        <YStack width={'100%'} paddingBottom={8} backgroundColor={theme.colors.gray[1]}>       
+          <YStack
                 justifyContent='center'
                 alignItems='center'
                 paddingVertical={32}

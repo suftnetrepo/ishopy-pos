@@ -8,6 +8,8 @@ import { theme } from '../../configs/theme';
 import { useRadioContext } from '../../hooks/radioContext';
 import BluetoothPrinter from './bluetoothPrinter';
 import { FEATURE_FLAG } from '../../feature-flags';
+import { ScrollView } from 'react-native';
+
 
 const Printer = () => {
     const navigator = useNavigation()
@@ -94,7 +96,9 @@ const Printer = () => {
                 }             
                 {
                     checked === 'bluetooth' && (
-                        <BluetoothPrinter />
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <BluetoothPrinter />
+                        </ScrollView>                      
                     )
                 }                
             </YStack>
