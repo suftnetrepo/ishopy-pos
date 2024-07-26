@@ -85,7 +85,7 @@ export default function BottomTabs() {
           )
         }
       }} />   
-      <Tab.Screen name='Payment' component={Payment} options={{
+      <Tab.Screen name='Payments' component={Payment} options={{
         tabBarIcon: ({ size, color }) => {
           return (
             <Icon color={color} size={size} name='cash-plus' />

@@ -9,6 +9,8 @@ const palettes = {
   lightText: '#FFFFFF',
   darkText: '#000000',
   transparent: 'rgba(0, 0, 0, 0)',
+  transparent05: 'rgba(0, 0, 0, 0.5)',
+  transparent09: 'rgba(0, 0, 0, 0.9)',
   rose: {
     50: '#fff1f2',
     100: '#ffe4e6',

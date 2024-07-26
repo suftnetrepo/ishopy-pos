@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   YStack,
   XStack,
@@ -14,6 +14,7 @@ import {
   StyledHeader,
   StyledSpacer,
   StyledButton,
+  StyledDialog
 } from 'fluent-styles';
 import { BarChart } from 'react-native-gifted-charts';
 import { StyledMIcon } from '../components/icon';
@@ -28,22 +29,18 @@ import { formatCurrency, getGreetings, toWordCase } from '../utils/help';
 import { ScrollView } from 'react-native';
 import { SalesTrend } from './home/salesTrend';
 import { PurchaseButton } from './home/purchaseButton';
-import { state } from '../store';
+import { state, useUtil } from '../store';
 import { useSelector } from '@legendapp/state/react';
+import { PurchaseSuccess } from './home/purchaseSuccess';
 
 const Home = () => {
   const navigate = useNavigation();
   const { user, shop } = useAppContext();  
-  const {payment_status, purchase_status} = useSelector(() => state.get());
+  const {setPaymentStatus} = useUtil()
+  const { payment_status, purchase_status} = useSelector(() => state.get());
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
-  useEffect(() => {
-    if (payment_status) {
-      navigate.navigate("sign-up")
-    }
-  }, [payment_status])
 
   const chart = useCallback(() => {
     const currentDate = new Date()
@@ -197,6 +194,10 @@ const Home = () => {
           <PurchaseButton />
         )
       }
+      {!payment_status &&
+        <StyledDialog visible>
+          <PurchaseSuccess setPaymentStatus={setPaymentStatus} />
+        </StyledDialog>}
 
     </StyledSafeAreaView>
   );

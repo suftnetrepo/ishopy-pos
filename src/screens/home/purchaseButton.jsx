@@ -20,12 +20,12 @@ const PurchaseButton = () => {
     return (
         <XStack absolute bottom={8} right={16}>
             <StyledSpacer flex={1} />
-            <StyledButton backgroundColor={theme.colors.red[400]} onPress={ async() => await purchaseHandler()}>
+            <StyledButton backgroundColor={theme.colors.orange[400]} onPress={ async() => await purchaseHandler()}>
                 <XStack justifyContent='flex-end' alignItems='center' paddingHorizontal={16} paddingVertical={8}>
                     <StyledMIcon size={24} name='apps' color={theme.colors.gray[1]} />
                     <StyledSpacer marginHorizontal={4} />
                     <StyledText color={theme.colors.gray[1]} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
-                        Purchase
+                        Buy this App
                     </StyledText>
                 </XStack>
             </StyledButton>

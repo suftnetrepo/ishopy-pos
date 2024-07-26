@@ -5,7 +5,6 @@ import Login from '../screens/login';
 import Keypad from '../screens/lock';
 import BottomTabs from './BottomNavigation';
 import SignUp from '../screens/signUp';
-import SignUpCompleted from '../screens/signUp/signUpCompleted';
 import Printer from '../screens/account/printer';
 import User from '../screens/account/user'
 import Discount from '../screens/account/discount'
@@ -195,14 +194,7 @@ function Navigator() {
         options={{
           headerShown: false,
         }}
-      />
-      <Stack.Screen
-        name="sign-up-completed"
-        component={SignUpCompleted}
-        options={{
-          headerShown: false,
-        }}
-      />
+      />     
       <Stack.Screen
         name="printer"
         component={Printer}

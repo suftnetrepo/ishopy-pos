@@ -20,9 +20,9 @@ const DownloadPayment = ({ data, currency }) => {
     const total = data.reduce((total, pay) => total + pay.amount, 0);
     return (
         <XStack absolute bottom={1} marginHorizontal={16}  backgroundColor={palettes.transparent} >           
-            <StyledButton borderRadius={8} flex={1} borderColor={theme.colors.pink[500]} backgroundColor={theme.colors.pink[500]} onPress={async () => await convertJsonToCsv(data)}>
+            <StyledButton borderRadius={32} flex={1} borderColor={theme.colors.cyan[600]} backgroundColor={theme.colors.cyan[600]} onPress={async () => await convertJsonToCsv(data)}>
                 <XStack justifyContent='flex-end' alignItems='center' paddingHorizontal={8} paddingVertical={8}>
-                    <StyledCycle width={30} height={30} borderWidth={1} borderColor={theme.colors.gray[1]} backgroundColor={theme.colors.pink[500]}>
+                    <StyledCycle width={30} height={30} borderWidth={1} borderColor={theme.colors.gray[1]} backgroundColor={theme.colors.cyan[500]}>
                         <StyledMIcon size={16} name='share' color={theme.colors.orange[100]} />
                     </StyledCycle>
                     <StyledSpacer marginHorizontal={4} />

@@ -11,12 +11,10 @@ import { generateRandomData } from "../../utils/help";
 import { useInsertShop } from "../../hooks/useShop";
 import { useAppContext } from "../../hooks/appContext";
 import { FEATURE_FLAG } from "../../feature-flags";
-import { useUtil } from "../../store";
 
 const SignUp = () => {
   const navigator = useNavigation()
   const { login } = useAppContext()
-  const { setPaymentStatus } = useUtil()
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(signUpValidatorRules.fields)
   const { error, loading, insertHandler, resetHandler } = useInsertShop()
@@ -30,10 +28,8 @@ const SignUp = () => {
     }
 
     await insertHandler(fields).then(async (result) => {
-      if (result) {
-        setPaymentStatus(false)
-        await login(result)
-        navigator.navigate("sign-up-completed")
+      if (result) {       
+        await login(result)     
       }
     })
   }

@@ -9,10 +9,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { shopRules } from "./validatorRules";
 import { useUpdateShop } from "../../../hooks/useShop";
 import { useAppContext } from "../../../hooks/appContext";
+import { useSelector } from "@legendapp/state/react";
+import { state } from "../../../store";
 
 const Shop = () => {
   const navigator = useNavigation()
   const { updateCurrentShop, shop } = useAppContext()
+  const { purchase_status } = useSelector(() => state.get());
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(shopRules.fields)
   const { updateHandler, error, loading, resetHandler } = useUpdateShop()
@@ -165,11 +168,15 @@ const Shop = () => {
           />
 
           <StyledSpacer marginVertical={8} />
-          <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
-            <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
-              Save Changes
-            </StyledText>
-          </StyledButton>
+          {
+            purchase_status && (
+              <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
+                <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
+                  Save Changes
+                </StyledText>
+              </StyledButton>
+            )
+          }         
           <StyledSpacer marginVertical={4} />
         </KeyboardAwareScrollView>
       </YStack>
