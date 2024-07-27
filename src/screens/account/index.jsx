@@ -12,7 +12,7 @@ import { toWordCase } from "../../utils/help";
 
 const Account = () => {
   const navigator = useNavigation()
-  const { user } = useAppContext()
+  const { user, shop } = useAppContext()
 
   const RenderRow = ({ icon = 'account-circle', title, screen }) => {
     return (
@@ -31,38 +31,32 @@ const Account = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader skipAndroid={false} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
-      </StyledHeader>
-      <StyledText paddingHorizontal={24} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
-        Profile
-      </StyledText>
-      <YStack >
-        <XStack
-          paddingHorizontal={8}
-          paddingVertical={8}
-          borderRadius={16}
-          justifyContent='flex-start'
-          alignItems='center'
-        >
-          <StyledImage
-            local
-            borderRadius={100}
-            borderWidth={5}
-            borderColor={theme.colors.gray[100]}
-            height={90}
-            width={90}
-            source={require('../../../assets/img/doctor.png')}
-          />
-          <YStack marginHorizontal={8}>
-            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
-              {toWordCase(user.first_name)} {toWordCase(user.last_name)}
-            </StyledText>
-            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
-              {toWordCase(user.role)}
-            </StyledText>
-          </YStack>
-        </XStack>
-      </YStack>
-      <StyledSpacer marginVertical={8} />
+      </StyledHeader>    
+      <XStack
+        paddingHorizontal={8}
+        paddingVertical={8}
+        borderRadius={16}
+        justifyContent='flex-start'
+        alignItems='center'
+      >
+        <StyledImage
+          local
+          borderRadius={100}
+          borderWidth={5}
+          borderColor={theme.colors.gray[100]}
+          height={90}
+          width={90}
+          source={require('../../../assets/img/doctor.png')}
+        />
+        <YStack flex={1} marginHorizontal={8}>
+          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+            {toWordCase(shop.name)} 
+          </StyledText>
+          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+            {toWordCase(shop.address)}
+          </StyledText>
+        </YStack>
+      </XStack> 
       <StyledScrollView>
         <YStack
           flex={2}
@@ -71,7 +65,7 @@ const Account = () => {
           borderTopRightRadius={16}>
           <StyledSeparator left={
             <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
-              Settings
+              Application
             </StyledText>
           }>
           </StyledSeparator>

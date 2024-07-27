@@ -52,7 +52,7 @@ const Shop = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={() => navigator.goBack()} title='Shop' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.goBack()} title='Store' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />

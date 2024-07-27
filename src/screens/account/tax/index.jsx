@@ -64,7 +64,7 @@ const Tax = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Profile'})} title='Tax' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Settings'})} title='Taxes' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={

@@ -95,7 +95,7 @@ const Products = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Profile' })} title='Products' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Settings' })} title='Products' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={
@@ -105,7 +105,7 @@ const Products = () => {
             </StyledCycle>
             <StyledSpacer marginHorizontal={2} />
             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
-              <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
+              <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => data?.length && await convertJsonToCsv(data)} />
             </StyledCycle>
           </XStack>
         } />

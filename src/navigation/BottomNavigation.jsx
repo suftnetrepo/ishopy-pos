@@ -93,10 +93,10 @@ export default function BottomTabs() {
         }
       }} />    
 
-      <Tab.Screen name='Profile' component={Account} options={{
+      <Tab.Screen name='Settings' component={Account} options={{
         tabBarIcon: ({ size, color }) => {
           return (
-            <Icon color={color} size={size} name='account-outline' />
+            <Icon color={color} size={size} name='application-settings' />
           )
         }
       }} />

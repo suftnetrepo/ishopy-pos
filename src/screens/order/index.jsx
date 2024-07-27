@@ -162,7 +162,7 @@ const Order = () => {
                         </StyledCycle>
                         <StyledSpacer marginHorizontal={4} />
                         <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
-                            <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => await convertJsonToCsv(data)} />
+                            <StyledMIcon size={24} name='share' color={theme.colors.gray[800]} onPress={async () => data?.length && await convertJsonToCsv(data)} />
                         </StyledCycle>
                     </XStack>
                 } />

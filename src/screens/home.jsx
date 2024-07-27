@@ -194,7 +194,7 @@ const Home = () => {
           <PurchaseButton />
         )
       }
-      {!payment_status &&
+      {payment_status &&
         <StyledDialog visible>
           <PurchaseSuccess setPaymentStatus={setPaymentStatus} />
         </StyledDialog>}

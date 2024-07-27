@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {guid} from '../utils/help';
-import {getRealmInstance} from './store';
+import { guid } from '../utils/help';
+import { getRealmInstance } from './store';
 import {
   Order,
   OrderItem,
@@ -48,15 +48,35 @@ const getRandomColorCode = () => {
 };
 
 const clearSeedData = async () => {
- const realm = await getRealmInstance();
-  realm.write(() => {   
-      realm.deleteAll();
+  const realm = await getRealmInstance();
+  realm.write(() => {
+    realm.deleteAll();
   })
 }
+const prepareSeedData = async () => {
+  const realm = await getRealmInstance();
+  try {
+    realm.write(() => {
+
+     realm.delete(realm.objects('Category'));
+     realm.delete(realm.objects('Tax'));
+     realm.delete(realm.objects('Discount'));
+     realm.delete(realm.objects('Product'));
+     realm.delete(realm.objects('Customer'));
+     realm.delete(realm.objects('Order'));
+     realm.delete(realm.objects('OrderItem'));
+     realm.delete(realm.objects('Payment'));
+
+      console.log('Database seeds deleted successfully');
+    });
+  } catch (error) {
+    console.log('..................', error);
+  }
+};
 const seedData = async () => {
   const realm = await getRealmInstance();
   try {
-    realm.write(() => {  
+    realm.write(() => {
       realm.deleteAll();
 
       // Seed Users
@@ -80,7 +100,7 @@ const seedData = async () => {
           pass_code: 1234,
         },
       ];
-      users.forEach(user => realm.create('User', user));     
+      users.forEach(user => realm.create('User', user));
 
       // // Seed Categories
       const categories: Category[] = [
@@ -90,7 +110,7 @@ const seedData = async () => {
           status: 1,
           color_code: '#e11d48',
         },
-        {category_id: guid(), name: 'Books', status: 1, color_code: '#be123c'},
+        { category_id: guid(), name: 'Books', status: 1, color_code: '#be123c' },
         {
           category_id: guid(),
           name: 'Clothing',
@@ -103,7 +123,7 @@ const seedData = async () => {
           status: 1,
           color_code: '#c026d3',
         },
-        {category_id: guid(), name: 'Toys', status: 1, color_code: '#7e22ce'},
+        { category_id: guid(), name: 'Toys', status: 1, color_code: '#7e22ce' },
         {
           category_id: guid(),
           name: 'Groceries',
@@ -116,8 +136,8 @@ const seedData = async () => {
           status: 1,
           color_code: '#6d28d9',
         },
-        {category_id: guid(), name: 'Sports', status: 1, color_code: '#4338ca'},
-        {category_id: guid(), name: 'Beauty', status: 1, color_code: '#005db4'},
+        { category_id: guid(), name: 'Sports', status: 1, color_code: '#4338ca' },
+        { category_id: guid(), name: 'Beauty', status: 1, color_code: '#005db4' },
         {
           category_id: guid(),
           name: 'Automotive',
@@ -129,15 +149,15 @@ const seedData = async () => {
 
       // Seed Taxes
       const taxes: Tax[] = [
-        {tax_id: guid(), name: 'VAT', rate: 2.5, status: 1},
-        {tax_id: guid(), name: 'State Tax', rate: 1.6, status: 1},
+        { tax_id: guid(), name: 'VAT', rate: 2.5, status: 1 },
+        { tax_id: guid(), name: 'State Tax', rate: 1.6, status: 1 },
       ];
       taxes.forEach(tax => realm.create('Tax', tax));
 
       // Seed Discounts
       const discounts: Discount[] = [
-        {discount_id: guid(), name: 'Season', rate: 2, status: 1},
-        {discount_id: guid(), name: 'State Tax', rate: 3, status: 1},
+        { discount_id: guid(), name: 'Season', rate: 2, status: 1 },
+        { discount_id: guid(), name: 'State Tax', rate: 3, status: 1 },
       ];
       discounts.forEach(discount => realm.create('Discount', discount));
 
@@ -156,7 +176,7 @@ const seedData = async () => {
       shops.forEach(shop => realm.create('Shop', shop));
 
       // Seed Products
-      const products: Product[] = Array.from({length: 50}, (_, i) => ({
+      const products: Product[] = Array.from({ length: 50 }, (_, i) => ({
         product_id: guid(),
         name: `Product ${i + 1}`,
         bar_code: `${1000000000 + i}`,
@@ -188,57 +208,57 @@ const seedData = async () => {
       customers.forEach(customer => realm.create('Customer', customer));
 
       // Seed Orders
-     const orders: Order[] = [];
-     const now = new Date();
+      const orders: Order[] = [];
+      const now = new Date();
 
-     for (let i = 1; i <= 20; i++) {
-       const orderDate = new Date(
-         now.getFullYear(),
-         now.getMonth(),
-         now.getDate() - Math.floor(Math.random() * 7),
-         Math.floor(Math.random() * 24),
-         Math.floor(Math.random() * 60),
-         Math.floor(Math.random() * 60)
-       );
+      for (let i = 1; i <= 20; i++) {
+        const orderDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - Math.floor(Math.random() * 7),
+          Math.floor(Math.random() * 24),
+          Math.floor(Math.random() * 60),
+          Math.floor(Math.random() * 60)
+        );
 
-       orders.push({
-         order_id: guid(),
-         user_id: users[i % 2].user_id,
-         total_price: Math.floor(Math.random() * 1000) + 100,
-         total: Math.floor(Math.random() * 200) + 100,
-         status: i % 2 === 0 ? 'completed' : 'pending',
-         tax: 10,
-         discount: 20,
-         date: orderDate,
-       });
-     }
+        orders.push({
+          order_id: guid(),
+          user_id: users[i % 2].user_id,
+          total_price: Math.floor(Math.random() * 1000) + 100,
+          total: Math.floor(Math.random() * 200) + 100,
+          status: i % 2 === 0 ? 'completed' : 'pending',
+          tax: 10,
+          discount: 20,
+          date: orderDate,
+        });
+      }
 
-     orders.forEach(order => realm.create('Order', order));
+      orders.forEach(order => realm.create('Order', order));
 
       // Seed OrderItems
-     const orderItems: OrderItem[] = [];
-     for (let i = 1; i <= 20; i++) {
-       const orderItemDate = new Date(
-         now.getFullYear(),
-         now.getMonth(),
-         now.getDate() - Math.floor(Math.random() * 7),
-         Math.floor(Math.random() * 24),
-         Math.floor(Math.random() * 60),
-         Math.floor(Math.random() * 60)
-       );
+      const orderItems: OrderItem[] = [];
+      for (let i = 1; i <= 20; i++) {
+        const orderItemDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - Math.floor(Math.random() * 7),
+          Math.floor(Math.random() * 24),
+          Math.floor(Math.random() * 60),
+          Math.floor(Math.random() * 60)
+        );
 
-       orderItems.push({
-         detail_id: guid(),
-         order_id: orders[Math.floor((i - 1) / 2)].order_id,
-         product_id: products[i % 50].product_id,
-         product_name: products[i % 50].name,
-         quantity: Math.floor(Math.random() * 5) + 1,
-         price: Math.floor(Math.random() * 500) + 50,
-         date: orderItemDate,
-       });
-     }
+        orderItems.push({
+          detail_id: guid(),
+          order_id: orders[Math.floor((i - 1) / 2)].order_id,
+          product_id: products[i % 50].product_id,
+          product_name: products[i % 50].name,
+          quantity: Math.floor(Math.random() * 5) + 1,
+          price: Math.floor(Math.random() * 500) + 50,
+          date: orderItemDate,
+        });
+      }
 
-     orderItems.forEach(orderItem => realm.create('OrderItem', orderItem));
+      orderItems.forEach(orderItem => realm.create('OrderItem', orderItem));
 
       const stock: Stock[] = products.map(product => ({
         stock_id: guid(),
@@ -268,4 +288,4 @@ const seedData = async () => {
   }
 };
 
-export {seedData, clearSeedData};
+export { seedData, clearSeedData, prepareSeedData };
