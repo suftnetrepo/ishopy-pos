@@ -84,7 +84,7 @@ android {
         applicationId "com.suftnet.shop.sa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 25
+        versionCode 9
         versionName "1.0.1"
         missingDimensionStrategy "store", "play"
     }   
@@ -98,9 +98,9 @@ android {
         }
 
           release {
-            storeFile file('jerur-release-key.keystore')
+            storeFile file('ishopy.keystore')
             storePassword "Kcmkcm12345!"
-            keyAlias "jerur-key-alias"
+            keyAlias "key01"
             keyPassword "Kcmkcm12345!"
         }
     }
