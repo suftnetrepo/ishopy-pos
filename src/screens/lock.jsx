@@ -3,14 +3,17 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
-import { theme } from '../configs/theme';
+import { fontStyles, theme } from '../configs/theme';
 import { usePin } from '../hooks/useUser';
 import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ShowToast } from '../components/toast';
+import { useSelector } from '@legendapp/state/react';
+import { state } from '../store';
 
 const Keypad = () => {
     const navigator = useNavigation()
+    const purchase_status = useSelector(() => state.purchase_status.get());
     const { error, loading, loginByPin, resetHandler } = usePin()
     const [pin, setPin] = useState('');
 
@@ -83,6 +86,13 @@ const Keypad = () => {
                         </YStack>
                     ))}
                 </XStack>
+                {
+                    !purchase_status && (
+                        <StyledText color={theme.colors.gray[400]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} >
+                            1234
+                        </StyledText>
+                    )
+                }               
                 <StyledSpacer marginVertical={8} />
                 <XStack flexWrap='wrap' justifyContent='center' alignItems='center'>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
@@ -95,7 +105,7 @@ const Keypad = () => {
                                 key={index}
                                 onPress={() => handlePress(num.toString())}
                             >
-                                <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                                <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
                                     {num}
                                 </StyledText>
                             </StyledButton>

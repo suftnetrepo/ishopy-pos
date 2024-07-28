@@ -144,7 +144,7 @@ const Home = () => {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.large}
             fontWeight={theme.fontWeight.normal}
-            paddingHorizontal={16}
+            paddingHorizontal={8}
             color={theme.colors.gray[800]}>
             Daily transaction
           </StyledText>
@@ -152,16 +152,16 @@ const Home = () => {
             alignItems="center">
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.xxxlarge}
+              fontSize={theme.fontSize.xxlarge}
               fontWeight={theme.fontWeight.bold}
-              paddingHorizontal={16}
+              paddingHorizontal={8}
               color={theme.colors.gray[800]}>
               {formatCurrency(shop.currency || '£', dailyTransaction)}
             </StyledText>        
             <StyledButton backgroundColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]} borderColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]}>
-              <XStack justifyContent="flex-start" paddingHorizontal={8} paddingVertical={1}
+              <XStack justifyContent="flex-start" paddingHorizontal={6} paddingVertical={1}
                 alignItems="center">
-                <StyledMIcon size={24} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />
+                <StyledMIcon size={16} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />
                 <StyledSpacer marginHorizontal={1} />
                 <StyledText
                   fontFamily={fontStyles.Roboto_Regular}

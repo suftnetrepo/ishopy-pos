@@ -106,11 +106,14 @@ const getDailyTransactionPercentageChange = async (): Promise<number> => {
         .filtered('date >= $0 && date <= $1', startOfYesterday, endOfYesterday)
         .sum('total_price');
 
-      const percentageChange =
-        yesterdayTotal === 0
-          ? 0
-          : ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
-      resolve(percentageChange);
+      let percentageChange: number;
+      if (yesterdayTotal === 0) {
+        percentageChange = todayTotal === 0 ? 0 : 100;
+      } else {
+        percentageChange =
+          ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
+      }
+      resolve(parseFloat(percentageChange.toFixed(2)));
     } catch (error) {
       reject(error);
     }

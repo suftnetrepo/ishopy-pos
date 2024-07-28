@@ -85,9 +85,9 @@ const seedData = async () => {
           user_id: guid(),
           first_name: 'james',
           last_name: 'micheal',
-          username: 'admin',
-          password: 'admin123',
-          role: 'admin',
+          username: 'user',
+          password: 'user123',
+          role: 'user',
           pass_code: 1234,
         },
         {

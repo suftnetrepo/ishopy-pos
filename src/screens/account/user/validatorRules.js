@@ -6,7 +6,7 @@ const reset = {
   last_name: "",
   username: "",
   password: '',
-  role: 'admin',
+  role: 'user',
   pass_code: '1234'
 }
 const userRules = {
