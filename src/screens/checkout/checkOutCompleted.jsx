@@ -51,7 +51,7 @@ const CheckOutCompleted = ({ order, printHandler, shareReceipt }) => {
                     fontSize={theme.fontSize.xxlarge}
                     textAlign="center"
                 >
-                    Thanks you for purchasing from us.
+                    Thank you for purchasing from us.
                 </StyledText>
                 <StyledSpacer marginVertical={16}></StyledSpacer>
                 <XStack justifyContent='flex-end' alignItems='flex-end'>
