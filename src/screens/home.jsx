@@ -29,14 +29,13 @@ import { formatCurrency, getGreetings, toWordCase } from '../utils/help';
 import { ScrollView } from 'react-native';
 import { SalesTrend } from './home/salesTrend';
 import { PurchaseButton } from './home/purchaseButton';
-import { state, useUtil } from '../store';
+import { state } from '../store';
 import { useSelector } from '@legendapp/state/react';
 import { PurchaseSuccess } from './home/purchaseSuccess';
 
 const Home = () => {
   const navigate = useNavigation();
   const { user, shop } = useAppContext();  
-  const {setPaymentStatus} = useUtil()
   const { payment_status, purchase_status} = useSelector(() => state.get());
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
@@ -196,7 +195,7 @@ const Home = () => {
       }
       {payment_status &&
         <StyledDialog visible>
-          <PurchaseSuccess setPaymentStatus={setPaymentStatus} />
+          <PurchaseSuccess />
         </StyledDialog>}
 
     </StyledSafeAreaView>

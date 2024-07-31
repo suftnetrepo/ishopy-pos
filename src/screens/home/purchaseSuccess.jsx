@@ -14,9 +14,11 @@ import { StyledMIcon } from '../../components/icon';
 import { fontStyles, palettes, theme } from '../../configs/theme';
 import { prepareSeedData } from '../../model/seed';
 import { useNavigation } from '@react-navigation/native';
+import { useUtil } from '../../store';
 
-const PurchaseSuccess = ({ setPaymentStatus }) => {
+const PurchaseSuccess = () => {
     const navigator = useNavigation()
+    const { setPaymentStatus } = useUtil()
 
     const clearHandler = async () => {
         setPaymentStatus(false)
