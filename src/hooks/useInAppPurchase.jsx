@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { requestPurchase, useIAP } from 'react-native-iap';
-import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage'; import { clearSeedData } from '../model/seed';
+import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage'; 
 import { useUtil, state } from '../store';
 import { useSelector } from '@legendapp/state/react';
 
@@ -67,8 +67,7 @@ const useInAppPurchase = () => {
                         error: null,
                         loading: false,
                     });
-
-                    await clearSeedData()
+                 
                 } catch (error) {
                     setData({
                         status: false,
@@ -89,10 +88,10 @@ const useInAppPurchase = () => {
             loading: false,
         });
     }, [currentPurchaseError]);
-
+  
     useEffect(() => {
         async function load() {
-            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_draft")
+            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_draft_testing")
             if (purchases.length > 0) {
                 await store(PURCHASED_STATUS, 1)
                 setPurchaseStatus(true)
@@ -110,11 +109,12 @@ const useInAppPurchase = () => {
             });
             return;
         }
-
+       
         try {
-            await getProducts({ skus: ['ishopy_sa_draft'] })
+            await getProducts({ skus: ['ishopy_sa_draft_testing'] })
+            console.log(".................................", products)
             if (products?.length > 0) {
-                await requestPurchase({ skus: ['ishopy_sa_draft'] });
+                await requestPurchase({ skus: ['ishopy_sa_draft_testing'] });
             }
         } catch (error) {
             setData({

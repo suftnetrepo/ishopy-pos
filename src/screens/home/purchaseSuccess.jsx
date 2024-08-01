@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {    
+import {
     YStack,
     StyledText,
     StyledSpacer,
@@ -23,7 +23,8 @@ const PurchaseSuccess = () => {
     const clearHandler = async () => {
         setPaymentStatus(false)
         await prepareSeedData()
-        navigator.navigate("bottom-tabs", { screen: 'Settings' })    }
+        navigator.navigate("bottom-tabs", { screen: 'Settings' })       
+    }   
 
     return (
         <YStack
@@ -84,7 +85,7 @@ const PurchaseSuccess = () => {
                         paddingHorizontal={16}
                         paddingVertical={8}
                     >
-                        Get Settings
+                        Go Settings
                     </StyledText>
                 </StyledButton>
                 <StyledSpacer marginVertical={8} />

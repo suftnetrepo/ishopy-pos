@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
 import { YStack, StyledImage, XStack, StyledHeader, StyledConfirmDialog, StyledScrollView, StyledSafeAreaView, StyledSeparator, StyledSpacer, StyledText } from 'fluent-styles';

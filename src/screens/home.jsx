@@ -40,7 +40,7 @@ const Home = () => {
   const { data } = useWeeklyTransactions();
   const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
+  
   const chart = useCallback(() => {
     const currentDate = new Date()
     const chartData = labels.map((label, index) => {

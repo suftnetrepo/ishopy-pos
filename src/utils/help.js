@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-undef */
+/* eslint-disable prettier/prettier */
 import { faker } from '@faker-js/faker';
 
 export const isValidColor = value =>
-	/^#([0-9A-F]{3}|[0-9A-F]{6}|[0-9A-F]{8})$/i.test(value) 
+  /^#([0-9A-F]{3}|[0-9A-F]{6}|[0-9A-F]{8})$/i.test(value)
 export const isValidNumber = value =>
-	typeof value === 'number' && isFinite(value)
+  typeof value === 'number' && isFinite(value)
 export const isValidString = value =>
-	typeof value === 'string' && value.trim().length > 0
+  typeof value === 'string' && value.trim().length > 0
 
 const generateRandomData = () => {
   return {
@@ -43,13 +45,13 @@ const getGreetings = () => {
 };
 
 const dateConverter = (stringDate) => {
- return stringDate.split("T")[0].split("-").reverse().join("-")
+  return stringDate.split("T")[0].split("-").reverse().join("-")
 };
 
 function formatDateTime(dateTimeString) {
   const [datePart, timePart] = dateTimeString.split("T");
-  const formattedDate = datePart.split("-").reverse().join("-"); 
-  const formattedTime = timePart.split(".")[0]; 
+  const formattedDate = datePart.split("-").reverse().join("-");
+  const formattedTime = timePart.split(".")[0];
 
   return `${formattedDate} ${formattedTime}`;
 }
@@ -104,11 +106,17 @@ function generatePaymentId() {
   return result;
 }
 
- function guid() {
-    var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
-        return (Math.random() * 16 | 0).toString(16);
-    }).toLowerCase();
-  }
+function guid() {
+  var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+  return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+    return (Math.random() * 16 | 0).toString(16);
+  }).toLowerCase();
+}
 
-export {guid,formatDateTime, getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }
+const simulateDelay = (delay, callback) => {
+  setTimeout(() => {
+    callback();
+  }, delay);
+};
+
+export { simulateDelay, guid, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }

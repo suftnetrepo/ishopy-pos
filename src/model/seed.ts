@@ -54,25 +54,36 @@ const clearSeedData = async () => {
   })
 }
 const prepareSeedData = async () => {
+  // Get the Realm instance
   const realm = await getRealmInstance();
-  try {
-    realm.write(() => {
 
-     realm.delete(realm.objects('Category'));
-     realm.delete(realm.objects('Tax'));
-     realm.delete(realm.objects('Discount'));
-     realm.delete(realm.objects('Product'));
-     realm.delete(realm.objects('Customer'));
-     realm.delete(realm.objects('Order'));
-     realm.delete(realm.objects('OrderItem'));
-     realm.delete(realm.objects('Payment'));
+  // Start the transaction
+  realm.write(() => {
+    try {
+      // Delete entries in a specific order if there are dependencies
+      const models = [
+        'OrderItem',
+        'Order',
+        'Payment',
+        'Customer',
+        'Product',
+        'Discount',
+        'Tax',
+        'Category',
+      ];
+      models.forEach(model => {
+        const allItems = realm.objects(model);
+        realm.delete(allItems); // Delete all objects of each model
+      });
 
       console.log('Database seeds deleted successfully');
-    });
-  } catch (error) {
-    console.log('..................', error);
-  }
+    } catch (error) {
+      // Handle errors that might occur during the deletion process
+      console.error('Error while deleting database seeds:', error);   
+    }
+  });
 };
+
 const seedData = async () => {
   const realm = await getRealmInstance();
   try {
