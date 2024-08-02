@@ -49,8 +49,7 @@ const BluetoothPrinter = () => {
                     color={theme.colors.gray[800]}
                     fontSize={theme.fontSize.medium}
                 >
-                    You are not connected to any printer yet.
-                    Make sure your Bluetooth printer is in pairing mode to connect.
+                    Make sure your Bluetooth printer is in pairing mode. Once it’s ready, use the button below to scan for available Bluetooth devices.
                     `
                 </StyledText>
                 <StyledSpacer marginVertical={4} />
