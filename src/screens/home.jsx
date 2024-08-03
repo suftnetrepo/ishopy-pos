@@ -38,7 +38,7 @@ const Home = () => {
   const { user, shop } = useAppContext();  
   const { payment_status, purchase_status} = useSelector(() => state.get());
   const { data } = useWeeklyTransactions();
-  const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
+  const { trend, dailyTransaction } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   
   const chart = useCallback(() => {
@@ -161,14 +161,14 @@ const Home = () => {
               <XStack justifyContent="flex-start" paddingHorizontal={6} paddingVertical={1}
                 alignItems="center">
                 <StyledMIcon size={16} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />
-                <StyledSpacer marginHorizontal={1} />
+                {/* <StyledSpacer marginHorizontal={1} />
                 <StyledText
                   fontFamily={fontStyles.Roboto_Regular}
                   fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.bold}
                   color={theme.colors.gray[1]}>
                   {percentageChange}%
-                </StyledText>
+                </StyledText> */}
               </XStack>
             </StyledButton>
           </XStack>
