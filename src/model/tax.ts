@@ -92,7 +92,7 @@ const queryTaxById = async (tax_id: number): Promise<Tax | null> => {
 };
 
 const updateTax = async (
-  tax_id: number,
+  tax_id: string,
   name: string,
   status: number,
   rate: number
