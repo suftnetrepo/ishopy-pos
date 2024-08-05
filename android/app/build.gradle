@@ -84,7 +84,7 @@ android {
         applicationId "com.suftnet.shop.sa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
+        versionCode 31
         versionName "1.0"
         missingDimensionStrategy "store", "play"
     }   

@@ -10,6 +10,7 @@ import { FlatList } from "react-native";
 import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
+import EmptyView from "../utils/empty";
 
 const ProductScrollView = ({ searchString, category_id }) => {
     const { shop, addItem } = useAppContext()
@@ -27,6 +28,11 @@ const ProductScrollView = ({ searchString, category_id }) => {
       await addItem(item.product_id, item.name, item.price, 1);
     };
 
+    if (data?.length === 0) {
+        return (
+            <EmptyView button='Add Product' screen='products' title='Empty Product' description='Your Product list is currently empty. Please add Product to see them here.' />
+        )
+    }
     const RenderCard = React.memo(({ item }) => {
 
         return (
