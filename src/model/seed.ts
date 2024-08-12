@@ -84,6 +84,31 @@ const prepareSeedData = async () => {
   });
 };
 
+export const generateUser = () => {
+  return {
+    user_id: guid(),
+    username: 'user',
+    password: 'user123',
+    first_name: 'James',
+    last_name: 'Smith',
+    pass_code: 1234,
+    status: 1,
+    role: 'user',
+  };
+};
+
+export const generateShop = () => {
+  return {
+    shop_id: guid(),
+    name: 'Shop A',
+    email: 'shop@test.com',
+    mobile: '1234566778',
+    description: 'No thing',
+    address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
+    currency: '£',
+  };
+};
+
 const seedData = async () => {
   const realm = await getRealmInstance();
   try {

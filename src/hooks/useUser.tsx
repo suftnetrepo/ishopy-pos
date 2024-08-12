@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryUsers, insertUser, updateUser, deleteUser, loginUser, loginByPin } from "../model/user";
+import { queryUsers, insertUser, updateUser, deleteUser, loginUser, loginByPin, createUser, updatePassCode } from "../model/user";
 import { User, Shop } from "../model/types";
 import { queryAllShops } from "../model/shop";
+import { generateShop, generateUser } from "../model/seed";
 
 interface Initialize {
 	data: User[] | [] | null | User | Shop;
@@ -246,13 +247,42 @@ const usePin = () => {
 
 		try {
 			const user = await loginByPin(pin);
+			const shop = await queryAllShops()
 			setData({
 				data: user,
 				error: null,
 				loading: false,
 			});
 
-			return user
+			return {
+				user,
+				shop
+			}
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	};
+
+	const recoveryHandler = async () => {
+		setData((prev) => ({ ...prev, loading: false }));
+
+		try {
+			const users = await queryUsers();
+			if (users.length) {
+				const user = users[0]
+				user.pass_code = 1234
+				await updatePassCode(user)
+			} else {
+				const shop = generateShop()
+				const user = generateUser()
+				await createUser(user, shop)
+			}
+
+			return true
 		} catch (error) {
 			setData({
 				data: null,
@@ -273,6 +303,7 @@ const usePin = () => {
 	return {
 		...data,
 		resetHandler,
+		recoveryHandler,
 		loginByPin: loginHandler,
 	};
 };

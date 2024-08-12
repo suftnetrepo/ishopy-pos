@@ -3,6 +3,7 @@
 /* eslint-disable prettier/prettier */
 import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
+import {Shop} from './shop';
 
 export interface User {
   user_id: string;
@@ -150,4 +151,62 @@ const loginByPin = async (pin: number): Promise<User> => {
   });
 };
 
-export { insertUser, updateUser, deleteUser, queryUsers, loginUser, loginByPin };
+const updatePassCode = async (user: User): Promise<boolean> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const updateUser = realm.objectForPrimaryKey<User>(
+          'User',
+          user.user_id
+        );
+        if (updateUser) {
+          updateUser.pass_code = user.pass_code;
+          resolve(true);
+        } else {
+          reject(new Error('User not found'));
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const createUser = async (
+  user: Omit<User, 'user_id'>,
+  shop: Omit<Shop, 'shop_id'>
+): Promise<true> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        realm.create('User', {
+          user_id: guid(),
+          ...user,
+        });
+
+        const newShop = {
+          shop_id: guid(),
+          ...shop,
+        };
+        realm.create('Shop', newShop);
+
+        resolve(true);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export {
+  insertUser,
+  updateUser,
+  deleteUser,
+  queryUsers,
+  loginUser,
+  loginByPin,
+  updatePassCode,
+  createUser,
+};

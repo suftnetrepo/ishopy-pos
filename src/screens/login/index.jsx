@@ -189,6 +189,21 @@ const Login = () => {
           </StyledText>
         </StyledButton>
         <StyledSpacer marginVertical={4} />
+        {
+          purchase_status && (
+            <XStack justifyContent='flex-end' alignItems='center'>
+              <StyledButton link backgroundColor={theme.colors.cyan[500]} onPress={() => navigator.navigate("keypad", {
+                recovery_password: true
+              })} >
+                <StyledText paddingHorizontal={20} fontFamily={fontStyles.Roboto_Regular}
+                  fontSize={theme.fontSize.normal}
+                  fontWeight={theme.fontWeight.normal} color={theme.colors.gray[400]}>
+                  Forgot password
+                </StyledText>
+              </StyledButton>
+            </XStack>
+          )
+        }
       </YStack>
       {
         (error) && (
