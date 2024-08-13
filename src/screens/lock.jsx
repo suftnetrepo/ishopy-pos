@@ -12,6 +12,7 @@ import { useSelector } from '@legendapp/state/react';
 import { state } from '../store';
 import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
+import { ScrollView } from 'react-native';
 
 const Keypad = () => {
     const navigator = useNavigation()
@@ -32,7 +33,7 @@ const Keypad = () => {
             setPin(pin + num);
 
             if (passCode.length === 4) {
-                loginByPin(parseInt(passCode)).then(async(result) => {
+                loginByPin(parseInt(passCode)).then(async (result) => {
                     if (result) {
                         await login(result)
                         navigator.navigate("bottom-tabs")
@@ -102,62 +103,68 @@ const Keypad = () => {
                     <RenderHeader />
                 </StyledHeader.Full>
             </StyledHeader>
-            <RenderLockIcon />
-            {
-                recovery_password && (
-                    <Notice />
-                )
-            }
-            <YStack flex={1} justifyContent='center' alignItems='center'>
-
-                <XStack marginBottom={20}>
-                    {[0, 1, 2, 3].map((_, index) => (
-                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={theme.colors.gray[400]} justifyContent='center' alignItems='center'>
-                            <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} >
-                                {pin[index]}
-                            </StyledText>
-                        </YStack>
-                    ))}
-                </XStack>
-                {
-                    !purchase_status || recovery_password && (
-                        <StyledText color={theme.colors.gray[400]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} >
-                            1234
-                        </StyledText>
-                    )
-                }               
-                <StyledSpacer marginVertical={8} />
-                <XStack flexWrap='wrap' justifyContent='center' alignItems='center'>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
-                        <YStack key={index} margin={5}>
-                            <StyledButton
-                                width={70} height={70}
-                                borderWidth={1} borderRadius={35}
-                                backgroundColor={theme.colors.gray[1]}
-                                borderColor={theme.colors.gray[400]}
-                                key={index}
-                                onPress={() => handlePress(num.toString())}
-                            >
-                                <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
-                                    {num}
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <RenderLockIcon />
+                <YStack flex={1} justifyContent='center' alignItems='center'>
+                    {
+                        recovery_password && (
+                            <>
+                                <StyledSpacer marginVertical={8} />
+                                <Notice />
+                            </>
+                        )
+                    }
+                    <StyledSpacer marginVertical={8} />
+                    <XStack marginBottom={20}>
+                        {[0, 1, 2, 3].map((_, index) => (
+                            <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={theme.colors.gray[400]} justifyContent='center' alignItems='center'>
+                                <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} >
+                                    {pin[index]}
                                 </StyledText>
-                            </StyledButton>
-                        </YStack>
+                            </YStack>
+                        ))}
+                    </XStack>
+                    {
+                        !purchase_status || recovery_password && (
+                            <StyledText color={theme.colors.gray[400]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} >
+                                1234
+                            </StyledText>
+                        )
+                    }
+                    <StyledSpacer marginVertical={8} />
+                    <XStack flexWrap='wrap' justifyContent='center' alignItems='center'>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
+                            <YStack key={index} margin={5}>
+                                <StyledButton
+                                    width={70} height={70}
+                                    borderWidth={1} borderRadius={35}
+                                    backgroundColor={theme.colors.gray[1]}
+                                    borderColor={theme.colors.gray[400]}
+                                    key={index}
+                                    onPress={() => handlePress(num.toString())}
+                                >
+                                    <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                                        {num}
+                                    </StyledText>
+                                </StyledButton>
+                            </YStack>
 
-                    ))}
-                    <StyledButton
-                        width={70} height={70}
-                        borderWidth={1} borderRadius={35}
-                        backgroundColor={theme.colors.gray[1]}
-                        borderColor={theme.colors.gray[400]}
-                        onPress={handleDelete}
-                    >
-                        <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
-                            ⌫
-                        </StyledText>
-                    </StyledButton>
-                </XStack>
-            </YStack>
+                        ))}
+                        <StyledButton
+                            width={70} height={70}
+                            borderWidth={1} borderRadius={35}
+                            backgroundColor={theme.colors.gray[1]}
+                            borderColor={theme.colors.gray[400]}
+                            onPress={handleDelete}
+                        >
+                            <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                                ⌫
+                            </StyledText>
+                        </StyledButton>
+                    </XStack>
+                </YStack>
+            </ScrollView>
+          
             {
                 (loading) && (
                     <StyledSpinner />
