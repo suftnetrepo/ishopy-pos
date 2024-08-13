@@ -70,7 +70,7 @@ const queryByStatus = async (status: number): Promise<Tax[]> => {
   });
 };
 
-const queryTaxById = async (tax_id: number): Promise<Tax | null> => {
+const queryTaxById = async (tax_id: string): Promise<Tax | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -120,7 +120,7 @@ const updateTax = async (
   });
 };
 
-const deleteTax = async (tax_id: number): Promise<boolean> => {
+const deleteTax = async (tax_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

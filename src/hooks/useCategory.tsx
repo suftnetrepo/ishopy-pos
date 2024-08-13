@@ -93,7 +93,7 @@ const useQueryCategoriesByStatus = () => {
 	}
 	const allCategory: Category = {
 		color_code: '',
-		category_id: -1,
+		category_id: "-1",
 		name: 'All',
 		status: 1
 	}
