@@ -125,16 +125,7 @@ const seedData = async () => {
           password: 'user123',
           role: 'user',
           pass_code: 1234,
-        },
-        {
-          user_id: guid(),
-          first_name: 'ema',
-          last_name: 'dam',
-          username: 'user',
-          password: 'user123',
-          role: 'user',
-          pass_code: 1234,
-        },
+        }        
       ];
       users.forEach(user => realm.create('User', user));
 

@@ -28,7 +28,7 @@ const ProductScrollView = ({ searchString, category_id }) => {
       await addItem(item.product_id, item.name, item.price, 1);
     };
 
-    if (data?.length === 0) {
+    if (data?.length === 0 && !loading) {
         return (
             <EmptyView button='Add Product' screen='products' title='Empty Product' description='Your Product list is currently empty. Please add Product to see them here.' />
         )

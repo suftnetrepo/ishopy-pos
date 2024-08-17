@@ -33,7 +33,7 @@ import FAQ from '../screens/account/faq';
 const Stack = createStackNavigator();
 function Navigator() {
   return (
-    <Stack.Navigator initialRouteName="login">
+    <Stack.Navigator initialRouteName="keypad">
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}

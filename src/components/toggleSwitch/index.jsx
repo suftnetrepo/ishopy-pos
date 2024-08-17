@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react"
-import { YStack, XStack, StyledConfirmDialog, StyledCard, StyledCycle, StyledButton, StyledSeparator, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import { XStack, StyledButton, StyledText } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 
 const StyledToggleSwitch = ({ defaultLabel = "Cash", nextLabel = "Card", onPress }) => {
