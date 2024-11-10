@@ -44,7 +44,10 @@ const Login = () => {
           (FEATURE_FLAG.MOCK_STORE || !purchase_status) && (
             <>
               <StyledSpacer marginHorizontal={4} />
-              <StyledButton onPress={() => setFields({ ...fields, password: 'user123', user_name: 'user' })}>
+              <StyledButton onPress={async() => { 
+                setFields({ ...fields, password: 'user123', user_name: 'user' }) 
+                await seedData()
+                }}>
                 <StyledBadge
                   color={theme.colors.green[800]}
                   backgroundColor={theme.colors.green[100]}

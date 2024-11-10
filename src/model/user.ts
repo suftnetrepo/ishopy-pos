@@ -134,12 +134,17 @@ const loginUser = async (username: string, password: string): Promise<User> => {
   });
 };
 const loginByPin = async (pin: number): Promise<User> => {
+
+  console.log(".................pin", pin)
+
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const user = realm
         .objects<User>('User')
         .filtered('pass_code == $0', pin)[0];
+
+        console.log(".................user", user)
       if (user) {
         resolve(user);
       } else {

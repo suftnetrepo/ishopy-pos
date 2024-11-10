@@ -153,7 +153,7 @@ const Sales = () => {
         }
       </XStack>
       <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
-        <ProductScrollView searchString={searchString} category_id={selectedCategory?.category_id || -1} />
+        <ProductScrollView searchString={searchString} category_id={selectedCategory?.category_id || "-1"} />
       </YStack>
       <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8} borderWidth={1} borderRadius={32} borderColor={theme.colors.gray[400]}>
         <StyledButton flex={1} borderRadius={32} borderColor={theme.colors.coolGray[600]} backgroundColor={theme.colors.coolGray[600]} onPress={() => clearItem()} >

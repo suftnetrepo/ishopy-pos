@@ -142,7 +142,7 @@ const queryProductByName = async (name: string): Promise<Product[]> => {
 };
 
 
-const queryProductByCategory = async (category_id: number): Promise<Product[]> => {
+const queryProductByCategory = async (category_id: string): Promise<Product[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -170,7 +170,7 @@ const queryProductByCategory = async (category_id: number): Promise<Product[]> =
   });
 };
 
-const queryProductById = async (product_id: number): Promise<Product | null> => {
+const queryProductById = async (product_id: string): Promise<Product | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -229,7 +229,7 @@ const queryProductByBarCode = async (bar_code: string): Promise<Product | null> 
 };
 
 const updateProduct = async (
-  product_id: number,
+  product_id: string,
   product: Product
 ): Promise<Product> => {
   const realm = await getRealmInstance(); 
@@ -263,7 +263,7 @@ const updateProduct = async (
 };
 
 
-const deleteProduct = async (product_id: number): Promise<boolean> => {
+const deleteProduct = async (product_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

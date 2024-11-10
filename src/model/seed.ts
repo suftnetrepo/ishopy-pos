@@ -97,6 +97,9 @@ export const generateUser = () => {
   };
 };
 
+
+console.log("................................generateUser", generateUser())
+
 export const generateShop = () => {
   return {
     shop_id: guid(),
@@ -125,7 +128,15 @@ const seedData = async () => {
           password: 'user123',
           role: 'user',
           pass_code: 1234,
-        }        
+        }, {
+          user_id: guid(),
+          first_name: 'micheal',
+          last_name: 'james',
+          username: 'user',
+          password: 'user123',
+          role: 'user',
+          pass_code: 1234,
+        }           
       ];
       users.forEach(user => realm.create('User', user));
 

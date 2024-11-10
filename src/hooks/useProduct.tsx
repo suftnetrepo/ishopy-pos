@@ -87,10 +87,11 @@ const useQueryProductByStatus = (status: number) => {
 		}
 	}
 
-	async function loadProductByCategory(category_id: number) {
+	async function loadProductByCategory(category_id: string) {
+		
 		try {
 			setData((prev) => ({ ...prev, loading: true }));
-			const result = category_id === -1 ? await queryProductByStatus(1) : await queryProductByCategory(category_id);
+			const result = category_id === "-1" ? await queryProductByStatus(1) : await queryProductByCategory(category_id);
 			setData({
 				data: result,
 				error: null,
@@ -143,7 +144,7 @@ const useQueryProductByStatus = (status: number) => {
 	};
 };
 
-const useQueryProductByCategory = (category_id: number) => {
+const useQueryProductByCategory = (category_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -184,7 +185,7 @@ const useQueryProductByCategory = (category_id: number) => {
 	};
 };
 
-const useQueryProductById = (product_id: number) => {
+const useQueryProductById = (product_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -316,7 +317,7 @@ const useUpdateProduct = () => {
 		loading: false,
 	});
 
-	const updateHandler = async (product_id: number, product: Product) => {
+	const updateHandler = async (product_id: string, product: Product) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
@@ -363,7 +364,7 @@ const useDeleteProduct = () => {
 		loading: true,
 	});
 
-	const deleteHandler = async (product_id: number) => {
+	const deleteHandler = async (product_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const result = await deleteProduct(product_id);
